@@ -1,11 +1,33 @@
-// This is your Prisma schema file.
-// Morning Star — préparé pour PostgreSQL.
+// =============================================================================
+// Morning Star — schéma Prisma / PostgreSQL
+// =============================================================================
 //
-// IMPORTANT (étape architecture) :
-// - Ne pas exécuter de migration
-// - Ne pas connecter une base réelle
-// - Ne pas lancer Docker / PostgreSQL
-// Le client Prisma sera généré et branché dans une étape ultérieure.
+// Décisions générales
+// -------------------
+// 1. Provider PostgreSQL uniquement (tableaux, JSONB, index GIN futurs).
+// 2. Naming « Article » plutôt que « Meditation » : le domaine métier V1 est
+//    la méditation quotidienne, mais le modèle reste ouvert à d'autres types
+//    éditoriaux via PublicationType (évolutivité sans renommage massif).
+// 3. Contenu structuré extrait dans ArticleContent (1—n versionné) pour :
+//    - conserver l'historique d'imports PDF/DOCX ;
+//    - séparer métadonnées éditoriales et corps / blocs structurés ;
+//    - faciliter la recherche full-text sur le corps sans gonfler Article.
+// 4. Admin unique en V1 (UserRole.ADMIN). Pas de multi-tenancy.
+// 5. Aucune migration / generate / connexion dans cette phase.
+//    DATABASE_URL peut rester vide ; ce fichier est une spécification.
+//
+// Recherche full-text (futur)
+// ---------------------------
+// Prisma ne gère pas nativement to_tsvector. Lors de la première migration
+// réelle, ajouter une colonne générée + index GIN, par exemple :
+//   ALTER TABLE "ArticleContent"
+//     ADD COLUMN search_vector tsvector
+//     GENERATED ALWAYS AS (
+//       to_tsvector('french', coalesce(plain_text, '') || ' ' || coalesce(title_snapshot, ''))
+//     ) STORED;
+//   CREATE INDEX article_content_search_idx ON "ArticleContent" USING GIN (search_vector);
+// En attendant : ILIKE sur title / excerpt / plainText (voir ArchiveQuery).
+// =============================================================================
 
 generator client {
   provider = "prisma-client-js"
@@ -16,164 +38,423 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+/// Rôles applicatifs.
+/// V1 : un seul administrateur / auteur (ADMIN).
+/// Évolution possible : EDITOR, READER — sans casser les lignes existantes.
 enum UserRole {
   ADMIN
 }
 
-enum MeditationStatus {
+/// Cycle de vie éditorial d'un article.
+enum ArticleStatus {
   DRAFT
   SCHEDULED
   PUBLISHED
   ARCHIVED
 }
 
+/// Modération des commentaires publics.
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SPAM
+}
+
+/// Type de publication — permet d'étendre au-delà de la méditation quotidienne.
+enum PublicationType {
+  DAILY_MEDITATION
+  SPECIAL
+  PAGE
+}
+
+/// État d'un abonné newsletter.
 enum NewsletterStatus {
   ACTIVE
   UNSUBSCRIBED
+  BOUNCED
+  COMPLAINED
 }
 
+/// Événements traçables sur la newsletter (analytics / audit léger).
+enum NewsletterEventType {
+  SUBSCRIBE
+  UNSUBSCRIBE
+  CONFIRM
+  SEND
+  OPEN
+  CLICK
+  BOUNCE
+  COMPLAINT
+}
+
+/// Rôle d'un média rattaché (bannière, pièce jointe, source d'import, OG).
+enum MediaKind {
+  BANNER
+  ATTACHMENT
+  ORIGINAL_SOURCE
+  OG_IMAGE
+  OTHER
+}
+
+/// Format du contenu versionné (texte brut, markdown, blocs JSON).
+enum ContentFormat {
+  PLAIN
+  MARKDOWN
+  STRUCTURED_JSON
+}
+
+// -----------------------------------------------------------------------------
+// Utilisateur
+// -----------------------------------------------------------------------------
+
+/// Compte applicatif.
+/// V1 : une seule ligne ADMIN (auteur unique). passwordHash / auth à brancher
+/// dans la phase authentification — champs déjà prévus pour éviter une migration
+/// structurelle lourde.
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  role      UserRole @default(ADMIN)
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  role         UserRole @default(ADMIN)
+  /// Hash du mot de passe (null tant que l'auth n'est pas activée).
+  passwordHash String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  articles  Article[]
+  auditLogs AuditLog[]
+  media     Media[]    @relation("MediaUploader")
+
+  @@index([role])
+}
+
+// -----------------------------------------------------------------------------
+// Article & contenu
+// -----------------------------------------------------------------------------
+
+/// Unité éditoriale principale (méditation du jour en V1).
+model Article {
+  id     String          @id @default(cuid())
+  /// Type métier — filtre / stats / UX admin.
+  type   PublicationType @default(DAILY_MEDITATION)
+  status ArticleStatus   @default(DRAFT)
+
+  title    String
+  /// Identifiant URL stable. Unique globalement.
+  slug     String  @unique
+  subtitle String?
+  excerpt  String  @db.Text
+  /// Citation mise en avant (pull quote).
+  highlightQuote String? @db.Text
+
+  /// Date éditoriale affichée (« méditation du 26 septembre »).
+  /// Distincte de scheduledAt / publishedAt techniques.
+  publicationDate DateTime  @db.Date
+  /// Programmation automatique (null si publication manuelle).
+  scheduledAt     DateTime?
+  /// Horodatage réel de passage à PUBLISHED (audit / stats).
+  publishedAt     DateTime?
+
+  /// Références bibliques structurées (miroir des détections / saisie admin).
+  /// JSON : [{ label, book?, chapter?, verseStart?, verseEnd? }]
+  bibleReferences Json?
+
+  /// Thèmes pour filtres archives (tableau PostgreSQL indexable).
+  themes String[] @default([])
+
+  // --- SEO ---
+  seoTitle       String?
+  seoDescription String? @db.Text
+  /// Canonical optionnel si l'article est syndiqué ailleurs.
+  seoCanonicalUrl String?
+
+  // --- Fichier source (import PDF/DOCX) — métadonnées, pas le binaire ---
+  originalFilename   String?
+  originalMimeType   String?
+  originalSizeBytes  Int?
+  originalStorageKey String?
+  /// Empreinte pour dédupliquer les ré-imports.
+  originalChecksum   String?
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  /// Bannière éditoriale (MediaKind.BANNER recommandé).
+  bannerMediaId String?
+  banner        Media?  @relation("ArticleBanner", fields: [bannerMediaId], references: [id], onDelete: SetNull)
+
+  /// Image Open Graph dédiée (sinon fallback bannière côté app).
+  ogImageMediaId String?
+  ogImage        Media?  @relation("ArticleOgImage", fields: [ogImageMediaId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  meditations DailyMeditation[]
-  auditLogs   AuditLog[]
-}
-
-model MeditationEdition {
-  id          String   @id @default(cuid())
-  title       String
-  year        Int
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  meditations DailyMeditation[]
-}
-
-model DailyMeditation {
-  id              String           @id @default(cuid())
-  slug            String           @unique
-  title           String
-  subtitle        String?
-  publicationDate DateTime         @db.Date
-  status          MeditationStatus @default(DRAFT)
-  excerpt         String
-  body            String
-  highlightQuote  String?
-  bibleReferences Json?
-  themes          String[]         @default([])
-  authorId        String
-  editionId       String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-
-  author   User               @relation(fields: [authorId], references: [id])
-  edition  MeditationEdition? @relation(fields: [editionId], references: [id])
+  contents ArticleContent[]
   comments Comment[]
   views    ArticleView[]
-  media    Media[]
+  media    Media[]              @relation("ArticleMedia")
   schedule PublicationSchedule?
 
-  @@index([publicationDate])
+  /// Accès public / archives : status + date.
+  @@index([status, publicationDate(sort: Desc)])
+  @@index([publicationDate(sort: Desc)])
   @@index([status])
+  @@index([scheduledAt])
+  @@index([type, status])
+  @@index([authorId])
+  /// Filtre par thème (opérateur @> / && en SQL brut si besoin).
   @@index([themes])
+  /// Recherche simple sur titre (préfixe / égalité). FTS = phase migration.
+  @@index([title])
 }
+
+/// Version(s) du corps d'article.
+/// Décision : 1—n pour historiser les imports / révisions éditoriales.
+/// Une seule version isCurrent=true à la fois (contraint côté service).
+model ArticleContent {
+  id        String @id @default(cuid())
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  /// Numéro de révision monotone (1, 2, 3…).
+  version Int
+  /// Version servie au public / admin par défaut.
+  isCurrent Boolean @default(false)
+
+  format ContentFormat @default(MARKDOWN)
+
+  /// Texte plat (markdown ou plain) — base lecture + recherche ILIKE / FTS.
+  plainText String @db.Text
+
+  /// Snapshot du titre au moment de la version (recherche / audit).
+  titleSnapshot String?
+
+  /// Blocs structurés (paragraphes, citations, refs Bible détectées, etc.).
+  /// Schéma JSON documenté côté domaine `ArticleContentBlock[]`.
+  structured Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([articleId, version])
+  @@index([articleId, isCurrent])
+  /// Point d'ancrage pour FTS futur sur plainText.
+  @@index([articleId])
+}
+
+// -----------------------------------------------------------------------------
+// Médias
+// -----------------------------------------------------------------------------
+
+/// Fichier stocké (S3 / local). Le binaire n'est pas dans PostgreSQL.
+model Media {
+  id         String    @id @default(cuid())
+  kind       MediaKind @default(OTHER)
+  filename   String
+  mimeType   String
+  sizeBytes  Int
+  /// Clé chez le storage provider (jamais une URL signée longue durée).
+  storageKey String
+  width      Int?
+  height     Int?
+  altText    String?
+  checksum   String?
+
+  articleId String?
+  article   Article? @relation("ArticleMedia", fields: [articleId], references: [id], onDelete: SetNull)
+
+  uploadedById String?
+  uploadedBy   User?   @relation("MediaUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  bannerFor  Article[] @relation("ArticleBanner")
+  ogImageFor Article[] @relation("ArticleOgImage")
+
+  @@index([articleId])
+  @@index([kind])
+  @@index([storageKey])
+}
+
+// -----------------------------------------------------------------------------
+// Commentaires
+// -----------------------------------------------------------------------------
 
 model Comment {
-  id           String   @id @default(cuid())
-  meditationId String
-  authorName   String
-  authorEmail  String?
-  body         String
-  approved     Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  id        String        @id @default(cuid())
+  articleId String
+  article   Article       @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
-  meditation DailyMeditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+  authorName  String
+  authorEmail String?
+  body        String        @db.Text
+  status      CommentStatus @default(PENDING)
 
-  @@index([meditationId])
+  /// Soft moderation / anti-spam futur.
+  ipHash    String?
+  userAgent String?
+
+  createdAt   DateTime  @default(now())
+  reviewedAt  DateTime?
+  reviewedBy  String?
+
+  @@index([articleId, status])
+  @@index([status, createdAt])
+  @@index([createdAt])
 }
+
+// -----------------------------------------------------------------------------
+// Statistiques de lecture
+// -----------------------------------------------------------------------------
+
+/// Vue atomique (une ligne ≈ un hit). Agrégations = requêtes / vues matérialisées futures.
+model ArticleView {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  viewedAt DateTime @default(now())
+  /// Identifiant de session anonyme — pas de PII.
+  sessionKey String?
+  referrer   String?
+  /// User-Agent tronqué / hashé côté app avant insertion si besoin.
+  userAgent  String?
+
+  @@index([articleId, viewedAt])
+  @@index([viewedAt])
+  @@index([sessionKey])
+}
+
+// -----------------------------------------------------------------------------
+// Newsletter
+// -----------------------------------------------------------------------------
 
 model NewsletterSubscriber {
-  id             String           @id @default(cuid())
-  email          String           @unique
-  status         NewsletterStatus @default(ACTIVE)
-  subscribedAt   DateTime         @default(now())
+  id     String            @id @default(cuid())
+  email  String            @unique
+  status NewsletterStatus  @default(ACTIVE)
+
+  /// Token opaque pour confirmation / désinscription one-click.
+  unsubscribeToken String @unique @default(cuid())
+
+  subscribedAt   DateTime  @default(now())
+  confirmedAt    DateTime?
   unsubscribedAt DateTime?
+
+  /// Source d'acquisition (homepage, footer, import…).
+  source String?
+
+  events NewsletterEvent[]
+
+  @@index([status])
+  @@index([subscribedAt])
+  @@index([status, subscribedAt])
 }
 
+/// Journal d'événements newsletter (reporting + debug envois).
+model NewsletterEvent {
+  id           String              @id @default(cuid())
+  subscriberId String
+  subscriber   NewsletterSubscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+
+  type      NewsletterEventType
+  /// Métadonnées libres (messageId provider, articleId lié à un envoi, etc.).
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([subscriberId, createdAt])
+  @@index([type, createdAt])
+  @@index([createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// Bible (multi-traductions, lecture interne)
+// -----------------------------------------------------------------------------
+
 model BibleTranslation {
-  id    String @id @default(cuid())
-  code  String @unique
-  name  String
+  id       String  @id @default(cuid())
+  /// Code court : LSG, S21, NBS…
+  code     String  @unique
+  name     String
+  language String  @default("fr")
+  /// Notice de licence / attribution affichée dans le Dialog lecteur.
+  license  String?
+  isDefault Boolean @default(false)
+
   books BibleBook[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model BibleBook {
   id            String @id @default(cuid())
   translationId String
-  name          String
-  abbreviation  String
-  order         Int
-  verses        BibleVerse[]
+  translation   BibleTranslation @relation(fields: [translationId], references: [id], onDelete: Cascade)
 
-  translation BibleTranslation @relation(fields: [translationId], references: [id], onDelete: Cascade)
+  /// Identifiant canonique stable (jhn, rev, psa…) — aligné domaine `BIBLE_BOOKS`.
+  canonicalId  String
+  name         String
+  abbreviation String
+  /// Ordre d'affichage dans la traduction.
+  order        Int
 
+  verses BibleVerse[]
+
+  @@unique([translationId, canonicalId])
   @@unique([translationId, abbreviation])
-  @@index([translationId])
+  @@index([translationId, order])
 }
 
 model BibleVerse {
   id      String @id @default(cuid())
   bookId  String
+  book    BibleBook @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
   chapter Int
   verse   Int
-  text    String
-
-  book BibleBook @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  text    String @db.Text
 
   @@unique([bookId, chapter, verse])
   @@index([bookId, chapter])
 }
 
-model Media {
-  id           String   @id @default(cuid())
-  meditationId String?
-  filename     String
-  mimeType     String
-  sizeBytes    Int
-  storageKey   String
-  createdAt    DateTime @default(now())
+// -----------------------------------------------------------------------------
+// Programmation de publication
+// -----------------------------------------------------------------------------
 
-  meditation DailyMeditation? @relation(fields: [meditationId], references: [id], onDelete: SetNull)
-}
-
-model ArticleView {
-  id           String   @id @default(cuid())
-  meditationId String
-  viewedAt     DateTime @default(now())
-  sessionKey   String?
-
-  meditation DailyMeditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
-
-  @@index([meditationId])
-  @@index([viewedAt])
-}
-
+/// File d'attente de publication (cron / worker futur).
+/// 1—1 avec Article : un article n'a qu'une programmation active.
 model PublicationSchedule {
-  id           String   @id @default(cuid())
-  meditationId String   @unique
-  publishAt    DateTime
-  published    Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  id        String @id @default(cuid())
+  articleId String @unique
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
-  meditation DailyMeditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+  publicationType PublicationType @default(DAILY_MEDITATION)
+  publishAt       DateTime
+  /// false tant que le job n'a pas basculé l'article en PUBLISHED.
+  executed        Boolean  @default(false)
+  executedAt      DateTime?
+  lastError       String?  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([executed, publishAt])
+  @@index([publishAt])
 }
 
+// -----------------------------------------------------------------------------
+// Configuration & audit
+// -----------------------------------------------------------------------------
+
+/// Réglages clé/valeur (JSON) — ex. newsletter.from, site.tagline.
 model SiteSetting {
   id        String   @id @default(cuid())
   key       String   @unique
@@ -181,17 +462,20 @@ model SiteSetting {
   updatedAt DateTime @updatedAt
 }
 
+/// Journal d'actions admin (imports, publications, modérations…).
 model AuditLog {
-  id        String   @id @default(cuid())
-  actorId   String?
-  action    String
-  entity    String?
-  entityId  String?
-  metadata  Json?
+  id       String  @id @default(cuid())
+  actorId  String?
+  actor    User?   @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  action   String
+  entity   String?
+  entityId String?
+  metadata Json?
+
   createdAt DateTime @default(now())
 
-  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
-
   @@index([createdAt])
-  @@index([actorId])
+  @@index([actorId, createdAt])
+  @@index([entity, entityId])
 }

@@ -72,11 +72,14 @@ Les mocks sont :
 
 ## 6. Stratégie Prisma
 
-- Fichier : `prisma/schema.prisma`
+- Fichier : `prisma/schema.prisma` (+ `prisma/README.md`)
 - Provider : PostgreSQL
-- Entités préparées : User, MeditationEdition, DailyMeditation, Comment, NewsletterSubscriber, BibleTranslation, BibleBook, BibleVerse, Media, ArticleView, PublicationSchedule, SiteSetting, AuditLog
+- Entités : `User`, `Article`, `ArticleContent`, `Media`, `Comment`, `ArticleView`, `NewsletterSubscriber`, `NewsletterEvent`, `BibleTranslation`, `BibleBook`, `BibleVerse`, `PublicationSchedule`, `SiteSetting`, `AuditLog`
+- Enums : `UserRole`, `ArticleStatus`, `CommentStatus`, `PublicationType`, `NewsletterStatus`, (+ `NewsletterEventType`, `MediaKind`, `ContentFormat`)
 
-Les packages `prisma` / `@prisma/client` seront installés lors de la phase DB (`npm install prisma --save-dev && npm install @prisma/client`). À cette étape, seul le schéma est versionné — **aucune connexion, migration ou génération de client**.
+Le domaine applicatif V1 parle encore de « méditation » (mocks) ; Prisma utilise **Article** pour rester évolutif. Mapping documenté dans `prisma/README.md`.
+
+Les packages `prisma` / `@prisma/client` seront installés lors de la phase DB. Cette étape = spécification du schéma uniquement — **aucune connexion, migration ou génération de client**.
 
 **À ne pas faire maintenant** : migrations, seed, connexion réelle, containers.
 
