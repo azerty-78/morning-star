@@ -142,6 +142,10 @@ Contrat prêt pour PostgreSQL :
 
 Voir `src/domain/meditation/archive.ts` et `MeditationRepository.findArchive`.
 
+### Import documents
+
+Voir [docs/IMPORT.md](./docs/IMPORT.md). Pipeline jusqu'à preview ; publication manuelle uniquement.
+
 ## Design system
 
 Tokens dans `src/styles/globals.css` (palette sobre, accent doré, typographie IBM Plex, grille 8px, radius quasi nul). Inspiration Swiss International Typographic Style.

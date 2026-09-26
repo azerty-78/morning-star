@@ -11,7 +11,7 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-full flex-col bg-ms-white">
       <header className="border-b border-ms-black">
-        <Container className="flex items-center justify-between py-4">
+        <Container className="flex items-center justify-between gap-4 py-4">
           <div>
             <p className="text-xs uppercase tracking-[0.14em] text-ms-muted">
               Espace administrateur
@@ -23,12 +23,20 @@ export default function AdminLayout({
               {APP_NAME}
             </Link>
           </div>
-          <Link
-            href={ADMIN_ROUTES.login}
-            className="text-xs uppercase tracking-[0.14em] no-underline hover:text-ms-accent-muted"
-          >
-            Connexion
-          </Link>
+          <nav aria-label="Admin" className="flex flex-wrap items-center gap-4">
+            <Link
+              href={ADMIN_ROUTES.import}
+              className="text-xs uppercase tracking-[0.14em] no-underline hover:text-ms-accent-muted"
+            >
+              Import
+            </Link>
+            <Link
+              href={ADMIN_ROUTES.login}
+              className="text-xs uppercase tracking-[0.14em] no-underline hover:text-ms-accent-muted"
+            >
+              Connexion
+            </Link>
+          </nav>
         </Container>
       </header>
       <main className="flex-1">{children}</main>

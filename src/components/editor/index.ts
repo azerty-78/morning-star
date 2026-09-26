@@ -1,4 +1,2 @@
-/**
- * Composants éditeur / import PDF-DOCX — phase ultérieure.
- */
-export {};
+export { DocumentDropzone } from "./document-dropzone";
+export { ImportPreviewPanel, ImportPipelineStatus } from "./import-preview";

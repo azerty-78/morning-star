@@ -53,7 +53,11 @@ export default async function AdminDashboardPage() {
           Modules à venir
         </Typography>
         <ul className="grid gap-3 text-sm text-ms-gray-700 md:grid-cols-2">
-          <li>Import PDF / DOCX</li>
+          <li>
+            <a href="/admin/import" className="underline-offset-2 hover:underline">
+              Import PDF / DOC / DOCX
+            </a>
+          </li>
           <li>Programmation des publications</li>
           <li>Gestion des commentaires</li>
           <li>Newsletter</li>

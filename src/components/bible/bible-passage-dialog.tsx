@@ -54,9 +54,11 @@ export function BiblePassageDialog({
     : null;
 
   const verseLabel = reference
-    ? reference.verseStart === reference.verseEnd
-      ? String(reference.verseStart)
-      : `${reference.verseStart}–${reference.verseEnd}`
+    ? reference.verseStart == null
+      ? "chapitre entier"
+      : reference.verseStart === (reference.verseEnd ?? reference.verseStart)
+        ? String(reference.verseStart)
+        : `${reference.verseStart}–${reference.verseEnd}`
     : "";
 
   return (
