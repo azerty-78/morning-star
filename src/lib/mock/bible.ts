@@ -101,7 +101,7 @@ function verseRangeKey(
 }
 
 export function getMockTranslation(
-  code = MOCK_DEFAULT_TRANSLATION_CODE,
+  code: string = MOCK_DEFAULT_TRANSLATION_CODE,
 ): BibleTranslation {
   return (
     mockBibleTranslations.find((t) => t.code === code) ??
@@ -111,7 +111,7 @@ export function getMockTranslation(
 
 export function buildMockPassage(
   reference: ResolvedBibleReference,
-  translationCode = MOCK_DEFAULT_TRANSLATION_CODE,
+  translationCode: string = MOCK_DEFAULT_TRANSLATION_CODE,
 ): BiblePassage | null {
   const translation = getMockTranslation(translationCode);
   const rangeKey = verseRangeKey(
@@ -159,7 +159,7 @@ export function buildMockPassage(
 
 export function listMockPassagesForReferences(
   references: ResolvedBibleReference[],
-  translationCode = MOCK_DEFAULT_TRANSLATION_CODE,
+  translationCode: string = MOCK_DEFAULT_TRANSLATION_CODE,
 ): Record<string, BiblePassage> {
   const result: Record<string, BiblePassage> = {};
   for (const ref of references) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type {
   BiblePassage,
   BibleTranslation,
@@ -33,10 +33,15 @@ export function BiblePassageDialog({
     defaultTranslationCode,
   );
 
+  useEffect(() => {
+    if (open) {
+      setTranslationCode(defaultTranslationCode);
+    }
+  }, [open, reference, defaultTranslationCode]);
+
   const handleClose = useCallback(() => {
     onClose();
-    setTranslationCode(defaultTranslationCode);
-  }, [onClose, defaultTranslationCode]);
+  }, [onClose]);
 
   const title = reference?.label ?? "Passage biblique";
   const passage = reference
@@ -59,7 +64,7 @@ export function BiblePassageDialog({
       open={open}
       title={title}
       onClose={handleClose}
-      className="w-[min(100%,32rem)]"
+      className="w-[min(100%,32rem)] max-w-[calc(100vw-2rem)]"
     >
       {!reference ? (
         <Typography variant="meta">Aucune référence sélectionnée.</Typography>

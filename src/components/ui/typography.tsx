@@ -14,7 +14,18 @@ type TypographyVariant =
   | "label";
 
 export interface TypographyProps {
-  as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "blockquote" | "cite" | "time";
+  as?:
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "p"
+    | "span"
+    | "blockquote"
+    | "cite"
+    | "time"
+    | "dt"
+    | "dd";
   variant: TypographyVariant;
   children: React.ReactNode;
   className?: string;
