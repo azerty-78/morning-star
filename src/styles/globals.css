@@ -24,9 +24,12 @@
   --ms-border: var(--ms-gray-300);
   --ms-surface: var(--ms-white);
 
-  /* Typographie */
-  --ms-font-sans: var(--font-ms-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --ms-font-serif: var(--font-ms-serif), "Times New Roman", Times, serif;
+  /*
+    Typographie éditoriale suisse (Akzidenz / Helvetica lineage).
+    next/font (IBM Plex) pourra être réintroduit quand le réseau build est stable.
+  */
+  --ms-font-sans: "Helvetica Neue", Helvetica, "Arial Neue", Arial, sans-serif;
+  --ms-font-serif: "Georgia", "Times New Roman", Times, serif;
 
   --ms-text-xs: 0.75rem;
   --ms-text-sm: 0.875rem;

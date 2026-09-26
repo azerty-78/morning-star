@@ -17,6 +17,7 @@ export interface TypographyProps {
   children: React.ReactNode;
   className?: string;
   dateTime?: string;
+  id?: string;
 }
 
 const variantClass: Record<TypographyVariant, string> = {
@@ -42,6 +43,7 @@ export function Typography({
   children,
   className,
   dateTime,
+  id,
 }: TypographyProps) {
   const Tag =
     as ??
@@ -55,8 +57,18 @@ export function Typography({
             ? "time"
             : "p");
 
+  const classNames = cn(variantClass[variant], className);
+
+  if (Tag === "time") {
+    return (
+      <time id={id} className={classNames} dateTime={dateTime}>
+        {children}
+      </time>
+    );
+  }
+
   return (
-    <Tag className={cn(variantClass[variant], className)} dateTime={dateTime}>
+    <Tag id={id} className={classNames}>
       {children}
     </Tag>
   );

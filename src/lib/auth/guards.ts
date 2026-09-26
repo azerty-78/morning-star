@@ -14,7 +14,7 @@ export async function requireAdmin(): Promise<
   { ok: true; session: AuthSession } | { ok: false; reason: "unauthenticated" }
 > {
   const session = await getAdminSession();
-  if (!assertAdminAccess(session)) {
+  if (!session || !assertAdminAccess(session)) {
     return { ok: false, reason: "unauthenticated" };
   }
   return { ok: true, session };
