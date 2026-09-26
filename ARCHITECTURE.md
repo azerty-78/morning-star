@@ -128,6 +128,17 @@ Cette phase **ne touche pas** Docker. Une étape ultérieure branchera PostgreSQ
 5. Retirer le badge mock de l'UI une fois la bascule validée.
 6. Conserver les mocks pour tests / storybook si utile.
 
+### Archives (`findArchive`)
+
+Contrat prêt pour PostgreSQL :
+
+- `q` + `scope` → `ILIKE` / full-text `to_tsvector`
+- `date` / `year` → filtre sur `publicationDate`
+- `theme` → `themes` (`String[]`)
+- `sort` + `page` / `pageSize` → `orderBy` + `skip`/`take`
+
+Voir `src/domain/meditation/archive.ts` et `MeditationRepository.findArchive`.
+
 ## Design system
 
 Tokens dans `src/styles/globals.css` (palette sobre, accent doré, typographie IBM Plex, grille 8px, radius quasi nul). Inspiration Swiss International Typographic Style.

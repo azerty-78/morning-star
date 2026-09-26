@@ -1,27 +1,93 @@
-import { Container, PageHeader, Typography } from "@/components/ui";
-import { MeditationList } from "@/components/meditation";
+import { Container, PageHeader } from "@/components/ui";
+import {
+  ArchiveEmpty,
+  ArchiveError,
+  ArchiveFilters,
+  ArchivePagination,
+  ArchiveResults,
+} from "@/components/archive";
+import {
+  ArchiveSearchScope,
+  ArchiveSort,
+} from "@/domain/meditation";
+import { parseArchiveSearchParams } from "@/lib/archive";
 import { createMeditationService } from "@/services/meditation";
 
 export const metadata = {
   title: "Archive",
+  description:
+    "Parcourir, rechercher et filtrer les méditations Morning Star.",
 };
 
-export default async function ArchivePage() {
-  const meditations = await createMeditationService().listPublished();
+interface PageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
 
-  return (
-    <Container className="pb-16">
-      <PageHeader
-        eyebrow="Chronologie"
-        title="Archive"
-        description="Les méditations précédentes, par date de publication."
-      />
-      <div className="mt-10">
-        <MeditationList meditations={meditations} />
-      </div>
-      <Typography variant="meta" className="mt-8">
-        La navigation par calendrier sera ajoutée dans une étape ultérieure.
-      </Typography>
-    </Container>
-  );
+export default async function ArchivePage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const rawQuery = parseArchiveSearchParams(params);
+  const service = createMeditationService();
+
+  try {
+    const [result, facets] = await Promise.all([
+      service.searchArchive(rawQuery),
+      service.getArchiveFacets(),
+    ]);
+
+    const hasFilters = Boolean(
+      result.query.q ||
+        result.query.date ||
+        result.query.year ||
+        result.query.theme ||
+        result.query.scope !== ArchiveSearchScope.ALL ||
+        result.query.sort !== ArchiveSort.NEWEST,
+    );
+
+    return (
+      <Container className="pb-[var(--ms-space-10)]">
+        <PageHeader
+          eyebrow="Chronologie"
+          title="Archive"
+          description="Liste éditoriale des méditations — recherche, filtres et tri chronologique."
+        />
+
+        <div className="mt-10">
+          <ArchiveFilters query={result.query} facets={facets} />
+        </div>
+
+        <div className="mt-10">
+          {result.meta.total === 0 ? (
+            <ArchiveEmpty hasFilters={hasFilters} />
+          ) : (
+            <>
+              <ArchiveResults result={result} />
+              <ArchivePagination
+                query={result.query}
+                page={result.meta.page}
+                pageCount={result.meta.pageCount}
+                hasPreviousPage={result.meta.hasPreviousPage}
+                hasNextPage={result.meta.hasNextPage}
+              />
+            </>
+          )}
+        </div>
+      </Container>
+    );
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Erreur inattendue.";
+
+    return (
+      <Container className="pb-[var(--ms-space-10)]">
+        <PageHeader
+          eyebrow="Chronologie"
+          title="Archive"
+          description="Liste éditoriale des méditations."
+        />
+        <div className="mt-10">
+          <ArchiveError message={message} />
+        </div>
+      </Container>
+    );
+  }
 }
