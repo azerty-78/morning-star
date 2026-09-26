@@ -8,8 +8,10 @@ export const PUBLIC_ROUTES = {
 export const ADMIN_ROUTES = {
   login: "/admin/login",
   dashboard: "/admin/dashboard",
+  import: "/admin/import",
 } as const;
 
 export const API_ROUTES = {
   health: "/api/health",
+  import: "/api/admin/import",
 } as const;

@@ -1,11 +1,11 @@
 /**
- * Parser PDF/DOCX — emplacement réservé pour la phase import.
- * Ne pas implémenter le parsing ici.
+ * @deprecated Utiliser `@/lib/import`.
+ * Conservé pour ne pas casser d'imports éventuels.
  */
-
-export type SupportedDocumentType = "pdf" | "docx";
-
-export interface ParsedDocumentStub {
-  type: SupportedDocumentType;
-  rawText: string;
-}
+export {
+  type DocumentParser,
+  PdfParser,
+  WordParser,
+  createImportPipeline,
+} from "@/lib/import";
+export type { SupportedImportFormat as SupportedDocumentType } from "@/domain/import";
