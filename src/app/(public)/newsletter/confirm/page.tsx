@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { Container, PageHeader, Typography } from "@/components/ui";
-import { ButtonLink } from "@/components/ui";
+import {
+  ButtonLink,
+  Container,
+  PageHeader,
+  Typography,
+} from "@/components/ui";
 import { PUBLIC_ROUTES } from "@/constants/routes";
 import { buildPublicPageMetadata } from "@/lib/seo";
 import { createNewsletterService } from "@/services/newsletter";

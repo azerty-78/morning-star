@@ -36,4 +36,5 @@ export const API_ROUTES = {
   bibleResolve: "/api/bible/resolve",
   newsletterSubscribe: "/api/newsletter/subscribe",
   newsletterUnsubscribe: "/api/newsletter/unsubscribe",
+  newsletterNotifyPublication: "/api/admin/newsletter/notify-publication",
 } as const;

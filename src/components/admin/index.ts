@@ -3,3 +3,4 @@ export { AdminDashboardView } from "./admin-dashboard";
 export { EditorialCalendar } from "./editorial-calendar";
 export { MeditationAdminTable } from "./meditation-admin-table";
 export { StatusBadge } from "./status-badge";
+export { NotifyPublicationButton } from "./notify-publication-button";

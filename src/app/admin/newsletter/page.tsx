@@ -1,10 +1,8 @@
 import { Badge, Container, PageHeader, Typography } from "@/components/ui";
+import { NotifyPublicationButton } from "@/components/admin";
 import { MOCK_DATA_BANNER } from "@/constants/app";
-import { StatusBadge } from "@/components/admin/status-badge";
-import { createNewsletterService } from "@/services/newsletter";
-import { createPublicationService } from "@/services/publication";
 import { createMeditationService } from "@/services/meditation";
-import { NotifyPublicationButton } from "@/components/admin/notify-publication-button";
+import { createNewsletterService } from "@/services/newsletter";
 
 export const metadata = {
   title: "Newsletter",
@@ -127,7 +125,10 @@ export default async function AdminNewsletterPage() {
                 className="grid gap-2 border-b border-ms-border py-4 md:grid-cols-12 md:items-baseline"
               >
                 <div className="md:col-span-2">
-                  <Typography variant="date" dateTime={n.createdAt.toISOString()}>
+                  <Typography
+                    variant="date"
+                    dateTime={n.createdAt.toISOString()}
+                  >
                     {n.createdAt.toISOString().slice(0, 10)}
                   </Typography>
                   <Typography variant="label" className="mt-1">
@@ -143,9 +144,7 @@ export default async function AdminNewsletterPage() {
                   ) : null}
                 </div>
                 <div className="md:col-span-2">
-                  <Badge
-                    tone={n.status === "SENT" ? "inverted" : "neutral"}
-                  >
+                  <Badge tone={n.status === "SENT" ? "inverted" : "neutral"}>
                     {notificationStatusLabel(n.status)}
                   </Badge>
                 </div>

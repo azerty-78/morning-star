@@ -8,13 +8,9 @@ import {
   type DailyMeditation,
   type MeditationStatus as MeditationStatusType,
 } from "@/domain/meditation";
-import {
-  mockArticleViews,
-  mockNewsletterStats,
-  mockPendingComments,
-  sumMockViews,
-} from "@/lib/mock";
+import { mockArticleViews, mockPendingComments, sumMockViews } from "@/lib/mock";
 import { createMeditationService } from "@/services/meditation";
+import { createNewsletterService } from "@/services/newsletter";
 
 /**
  * Service admin — agrégats pour auteur unique.
@@ -23,6 +19,7 @@ import { createMeditationService } from "@/services/meditation";
 export class AdminService {
   constructor(
     private readonly meditations = createMeditationService(),
+    private readonly newsletter = createNewsletterService(),
   ) {}
 
   async getDashboard(): Promise<AdminDashboardSnapshot> {
@@ -38,6 +35,8 @@ export class AdminService {
       .sort((a, b) => b.publicationDate.localeCompare(a.publicationDate))
       .slice(0, 5);
 
+    const nl = await this.newsletter.getAdminSnapshot();
+
     return {
       current,
       recentPublished,
@@ -45,8 +44,8 @@ export class AdminService {
       drafts,
       totalViews: sumMockViews(),
       viewsThisWeek: Math.round(sumMockViews() * 0.12),
-      newsletterActive: mockNewsletterStats.active,
-      newsletterTotal: mockNewsletterStats.total,
+      newsletterActive: nl.counts.active,
+      newsletterTotal: nl.counts.total,
       pendingComments: mockPendingComments,
     };
   }
@@ -60,11 +59,7 @@ export class AdminService {
   }
 
   async getNewsletterSnapshot() {
-    return {
-      ...mockNewsletterStats,
-      recentSignups: 18,
-      openRateHint: "—",
-    };
+    return this.newsletter.getAdminSnapshot();
   }
 
   async getStatsSnapshot() {
@@ -79,13 +74,15 @@ export class AdminService {
     }));
     byId.sort((a, b) => b.views - a.views);
 
+    const nl = await this.newsletter.getAdminSnapshot();
+
     return {
       totalViews: sumMockViews(),
       publishedCount: published.length,
       draftCount: all.filter((m) => m.status === MeditationStatus.DRAFT).length,
       scheduledCount: all.filter((m) => m.status === MeditationStatus.SCHEDULED)
         .length,
-      newsletterActive: mockNewsletterStats.active,
+      newsletterActive: nl.counts.active,
       topArticles: byId.slice(0, 8),
     };
   }

@@ -79,6 +79,13 @@ export class MockNewsletterRepository implements NewsletterRepository {
     if (index < 0) return null;
     const current = all[index]!;
     const next: NewsletterSubscriber = { ...current, ...patch };
+    // Permettre l’effacement explicite des dates optionnelles
+    if ("confirmedAt" in patch && patch.confirmedAt === undefined) {
+      delete next.confirmedAt;
+    }
+    if ("unsubscribedAt" in patch && patch.unsubscribedAt === undefined) {
+      delete next.unsubscribedAt;
+    }
     all[index] = next;
     newsletterStore.saveSubscribers(all);
     return next;

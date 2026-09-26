@@ -3,14 +3,16 @@ export {
   NewsletterEventType,
   NewsletterNotificationKind,
   NewsletterNotificationStatus,
-  type NewsletterStatus as NewsletterStatusType,
-  type NewsletterEventType as NewsletterEventTypeType,
-  type NewsletterNotificationKind as NewsletterNotificationKindType,
-  type NewsletterNotificationStatus as NewsletterNotificationStatusType,
   type NewsletterSubscriber,
   type NewsletterEvent,
   type NewsletterNotification,
   type NewsletterCounts,
   type NewsletterPublicResult,
   type NewsletterAdminSnapshot,
+} from "./types";
+export type {
+  NewsletterStatus as NewsletterStatusValue,
+  NewsletterEventType as NewsletterEventTypeValue,
+  NewsletterNotificationKind as NewsletterNotificationKindValue,
+  NewsletterNotificationStatus as NewsletterNotificationStatusValue,
 } from "./types";
