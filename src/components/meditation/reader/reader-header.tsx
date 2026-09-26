@@ -27,11 +27,7 @@ export function ReaderHeader({
 }: ReaderHeaderProps) {
   return (
     <header>
-      <div
-        className="border-b border-ms-black pb-4"
-        role="presentation"
-        aria-hidden="true"
-      >
+      <div className="border-b border-ms-black pb-4">
         <div className="flex items-center justify-between gap-4">
           <Typography variant="label" className="text-ms-gold-dark">
             Méditation
