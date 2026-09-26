@@ -9,7 +9,9 @@ export const metadata = {
 };
 
 function shiftMonth(yearMonth: string, delta: number): string {
-  const [y, m] = yearMonth.split("-").map(Number);
+  const parts = yearMonth.split("-");
+  const y = Number(parts[0]);
+  const m = Number(parts[1]);
   const d = new Date(y, m - 1 + delta, 1);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }

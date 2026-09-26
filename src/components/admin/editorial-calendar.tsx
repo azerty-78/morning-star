@@ -8,7 +8,9 @@ import { cn, formatMonthYear } from "@/lib/utils";
 import { statusLabel } from "@/services/admin";
 
 function padMonthDays(yearMonth: string): string[] {
-  const [y, m] = yearMonth.split("-").map(Number);
+  const parts = yearMonth.split("-");
+  const y = Number(parts[0]);
+  const m = Number(parts[1]);
   const last = new Date(y, m, 0).getDate();
   const days: string[] = [];
   for (let d = 1; d <= last; d++) {
