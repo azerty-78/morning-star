@@ -17,12 +17,12 @@ import {
  * Composition root — sélectionne mock ou Prisma selon DATA_SOURCE.
  * Les pages et services dépendent des interfaces, jamais de Prisma directement.
  */
-function useMock(): boolean {
+function isMockMode(): boolean {
   return isMockDataSource(process.env.DATA_SOURCE);
 }
 
 export function getMeditationRepository(): MeditationRepository {
-  if (useMock()) return new MockMeditationRepository();
+  if (isMockMode()) return new MockMeditationRepository();
   return new PrismaMeditationRepository();
 }
 
