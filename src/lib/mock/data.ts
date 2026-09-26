@@ -8,7 +8,6 @@ import {
   MeditationStatus,
   type DailyMeditation,
 } from "@/domain/meditation";
-import type { BibleVerse } from "@/domain/bible";
 
 export const MOCK_SOURCE = "mock" as const;
 
@@ -33,9 +32,9 @@ export const mockMeditations: DailyMeditation[] = [
       "Avant que le jour ne se lève, une lumière discrète annonce déjà la promesse.",
     body: `Il y a des matins où l'horizon paraît encore fermé. Pourtant, une étoile brille déjà — discrète, précise, certaine.
 
-Cette lumière n'impose pas. Elle indique. Elle rappelle que la nuit n'a pas le dernier mot, et que la fidélité de Dieu précède souvent notre capacité à voir clairement.
+Cette lumière n'impose pas. Elle indique. Elle rappelle que la nuit n'a pas le dernier mot, et que la fidélité de Dieu précède souvent notre capacité à voir clairement. Apocalypse 22:16 nomme Jésus « l'étoile brillante du matin ».
 
-Aujourd'hui, arrêtons-nous. Non pour accumuler des mots, mais pour laisser cette lumière faire son œuvre : orienter, consoler, et remettre le regard vers Celui qui vient.`,
+Comme l'écrit 2 Pierre 1:19, la parole prophétique est une lampe dans l'obscurité, jusqu'à ce que le jour paraisse. Aujourd'hui, arrêtons-nous. Non pour accumuler des mots, mais pour laisser cette lumière faire son œuvre : orienter, consoler, et remettre le regard vers Celui qui vient.`,
     highlightQuote:
       "Je suis la racine et la postérité de David, l'étoile brillante du matin.",
     bibleReferences: [
@@ -66,7 +65,7 @@ Aujourd'hui, arrêtons-nous. Non pour accumuler des mots, mais pour laisser cett
     status: MeditationStatus.PUBLISHED,
     excerpt:
       "Le silence n'est pas un vide : c'est un espace où la Parole peut prendre racine.",
-    body: `Nous avons appris à remplir chaque pause. Pourtant, l'Écriture célèbre souvent le silence comme un lieu de formation.
+    body: `Nous avons appris à remplir chaque pause. Pourtant, l'Écriture célèbre souvent le silence comme un lieu de formation. Psaume 46:10 nous invite : « Arrêtez, et sachez que je suis Dieu ».
 
 Dans le silence, les urgences se dissolvent. Les priorités redeviennent visibles. Et la voix intérieure — trop souvent étouffée — peut enfin se faire entendre.`,
     bibleReferences: [
@@ -90,9 +89,9 @@ Dans le silence, les urgences se dissolvent. Les priorités redeviennent visible
     status: MeditationStatus.PUBLISHED,
     excerpt:
       "La lumière ne nous demande pas d'être parfaits : elle nous invite à être vrais.",
-    body: `Marcher dans la lumière, ce n'est pas exhiber une vertu sans faille. C'est accepter d'être vu, corrigé, et relevé.
+    body: `Marcher dans la lumière, ce n'est pas exhiber une vertu sans faille. C'est accepter d'être vu, corrigé, et relevé. 1 Jean 1:7 affirme que si nous marchons dans la lumière, nous sommes en communion les uns avec les autres.
 
-La lumière révèle, mais elle guérit aussi. Elle expose ce qui doit être transformé, tout en affirmant que la grâce précède le jugement.`,
+La lumière révèle, mais elle guérit aussi. Elle expose ce qui doit être transformé, tout en affirmant que la grâce précède le jugement — comme le rappelle Jean 3:16.`,
     bibleReferences: [
       {
         label: "1 Jean 1:7",
@@ -101,6 +100,13 @@ La lumière révèle, mais elle guérit aussi. Elle expose ce qui doit être tra
         verseStart: 7,
         verseEnd: 7,
       },
+      {
+        label: "Jean 3:16",
+        book: "Jean",
+        chapter: 3,
+        verseStart: 16,
+        verseEnd: 16,
+      },
     ],
     authorId: mockAdminUser.id,
     createdAt: new Date("2026-09-18T10:00:00.000Z"),
@@ -108,24 +114,14 @@ La lumière révèle, mais elle guérit aussi. Elle expose ce qui doit être tra
   },
 ];
 
-/** Versets mockés pour démontrer l'intégration Bible future. */
-export const mockBibleVerses: BibleVerse[] = [
-  {
-    id: "verse_mock_rev_22_16",
-    bookId: "book_mock_revelation",
-    chapter: 22,
-    verse: 16,
-    text: "Moi, Jésus, j'ai envoyé mon ange pour vous attester ces choses dans les Églises. Je suis la racine et la postérité de David, l'étoile brillante du matin.",
-  },
-  {
-    id: "verse_mock_2pet_1_19",
-    bookId: "book_mock_2peter",
-    chapter: 1,
-    verse: 19,
-    text: "Et nous tenons pour d'autant plus certaine la parole prophétique, à laquelle vous faites bien de prêter attention, comme à une lampe qui brille dans un lieu obscur, jusqu'à ce que le jour vienne à paraître et que l'étoile du matin se lève dans vos cœurs.",
-  },
-];
-
 export function isMockDataSource(source: string | undefined): boolean {
   return source !== "prisma";
 }
+
+export {
+  mockBibleTranslations,
+  MOCK_DEFAULT_TRANSLATION_CODE,
+  buildMockPassage,
+  listMockPassagesForReferences,
+  getMockTranslation,
+} from "./bible";
