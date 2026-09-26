@@ -8,6 +8,7 @@ export interface EditorialCardProps {
   excerpt: string;
   date: string;
   index?: string;
+  themes?: string[];
   className?: string;
 }
 
@@ -21,6 +22,7 @@ export function EditorialCard({
   excerpt,
   date,
   index,
+  themes,
   className,
 }: EditorialCardProps) {
   return (
@@ -59,6 +61,11 @@ export function EditorialCard({
           <Typography variant="meta" className="mt-3 max-w-[var(--ms-measure)]">
             {excerpt}
           </Typography>
+          {themes && themes.length > 0 ? (
+            <p className="mt-3 text-[length:var(--ms-text-2xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-muted">
+              {themes.join(" · ")}
+            </p>
+          ) : null}
         </div>
       </Link>
     </article>

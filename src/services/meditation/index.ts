@@ -1,18 +1,20 @@
-import type { DailyMeditation } from "@/domain/meditation";
+import type {
+  ArchiveFacets,
+  ArchiveQuery,
+  ArchiveResult,
+  DailyMeditation,
+} from "@/domain/meditation";
 import { getMeditationRepository } from "@/lib/db";
 
 /**
  * Service méditation — logique métier au-dessus du repository.
  */
 export class MeditationService {
-  constructor(
-    private readonly repo = getMeditationRepository(),
-  ) {}
+  constructor(private readonly repo = getMeditationRepository()) {}
 
   async getToday(date = todayIso()): Promise<DailyMeditation | null> {
     const today = await this.repo.findByPublicationDate(date);
     if (today) return today;
-    // Fallback démo : dernière publiée si pas de méditation pour la date
     const published = await this.repo.findPublished(1);
     return published[0] ?? null;
   }
@@ -29,8 +31,16 @@ export class MeditationService {
     return this.repo.search(query);
   }
 
+  async searchArchive(query: ArchiveQuery): Promise<ArchiveResult> {
+    return this.repo.findArchive(query);
+  }
+
+  async getArchiveFacets(): Promise<ArchiveFacets> {
+    return this.repo.getArchiveFacets();
+  }
+
   /**
-   * Méditations précédente / suivante selon la date de publication (ordre chronologique inverse).
+   * Méditations précédente / suivante selon la date de publication.
    */
   async getNeighbors(slug: string): Promise<{
     previous: DailyMeditation | null;
@@ -42,9 +52,7 @@ export class MeditationService {
       return { previous: null, next: null };
     }
     return {
-      // Liste triée desc : index+1 = plus ancienne = « précédente »
       previous: published[index + 1] ?? null,
-      // index-1 = plus récente = « suivante »
       next: published[index - 1] ?? null,
     };
   }

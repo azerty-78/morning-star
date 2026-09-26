@@ -34,6 +34,8 @@ export interface DailyMeditation {
   /** Citation mise en avant */
   highlightQuote?: string;
   bibleReferences: BibleReference[];
+  /** Thèmes éditoriaux (filtre archives) — prêt pour Prisma String[] */
+  themes?: string[];
   authorId: string;
   editionId?: string;
   createdAt: Date;

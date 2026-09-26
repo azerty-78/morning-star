@@ -66,6 +66,7 @@ model DailyMeditation {
   body            String
   highlightQuote  String?
   bibleReferences Json?
+  themes          String[]         @default([])
   authorId        String
   editionId       String?
   createdAt       DateTime         @default(now())
@@ -80,6 +81,7 @@ model DailyMeditation {
 
   @@index([publicationDate])
   @@index([status])
+  @@index([themes])
 }
 
 model Comment {

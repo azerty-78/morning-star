@@ -2,6 +2,7 @@ export {
   MOCK_SOURCE,
   mockAdminUser,
   mockMeditations,
+  MOCK_THEME_LABELS,
   isMockDataSource,
   mockBibleTranslations,
   MOCK_DEFAULT_TRANSLATION_CODE,
