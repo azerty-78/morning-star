@@ -14,6 +14,8 @@ export interface MeditationRepository {
   findBySlug(slug: string): Promise<DailyMeditation | null>;
   findByPublicationDate(date: string): Promise<DailyMeditation | null>;
   findPublished(limit?: number): Promise<DailyMeditation[]>;
+  /** Toutes les méditations (admin) — brouillons inclus. */
+  findAll(limit?: number): Promise<DailyMeditation[]>;
   /** @deprecated Préférer findArchive — conservé pour compat. */
   search(query: string): Promise<DailyMeditation[]>;
 

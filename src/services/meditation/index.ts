@@ -23,6 +23,10 @@ export class MeditationService {
     return this.repo.findPublished(limit);
   }
 
+  async listAll(limit?: number): Promise<DailyMeditation[]> {
+    return this.repo.findAll(limit);
+  }
+
   async getBySlug(slug: string): Promise<DailyMeditation | null> {
     return this.repo.findBySlug(slug);
   }

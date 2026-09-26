@@ -39,6 +39,12 @@ export class MockMeditationRepository implements MeditationRepository {
       .slice(0, limit);
   }
 
+  async findAll(limit = 200): Promise<DailyMeditation[]> {
+    return [...mockMeditations]
+      .sort((a, b) => b.publicationDate.localeCompare(a.publicationDate))
+      .slice(0, limit);
+  }
+
   async search(query: string): Promise<DailyMeditation[]> {
     const result = await this.findArchive({
       q: query,

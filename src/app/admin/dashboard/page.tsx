@@ -1,70 +1,26 @@
-import { Badge, Container, PageHeader, Typography } from "@/components/ui";
+import { AdminDashboardView } from "@/components/admin";
+import { Badge, Container, PageHeader } from "@/components/ui";
 import { MOCK_DATA_BANNER } from "@/constants/app";
-import { getUserRepository } from "@/lib/db";
-import { createMeditationService } from "@/services/meditation";
+import { createAdminService } from "@/services/admin";
 
 export const metadata = {
   title: "Dashboard",
 };
 
-/**
- * Dashboard structurel — fonctionnalités métier à venir.
- * Pas de protection auth réelle à cette étape (guards préparés dans lib/auth).
- */
 export default async function AdminDashboardPage() {
-  const admin = await getUserRepository().findAdmin();
-  const meditations = await createMeditationService().listPublished();
+  const snapshot = await createAdminService().getDashboard();
 
   return (
-    <Container className="pb-16">
+    <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
         eyebrow="Administration"
         title="Dashboard"
-        description="Vue d'ensemble structurelle. Les modules métier seront branchés progressivement."
+        description="Vue d’ensemble pour un auteur unique — publication, file d’attente, audience."
       />
-
-      <div className="mt-6">
+      <div className="mb-8">
         <Badge tone="accent">{MOCK_DATA_BANNER}</Badge>
       </div>
-
-      <section className="mt-10 grid gap-8 border-t border-ms-border pt-10 md:grid-cols-2">
-        <div>
-          <Typography variant="nav" className="mb-3 text-ms-muted">
-            Administrateur
-          </Typography>
-          <Typography variant="body">
-            {admin?.name ?? "—"}
-            <br />
-            <span className="text-ms-muted">{admin?.email}</span>
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="nav" className="mb-3 text-ms-muted">
-            Méditations (mock)
-          </Typography>
-          <Typography variant="display" as="p" className="text-5xl">
-            {meditations.length}
-          </Typography>
-        </div>
-      </section>
-
-      <section className="mt-12 border-t border-ms-border pt-10">
-        <Typography variant="nav" className="mb-4 text-ms-muted">
-          Modules à venir
-        </Typography>
-        <ul className="grid gap-3 text-sm text-ms-gray-700 md:grid-cols-2">
-          <li>
-            <a href="/admin/import" className="underline-offset-2 hover:underline">
-              Import PDF / DOC / DOCX
-            </a>
-          </li>
-          <li>Programmation des publications</li>
-          <li>Gestion des commentaires</li>
-          <li>Newsletter</li>
-          <li>Statistiques</li>
-          <li>Paramètres du site</li>
-        </ul>
-      </section>
+      <AdminDashboardView snapshot={snapshot} />
     </Container>
   );
 }

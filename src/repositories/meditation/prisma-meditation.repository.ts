@@ -42,6 +42,10 @@ export class PrismaMeditationRepository implements MeditationRepository {
     throw new Error(NOT_WIRED);
   }
 
+  async findAll(): Promise<never[]> {
+    throw new Error(NOT_WIRED);
+  }
+
   async search(): Promise<never[]> {
     throw new Error(NOT_WIRED);
   }
