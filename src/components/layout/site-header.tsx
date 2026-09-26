@@ -12,24 +12,21 @@ const navItems = [
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-ms-border bg-ms-bg">
+    <header className="bg-ms-bg">
       <Container className="flex flex-col gap-6 py-5 md:flex-row md:items-end md:justify-between md:py-6">
-        <div>
-          <Link
-            href={PUBLIC_ROUTES.home}
-            className="no-underline"
-          >
-            <span className="block text-2xl font-semibold tracking-tight text-ms-fg md:text-3xl">
+        <div className="min-w-0">
+          <Link href={PUBLIC_ROUTES.home} className="no-underline block">
+            <span className="block text-[length:var(--ms-text-2xl)] font-bold tracking-[var(--ms-tracking-tight)] text-ms-fg md:text-[length:var(--ms-text-3xl)]">
               {APP_NAME}
             </span>
           </Link>
-          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-ms-muted">
+          <p className="mt-1 text-[length:var(--ms-text-2xs)] uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted">
             {APP_TAGLINE}
           </p>
         </div>
         <Navigation items={navItems} />
       </Container>
-      <Separator className="border-ms-black" />
+      <Separator tone="strong" />
     </header>
   );
 }

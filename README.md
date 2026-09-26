@@ -20,7 +20,9 @@ Les données affichées sont **mockées** (`DATA_SOURCE=mock` par défaut). Voir
 ## Documentation
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — architecture et conventions
+- [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) — identité visuelle suisse
 - [CONTRIBUTING.md](./CONTRIBUTING.md) — règles de développement
+- Styleguide vivant : `/design-system`
 
 ## Espaces
 

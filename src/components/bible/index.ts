@@ -1,4 +1,4 @@
-/**
- * Composants Bible (lecteur, références) — phase ultérieure.
- */
-export {};
+export {
+  BibleReference,
+  BibleReferenceList,
+} from "./bible-reference";

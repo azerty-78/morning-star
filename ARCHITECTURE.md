@@ -1,6 +1,8 @@
-# Architecture Morning Star
+# Morning Star
 
 Document de référence pour l'étape fondations. À tenir à jour au fur et à mesure des phases.
+
+Voir aussi [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) pour les décisions visuelles.
 
 ## 1. Architecture générale
 

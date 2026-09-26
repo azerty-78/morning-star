@@ -1,7 +1,11 @@
-import { Badge, Typography } from "@/components/ui";
-import { formatPublicationDate } from "@/lib/utils";
-import type { DailyMeditation } from "@/domain/meditation";
+import {
+  ArticleBody,
+  ArticleHeader,
+  PullQuote,
+} from "@/components/editorial";
+import { BibleReferenceList } from "@/components/bible";
 import { MOCK_DATA_BANNER } from "@/constants/app";
+import type { DailyMeditation } from "@/domain/meditation";
 
 export interface MeditationHeroProps {
   meditation: DailyMeditation;
@@ -12,54 +16,32 @@ export function MeditationHero({
   meditation,
   showMockBadge = true,
 }: MeditationHeroProps) {
+  const primaryCite = meditation.bibleReferences[0]?.label;
+
   return (
     <article>
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <Typography
-          variant="date"
-          as="time"
-          dateTime={meditation.publicationDate}
-        >
-          {formatPublicationDate(meditation.publicationDate)}
-        </Typography>
-        {showMockBadge ? <Badge tone="accent">{MOCK_DATA_BANNER}</Badge> : null}
-      </div>
-
-      <Typography variant="display" className="max-w-4xl">
-        {meditation.title}
-      </Typography>
-
-      {meditation.subtitle ? (
-        <Typography variant="subtitle" className="mt-5 max-w-2xl">
-          {meditation.subtitle}
-        </Typography>
-      ) : null}
+      <ArticleHeader
+        title={meditation.title}
+        subtitle={meditation.subtitle}
+        date={meditation.publicationDate}
+        badge={showMockBadge ? MOCK_DATA_BANNER : undefined}
+      />
 
       {meditation.highlightQuote ? (
-        <Typography variant="quote" className="mt-10 max-w-3xl border-l-2 border-ms-accent pl-6">
+        <PullQuote cite={primaryCite} className="mt-10">
           {meditation.highlightQuote}
-        </Typography>
+        </PullQuote>
       ) : null}
 
       {meditation.bibleReferences.length > 0 ? (
-        <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2">
-          {meditation.bibleReferences.map((ref) => (
-            <li key={ref.label}>
-              <Typography variant="reference" as="span">
-                {ref.label}
-              </Typography>
-            </li>
-          ))}
-        </ul>
+        <BibleReferenceList
+          references={meditation.bibleReferences}
+          compact
+          className="mt-8"
+        />
       ) : null}
 
-      <div className="mt-10 max-w-2xl space-y-5">
-        {meditation.body.split("\n\n").map((paragraph) => (
-          <Typography key={paragraph.slice(0, 24)} variant="body">
-            {paragraph}
-          </Typography>
-        ))}
-      </div>
+      <ArticleBody content={meditation.body} className="mt-10" />
     </article>
   );
 }
