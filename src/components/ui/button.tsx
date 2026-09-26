@@ -1,13 +1,7 @@
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "accent" | "link";
-type ButtonSize = "sm" | "md";
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-}
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "accent" | "link";
+export type ButtonSize = "sm" | "md";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
@@ -26,6 +20,32 @@ const sizeClass: Record<ButtonSize, string> = {
   md: "min-h-10 px-4 py-2 text-[length:var(--ms-text-xs)] tracking-[var(--ms-tracking-wider)]",
 };
 
+export function buttonClassName({
+  variant = "primary",
+  size = "md",
+  className,
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+}): string {
+  return cn(
+    "inline-flex items-center justify-center gap-2",
+    "font-medium uppercase rounded-none no-underline",
+    "transition-colors duration-[var(--ms-duration)] ease-[var(--ms-ease)]",
+    "disabled:opacity-35 disabled:pointer-events-none",
+    variant !== "link" && sizeClass[size],
+    variantClass[variant],
+    className,
+  );
+}
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+}
+
 export function Button({
   className,
   variant = "primary",
@@ -39,15 +59,7 @@ export function Button({
     <button
       type={type}
       disabled={disabled}
-      className={cn(
-        "inline-flex items-center justify-center gap-2",
-        "font-medium uppercase rounded-none",
-        "transition-colors duration-[var(--ms-duration)] ease-[var(--ms-ease)]",
-        "disabled:opacity-35 disabled:pointer-events-none",
-        variant !== "link" && sizeClass[size],
-        variantClass[variant],
-        className,
-      )}
+      className={buttonClassName({ variant, size, className })}
       {...props}
     >
       {children}

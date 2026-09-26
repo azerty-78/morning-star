@@ -1,4 +1,3 @@
-/**
- * Composants publics composés — phase fonctionnalités ultérieure.
- */
-export {};
+export { HomeToday } from "./home-today";
+export { HomeArchiveTeaser } from "./home-archive-teaser";
+export { NewsletterSignup } from "./newsletter-signup";

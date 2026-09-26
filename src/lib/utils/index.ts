@@ -15,3 +15,24 @@ export function formatPublicationDate(
     year: "numeric",
   }).format(date);
 }
+
+export function formatWeekday(isoDate: string, locale = "fr-FR"): string {
+  const date = new Date(`${isoDate}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat(locale, { weekday: "long" }).format(date);
+}
+
+export function formatDayNumber(isoDate: string): string {
+  const date = new Date(`${isoDate}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  return String(date.getDate());
+}
+
+export function formatMonthYear(isoDate: string, locale = "fr-FR"): string {
+  const date = new Date(`${isoDate}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat(locale, {
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
