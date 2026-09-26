@@ -61,6 +61,7 @@ export default async function MeditationDetailPage({ params }: PageProps) {
 
   return (
     <Container className="pb-[var(--ms-space-10)] pt-[var(--ms-space-7)] md:pt-[var(--ms-space-8)]">
+      <MeditationViewTracker meditationId={meditation.id} />
       <JsonLd
         data={[
           meditationArticleJsonLd(meditation, authorName),
