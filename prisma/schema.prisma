@@ -1,0 +1,195 @@
+// This is your Prisma schema file.
+// Morning Star — préparé pour PostgreSQL.
+//
+// IMPORTANT (étape architecture) :
+// - Ne pas exécuter de migration
+// - Ne pas connecter une base réelle
+// - Ne pas lancer Docker / PostgreSQL
+// Le client Prisma sera généré et branché dans une étape ultérieure.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+}
+
+enum MeditationStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum NewsletterStatus {
+  ACTIVE
+  UNSUBSCRIBED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  meditations DailyMeditation[]
+  auditLogs   AuditLog[]
+}
+
+model MeditationEdition {
+  id          String   @id @default(cuid())
+  title       String
+  year        Int
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  meditations DailyMeditation[]
+}
+
+model DailyMeditation {
+  id              String           @id @default(cuid())
+  slug            String           @unique
+  title           String
+  subtitle        String?
+  publicationDate DateTime         @db.Date
+  status          MeditationStatus @default(DRAFT)
+  excerpt         String
+  body            String
+  highlightQuote  String?
+  bibleReferences Json?
+  authorId        String
+  editionId       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  author   User               @relation(fields: [authorId], references: [id])
+  edition  MeditationEdition? @relation(fields: [editionId], references: [id])
+  comments Comment[]
+  views    ArticleView[]
+  media    Media[]
+  schedule PublicationSchedule?
+
+  @@index([publicationDate])
+  @@index([status])
+}
+
+model Comment {
+  id           String   @id @default(cuid())
+  meditationId String
+  authorName   String
+  authorEmail  String?
+  body         String
+  approved     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  meditation DailyMeditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+
+  @@index([meditationId])
+}
+
+model NewsletterSubscriber {
+  id             String           @id @default(cuid())
+  email          String           @unique
+  status         NewsletterStatus @default(ACTIVE)
+  subscribedAt   DateTime         @default(now())
+  unsubscribedAt DateTime?
+}
+
+model BibleTranslation {
+  id    String @id @default(cuid())
+  code  String @unique
+  name  String
+  books BibleBook[]
+}
+
+model BibleBook {
+  id            String @id @default(cuid())
+  translationId String
+  name          String
+  abbreviation  String
+  order         Int
+  verses        BibleVerse[]
+
+  translation BibleTranslation @relation(fields: [translationId], references: [id], onDelete: Cascade)
+
+  @@unique([translationId, abbreviation])
+  @@index([translationId])
+}
+
+model BibleVerse {
+  id      String @id @default(cuid())
+  bookId  String
+  chapter Int
+  verse   Int
+  text    String
+
+  book BibleBook @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([bookId, chapter, verse])
+  @@index([bookId, chapter])
+}
+
+model Media {
+  id           String   @id @default(cuid())
+  meditationId String?
+  filename     String
+  mimeType     String
+  sizeBytes    Int
+  storageKey   String
+  createdAt    DateTime @default(now())
+
+  meditation DailyMeditation? @relation(fields: [meditationId], references: [id], onDelete: SetNull)
+}
+
+model ArticleView {
+  id           String   @id @default(cuid())
+  meditationId String
+  viewedAt     DateTime @default(now())
+  sessionKey   String?
+
+  meditation DailyMeditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+
+  @@index([meditationId])
+  @@index([viewedAt])
+}
+
+model PublicationSchedule {
+  id           String   @id @default(cuid())
+  meditationId String   @unique
+  publishAt    DateTime
+  published    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  meditation DailyMeditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([actorId])
+}
