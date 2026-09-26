@@ -8,7 +8,8 @@ import {
   type DailyMeditation,
   type MeditationStatus as MeditationStatusType,
 } from "@/domain/meditation";
-import { mockArticleViews, mockPendingComments, sumMockViews } from "@/lib/mock";
+import { mockPendingComments } from "@/lib/mock";
+import { createAnalyticsService } from "@/services/analytics";
 import { createMeditationService } from "@/services/meditation";
 import { createNewsletterService } from "@/services/newsletter";
 
@@ -20,6 +21,7 @@ export class AdminService {
   constructor(
     private readonly meditations = createMeditationService(),
     private readonly newsletter = createNewsletterService(),
+    private readonly analytics = createAnalyticsService(),
   ) {}
 
   async getDashboard(): Promise<AdminDashboardSnapshot> {
@@ -35,15 +37,18 @@ export class AdminService {
       .sort((a, b) => b.publicationDate.localeCompare(a.publicationDate))
       .slice(0, 5);
 
-    const nl = await this.newsletter.getAdminSnapshot();
+    const [nl, stats] = await Promise.all([
+      this.newsletter.getAdminSnapshot(),
+      this.analytics.getDashboard(),
+    ]);
 
     return {
       current,
       recentPublished,
       scheduled,
       drafts,
-      totalViews: sumMockViews(),
-      viewsThisWeek: Math.round(sumMockViews() * 0.12),
+      totalViews: stats.allTime.pageViews,
+      viewsThisWeek: stats.week.pageViews,
       newsletterActive: nl.counts.active,
       newsletterTotal: nl.counts.total,
       pendingComments: mockPendingComments,
@@ -63,28 +68,7 @@ export class AdminService {
   }
 
   async getStatsSnapshot() {
-    const all = await this.meditations.listAll();
-    const published = all.filter((m) => m.status === MeditationStatus.PUBLISHED);
-    const byId = published.map((m) => ({
-      id: m.id,
-      title: m.title,
-      slug: m.slug,
-      publicationDate: m.publicationDate,
-      views: mockArticleViews[m.id] ?? 0,
-    }));
-    byId.sort((a, b) => b.views - a.views);
-
-    const nl = await this.newsletter.getAdminSnapshot();
-
-    return {
-      totalViews: sumMockViews(),
-      publishedCount: published.length,
-      draftCount: all.filter((m) => m.status === MeditationStatus.DRAFT).length,
-      scheduledCount: all.filter((m) => m.status === MeditationStatus.SCHEDULED)
-        .length,
-      newsletterActive: nl.counts.active,
-      topArticles: byId.slice(0, 8),
-    };
+    return this.analytics.getDashboard();
   }
 
   /**

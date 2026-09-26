@@ -2,7 +2,7 @@
 
 Document de référence pour l'étape fondations. À tenir à jour au fur et à mesure des phases.
 
-Voir aussi [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) pour les décisions visuelles.
+Voir aussi [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) pour les décisions visuelles et [SECURITY.md](./SECURITY.md) pour l’audit et les décisions de sécurité.
 
 ## 1. Architecture générale
 
