@@ -42,15 +42,18 @@ export function Dialog({
       ref={dialogRef}
       aria-labelledby={titleId}
       className={cn(
-        "m-auto w-[min(100%,28rem)] max-h-[90vh] overflow-auto",
-        "rounded-none border border-ms-black bg-ms-surface p-0 text-ms-fg",
-        "backdrop:bg-ms-black/40",
+        "m-auto w-[min(100%,26rem)] max-h-[85vh] overflow-auto p-0",
+        "rounded-none border border-ms-black bg-ms-paper text-ms-fg shadow-none",
+        "backdrop:bg-ms-black/45 backdrop:backdrop-blur-none",
         "open:flex open:flex-col",
         className,
       )}
     >
-      <div className="flex items-start justify-between gap-4 border-b border-ms-border px-5 py-4">
-        <h2 id={titleId} className="text-lg font-semibold tracking-tight">
+      <div className="flex items-baseline justify-between gap-4 border-b border-ms-black px-5 py-4">
+        <h2
+          id={titleId}
+          className="text-[length:var(--ms-text-sm)] font-semibold uppercase tracking-[var(--ms-tracking-wider)]"
+        >
           {title}
         </h2>
         <Button
@@ -58,8 +61,7 @@ export function Dialog({
           variant="ghost"
           size="sm"
           onClick={onClose}
-          aria-label="Fermer"
-          className="uppercase tracking-[0.14em]"
+          aria-label="Fermer la boîte de dialogue"
         >
           Fermer
         </Button>

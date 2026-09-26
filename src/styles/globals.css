@@ -1,83 +1,117 @@
 @import "tailwindcss";
 
 /*
-  Morning Star — design tokens
-  Inspiration : Swiss International Typographic Style (Müller-Brockmann)
-  Pas de gradients, glassmorphism, ombres lourdes ni décoration SaaS.
+  Morning Star Design System
+  Swiss International Typographic Style · Josef Müller-Brockmann
+  Publication éditoriale — pas un template SaaS.
 */
 
 :root {
-  /* Couleurs */
+  /* ——— Couleurs ——— */
   --ms-black: #0a0a0a;
   --ms-white: #ffffff;
-  --ms-off-white: #f5f4f1;
-  --ms-gray-100: #ebeae6;
-  --ms-gray-300: #c8c6c0;
-  --ms-gray-500: #7a7872;
-  --ms-gray-700: #3f3e3a;
-  --ms-accent: #b08d3c;
-  --ms-accent-muted: #8a6e2e;
+  --ms-off-white: #f3f2ee;
+  --ms-paper: #faf9f6;
+
+  --ms-gray-50: #f7f6f3;
+  --ms-gray-100: #ebeae5;
+  --ms-gray-200: #d9d7d0;
+  --ms-gray-300: #bdbbb3;
+  --ms-gray-400: #9a9790;
+  --ms-gray-500: #6f6d67;
+  --ms-gray-600: #524f4a;
+  --ms-gray-700: #3a3834;
+  --ms-gray-800: #232220;
+
+  /* Accent doré — Étoile du matin (usage parcimonieux) */
+  --ms-gold: #a8872f;
+  --ms-gold-dark: #7d6523;
+  --ms-gold-light: #c4a84e;
 
   --ms-bg: var(--ms-off-white);
   --ms-fg: var(--ms-black);
   --ms-muted: var(--ms-gray-500);
   --ms-border: var(--ms-gray-300);
-  --ms-surface: var(--ms-white);
+  --ms-border-strong: var(--ms-black);
+  --ms-surface: var(--ms-paper);
+  --ms-accent: var(--ms-gold);
+  --ms-accent-muted: var(--ms-gold-dark);
 
-  /*
-    Typographie éditoriale suisse (Akzidenz / Helvetica lineage).
-    next/font (IBM Plex) pourra être réintroduit quand le réseau build est stable.
-  */
+  /* ——— Typographie ———
+     Lignée Akzidenz / Helvetica — identité suisse éditoriale.
+     Serif réservée aux citations et références bibliques. */
   --ms-font-sans: "Helvetica Neue", Helvetica, "Arial Neue", Arial, sans-serif;
-  --ms-font-serif: "Georgia", "Times New Roman", Times, serif;
+  --ms-font-serif: Georgia, "Times New Roman", Times, serif;
 
-  --ms-text-xs: 0.75rem;
-  --ms-text-sm: 0.875rem;
-  --ms-text-base: 1rem;
-  --ms-text-lg: 1.125rem;
-  --ms-text-xl: 1.5rem;
-  --ms-text-2xl: 2.25rem;
-  --ms-text-3xl: 3rem;
-  --ms-text-display: clamp(2.5rem, 6vw, 4.5rem);
+  /* Échelle modulaire (~1.25) */
+  --ms-text-2xs: 0.6875rem; /* 11px — labels fins */
+  --ms-text-xs: 0.75rem; /* 12px — nav, date, meta */
+  --ms-text-sm: 0.875rem; /* 14px */
+  --ms-text-base: 1.0625rem; /* 17px — corps éditorial */
+  --ms-text-lg: 1.25rem; /* 20px */
+  --ms-text-xl: 1.5rem; /* 24px */
+  --ms-text-2xl: 2rem; /* 32px */
+  --ms-text-3xl: 2.75rem; /* 44px */
+  --ms-text-display: clamp(2.75rem, 7vw, 5rem);
 
-  --ms-leading-tight: 1.15;
-  --ms-leading-snug: 1.35;
-  --ms-leading-normal: 1.6;
-  --ms-tracking-tight: -0.02em;
-  --ms-tracking-wide: 0.12em;
+  --ms-leading-none: 1;
+  --ms-leading-tight: 1.12;
+  --ms-leading-snug: 1.3;
+  --ms-leading-normal: 1.65;
+  --ms-leading-relaxed: 1.8;
 
-  /* Spacing (grille 8px) */
-  --ms-space-1: 0.25rem;
-  --ms-space-2: 0.5rem;
-  --ms-space-3: 0.75rem;
-  --ms-space-4: 1rem;
-  --ms-space-5: 1.5rem;
-  --ms-space-6: 2rem;
-  --ms-space-7: 3rem;
-  --ms-space-8: 4rem;
-  --ms-space-9: 6rem;
-  --ms-space-10: 8rem;
+  --ms-tracking-tighter: -0.03em;
+  --ms-tracking-tight: -0.015em;
+  --ms-tracking-normal: 0;
+  --ms-tracking-wide: 0.08em;
+  --ms-tracking-wider: 0.14em;
+  --ms-tracking-widest: 0.2em;
 
-  /* Layout */
+  /* Mesure de lecture (ligne optimale) */
+  --ms-measure: 36rem;
+  --ms-measure-wide: 42rem;
+
+  /* ——— Spacing — grille 8px ——— */
+  --ms-space-0: 0;
+  --ms-space-1: 0.25rem; /* 4 */
+  --ms-space-2: 0.5rem; /* 8 */
+  --ms-space-3: 0.75rem; /* 12 */
+  --ms-space-4: 1rem; /* 16 */
+  --ms-space-5: 1.5rem; /* 24 */
+  --ms-space-6: 2rem; /* 32 */
+  --ms-space-7: 3rem; /* 48 */
+  --ms-space-8: 4rem; /* 64 */
+  --ms-space-9: 6rem; /* 96 */
+  --ms-space-10: 8rem; /* 128 */
+  --ms-space-11: 10rem; /* 160 */
+
+  /* Espacements sémantiques */
+  --ms-section-y: clamp(3rem, 8vw, 6rem);
+  --ms-block-gap: var(--ms-space-5);
+  --ms-stack-gap: var(--ms-space-4);
+
+  /* ——— Layout / grille ——— */
   --ms-container: 72rem;
-  --ms-container-narrow: 42rem;
-  --ms-gutter: clamp(1rem, 4vw, 2rem);
+  --ms-container-narrow: var(--ms-measure-wide);
+  --ms-container-wide: 84rem;
+  --ms-gutter: clamp(1.25rem, 4vw, 2.5rem);
   --ms-grid-columns: 12;
   --ms-grid-gap: 1.5rem;
+  --ms-grid-gap-lg: 2rem;
 
-  /* Radius — presque nul (suisse) */
+  /* ——— Forme ——— */
   --ms-radius-none: 0;
-  --ms-radius-sm: 2px;
+  --ms-radius-sm: 0; /* pas d’arrondi SaaS */
 
-  /* Borders */
-  --ms-border-width: 1px;
-  --ms-border-strong: 2px;
+  --ms-rule: 1px;
+  --ms-rule-strong: 2px;
+  --ms-rule-accent: 3px;
 
-  /* Transitions */
-  --ms-duration: 150ms;
+  /* ——— Motion (minimal) ——— */
+  --ms-duration: 120ms;
   --ms-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 
-  /* Breakpoints (référence documentation) */
+  /* ——— Breakpoints (doc) ——— */
   --ms-bp-sm: 40rem;
   --ms-bp-md: 48rem;
   --ms-bp-lg: 64rem;
@@ -88,24 +122,36 @@
   --color-ms-black: var(--ms-black);
   --color-ms-white: var(--ms-white);
   --color-ms-off-white: var(--ms-off-white);
+  --color-ms-paper: var(--ms-paper);
+  --color-ms-gray-50: var(--ms-gray-50);
   --color-ms-gray-100: var(--ms-gray-100);
+  --color-ms-gray-200: var(--ms-gray-200);
   --color-ms-gray-300: var(--ms-gray-300);
+  --color-ms-gray-400: var(--ms-gray-400);
   --color-ms-gray-500: var(--ms-gray-500);
+  --color-ms-gray-600: var(--ms-gray-600);
   --color-ms-gray-700: var(--ms-gray-700);
+  --color-ms-gray-800: var(--ms-gray-800);
+  --color-ms-gold: var(--ms-gold);
+  --color-ms-gold-dark: var(--ms-gold-dark);
+  --color-ms-gold-light: var(--ms-gold-light);
   --color-ms-accent: var(--ms-accent);
   --color-ms-accent-muted: var(--ms-accent-muted);
   --color-ms-bg: var(--ms-bg);
   --color-ms-fg: var(--ms-fg);
   --color-ms-muted: var(--ms-muted);
   --color-ms-border: var(--ms-border);
+  --color-ms-border-strong: var(--ms-border-strong);
   --color-ms-surface: var(--ms-surface);
 
   --font-sans: var(--ms-font-sans);
   --font-serif: var(--ms-font-serif);
 
-  --radius-none: var(--ms-radius-none);
-  --radius-sm: var(--ms-radius-sm);
+  --radius-none: 0;
+  --radius-sm: 0;
 }
+
+/* ——— Reset éditorial ——— */
 
 *,
 *::before,
@@ -116,6 +162,7 @@
 html {
   height: 100%;
   scroll-behavior: smooth;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -126,27 +173,87 @@ body {
   font-family: var(--ms-font-sans);
   font-size: var(--ms-text-base);
   line-height: var(--ms-leading-normal);
+  font-weight: 400;
+  letter-spacing: var(--ms-tracking-normal);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :focus-visible {
-  outline: 2px solid var(--ms-accent);
+  outline: 2px solid var(--ms-gold);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: var(--ms-accent);
+  background: var(--ms-gold);
   color: var(--ms-white);
 }
 
 a {
   color: inherit;
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+  text-underline-offset: 0.18em;
 }
 
 img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+hr {
+  border: 0;
+  border-top: var(--ms-rule) solid var(--ms-border);
+  margin: 0;
+}
+
+/* ——— Utilitaires grille / règles ——— */
+
+.ms-rule {
+  border: 0;
+  border-top: var(--ms-rule) solid var(--ms-border);
+  margin: 0;
+}
+
+.ms-rule--strong {
+  border-top-width: var(--ms-rule-strong);
+  border-top-color: var(--ms-border-strong);
+}
+
+.ms-rule--accent {
+  border-top-width: var(--ms-rule-accent);
+  border-top-color: var(--ms-gold);
+}
+
+.ms-measure {
+  max-width: var(--ms-measure);
+}
+
+.ms-measure-wide {
+  max-width: var(--ms-measure-wide);
+}
+
+.ms-grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--ms-grid-gap);
+}
+
+.ms-prose {
+  max-width: var(--ms-measure);
+  font-size: var(--ms-text-base);
+  line-height: var(--ms-leading-normal);
+}
+
+.ms-prose > * + * {
+  margin-top: var(--ms-block-gap);
+}
+
+.ms-label {
+  font-family: var(--ms-font-sans);
+  font-size: var(--ms-text-xs);
+  font-weight: 500;
+  letter-spacing: var(--ms-tracking-wider);
+  text-transform: uppercase;
+  color: var(--ms-muted);
 }

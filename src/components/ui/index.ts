@@ -5,7 +5,7 @@ export { Dialog } from "./dialog";
 export { Badge } from "./badge";
 export { Separator } from "./separator";
 export { Container } from "./container";
-export { Grid } from "./grid";
+export { Grid, GridItem } from "./grid";
 export { Typography } from "./typography";
 export { PageHeader } from "./page-header";
 export { Navigation } from "./navigation";

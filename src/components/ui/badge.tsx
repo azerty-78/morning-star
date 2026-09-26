@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 export interface BadgeProps {
   children: React.ReactNode;
-  tone?: "neutral" | "accent";
+  tone?: "neutral" | "accent" | "inverted";
   className?: string;
 }
 
@@ -15,10 +15,10 @@ export function Badge({
     <span
       className={cn(
         "inline-flex items-center rounded-none border px-2 py-0.5",
-        "text-[0.7rem] uppercase tracking-[0.14em]",
-        tone === "accent"
-          ? "border-ms-accent text-ms-accent-muted"
-          : "border-ms-border text-ms-gray-700",
+        "text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)]",
+        tone === "accent" && "border-ms-gold text-ms-gold-dark",
+        tone === "neutral" && "border-ms-border text-ms-gray-700",
+        tone === "inverted" && "border-ms-black bg-ms-black text-ms-white",
         className,
       )}
     >

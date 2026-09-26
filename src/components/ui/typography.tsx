@@ -6,10 +6,12 @@ type TypographyVariant =
   | "subtitle"
   | "nav"
   | "body"
+  | "lede"
   | "date"
   | "quote"
   | "reference"
-  | "meta";
+  | "meta"
+  | "label";
 
 export interface TypographyProps {
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "blockquote" | "cite" | "time";
@@ -22,19 +24,22 @@ export interface TypographyProps {
 
 const variantClass: Record<TypographyVariant, string> = {
   display:
-    "font-sans text-[length:var(--ms-text-display)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)]",
+    "font-sans font-bold text-[length:var(--ms-text-display)] leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tighter)] text-ms-fg",
   title:
-    "font-sans text-3xl md:text-4xl font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)]",
+    "font-sans font-semibold text-[length:var(--ms-text-3xl)] md:text-[length:var(--ms-text-3xl)] leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-ms-fg",
   subtitle:
-    "font-sans text-lg md:text-xl font-normal text-ms-gray-700 leading-[var(--ms-leading-snug)]",
-  nav: "font-sans text-xs uppercase tracking-[var(--ms-tracking-wide)] font-medium",
-  body: "font-sans text-base leading-[var(--ms-leading-normal)] text-ms-fg",
-  date: "font-sans text-xs uppercase tracking-[var(--ms-tracking-wide)] text-ms-muted",
+    "font-sans font-normal text-[length:var(--ms-text-lg)] md:text-[length:var(--ms-text-xl)] leading-[var(--ms-leading-snug)] tracking-[var(--ms-tracking-tight)] text-ms-gray-700",
+  nav: "font-sans font-medium text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-fg",
+  body: "font-sans font-normal text-[length:var(--ms-text-base)] leading-[var(--ms-leading-normal)] text-ms-fg",
+  lede: "font-sans font-normal text-[length:var(--ms-text-lg)] leading-[var(--ms-leading-snug)] text-ms-gray-700",
+  date: "font-sans font-medium text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-muted",
   quote:
-    "font-serif text-xl md:text-2xl italic leading-[var(--ms-leading-snug)] text-ms-gray-700",
+    "font-serif font-normal italic text-[length:var(--ms-text-xl)] md:text-[length:var(--ms-text-2xl)] leading-[var(--ms-leading-snug)] text-ms-gray-700",
   reference:
-    "font-serif text-sm text-ms-accent-muted tracking-wide",
-  meta: "font-sans text-sm text-ms-muted",
+    "font-serif font-normal text-[length:var(--ms-text-sm)] tracking-[var(--ms-tracking-wide)] text-ms-gold-dark",
+  meta: "font-sans font-normal text-[length:var(--ms-text-sm)] leading-[var(--ms-leading-snug)] text-ms-muted",
+  label:
+    "font-sans font-medium text-[length:var(--ms-text-2xs)] uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted",
 };
 
 export function Typography({

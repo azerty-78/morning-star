@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Typography } from "./typography";
+import { Separator } from "./separator";
 
 export interface PageHeaderProps {
   eyebrow?: string;
@@ -15,23 +16,19 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <header
-      className={cn(
-        "border-b border-ms-border pb-8 pt-10 md:pb-10 md:pt-14",
-        className,
-      )}
-    >
+    <header className={cn("pt-[var(--ms-space-8)] pb-[var(--ms-space-6)]", className)}>
       {eyebrow ? (
-        <Typography variant="nav" className="mb-4 text-ms-accent-muted">
+        <Typography variant="label" className="mb-4 text-ms-gold-dark">
           {eyebrow}
         </Typography>
       ) : null}
       <Typography variant="title">{title}</Typography>
       {description ? (
-        <Typography variant="subtitle" className="mt-4 max-w-2xl">
+        <Typography variant="subtitle" className="mt-4 max-w-[var(--ms-measure)]">
           {description}
         </Typography>
       ) : null}
+      <Separator tone="strong" className="mt-[var(--ms-space-6)]" />
     </header>
   );
 }
