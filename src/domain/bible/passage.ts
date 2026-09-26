@@ -2,15 +2,16 @@ import type { BibleTranslation } from "./types";
 
 /**
  * Référence biblique résolue (indépendante de l'UI).
+ * verseStart / verseEnd absents = chapitre entier (ex. « Psaume 23 »).
  */
 export interface ResolvedBibleReference {
-  /** Texte tel qu'apparu / demandé, ex. "Jean 3:16" */
+  /** Texte normalisé, ex. "Jean 3:16" ou "Psaumes 23" */
   label: string;
   bookId: string;
   bookName: string;
   chapter: number;
-  verseStart: number;
-  verseEnd: number;
+  verseStart?: number;
+  verseEnd?: number;
 }
 
 export interface BibleVerseUnit {

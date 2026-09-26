@@ -23,76 +23,128 @@ const BOOKS_BY_ALIAS_LENGTH = [...BIBLE_BOOKS]
   )
   .sort((a, b) => b.alias.length - a.alias.length);
 
+function resolveBook(bookRaw: string) {
+  const key = normalizeBookKey(bookRaw);
+  return BOOKS_BY_ALIAS_LENGTH.find((entry) => entry.alias === key)?.book;
+}
+
+function formatLabel(
+  bookName: string,
+  chapter: number,
+  verseStart?: number,
+  verseEnd?: number,
+): string {
+  if (verseStart == null) {
+    return `${bookName} ${chapter}`;
+  }
+  if (verseEnd == null || verseEnd === verseStart) {
+    return `${bookName} ${chapter}:${verseStart}`;
+  }
+  return `${bookName} ${chapter}:${verseStart}-${verseEnd}`;
+}
+
 /**
- * Parse une référence isolée : "Jean 3:16", "1 Jean 1:7-9", "Psaume 46:10".
+ * Parse une référence isolée.
+ * Accepte : "Jean 3:16", "1 Jean 1:7-9", "Matthieu 5:3-12", "Psaume 23".
  */
 export function parseBibleReference(
   raw: string,
 ): ResolvedBibleReference | null {
-  const trimmed = raw.trim();
-  const match = trimmed.match(
-    /^(.+?)\s+(\d+)\s*:\s*(\d+)(?:\s*[-–—]\s*(\d+))?$/u,
+  const trimmed = raw.trim().replace(/\.$/, "");
+
+  const withVerses = trimmed.match(
+    /^(.+?)\s+(\d+)\s*[:\.]\s*(\d+)(?:\s*[-–—]\s*(\d+))?$/u,
   );
-  if (!match) return null;
-
-  const bookRaw = match[1];
-  const chapter = Number(match[2]);
-  const verseStart = Number(match[3]);
-  const verseEnd = match[4] ? Number(match[4]) : verseStart;
-
-  if (!bookRaw || !chapter || !verseStart || verseEnd < verseStart) {
-    return null;
+  if (withVerses) {
+    const bookRaw = withVerses[1];
+    const chapter = Number(withVerses[2]);
+    const verseStart = Number(withVerses[3]);
+    const verseEnd = withVerses[4] ? Number(withVerses[4]) : verseStart;
+    if (!bookRaw || !chapter || !verseStart || verseEnd < verseStart) {
+      return null;
+    }
+    const book = resolveBook(bookRaw);
+    if (!book) return null;
+    return {
+      label: formatLabel(book.name, chapter, verseStart, verseEnd),
+      bookId: book.id,
+      bookName: book.name,
+      chapter,
+      verseStart,
+      verseEnd,
+    };
   }
 
-  const key = normalizeBookKey(bookRaw);
-  const found = BOOKS_BY_ALIAS_LENGTH.find((entry) => entry.alias === key);
-  if (!found) return null;
+  // Chapitre seul : « Psaume 23 », « Jean 3 »
+  const chapterOnly = trimmed.match(/^(.+?)\s+(\d+)$/u);
+  if (chapterOnly) {
+    const bookRaw = chapterOnly[1];
+    const chapter = Number(chapterOnly[2]);
+    if (!bookRaw || !chapter) return null;
+    const book = resolveBook(bookRaw);
+    if (!book) return null;
+    return {
+      label: formatLabel(book.name, chapter),
+      bookId: book.id,
+      bookName: book.name,
+      chapter,
+    };
+  }
 
-  const label =
-    verseEnd === verseStart
-      ? `${found.book.name} ${chapter}:${verseStart}`
-      : `${found.book.name} ${chapter}:${verseStart}-${verseEnd}`;
-
-  return {
-    label,
-    bookId: found.book.id,
-    bookName: found.book.name,
-    chapter,
-    verseStart,
-    verseEnd,
-  };
+  return null;
 }
 
 /**
- * Détecte toutes les références bibliques dans un texte structuré.
- * Les chevauchements sont évités (premier match gagnant, livres longs d'abord).
+ * Détecte les références dans un texte.
+ * Ordre : formes avec versets d'abord, puis chapitres seuls (sans chevauchement).
  */
 export function detectBibleReferences(text: string): BibleReferenceMatch[] {
   if (!text) return [];
 
-  const pattern =
-    /\b(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+\.?)\s+(\d+)\s*:\s*(\d+)(?:\s*[-–—]\s*(\d+))?/gu;
-
   const matches: BibleReferenceMatch[] = [];
+
+  const versePattern =
+    /\b(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+)\s+(\d+)\s*[:\.]\s*(\d+)(?:\s*[-–—]\s*(\d+))?/gu;
+
   let match: RegExpExecArray | null;
-
-  while ((match = pattern.exec(text)) !== null) {
-    const raw = match[0];
-    const parsed = parseBibleReference(raw);
+  while ((match = versePattern.exec(text)) !== null) {
+    const parsed = parseBibleReference(match[0]);
     if (!parsed) continue;
+    pushIfNoOverlap(matches, {
+      reference: parsed,
+      start: match.index,
+      end: match.index + match[0].length,
+    });
+  }
 
+  const chapterPattern =
+    /\b(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+)\s+(\d+)\b/gu;
+
+  while ((match = chapterPattern.exec(text)) !== null) {
+    const raw = match[0];
+    // Ignorer si déjà couvert par une ref avec versets
     const start = match.index;
     const end = start + raw.length;
+    if (matches.some((m) => !(end <= m.start || start >= m.end))) continue;
 
-    const overlaps = matches.some(
-      (existing) => !(end <= existing.start || start >= existing.end),
-    );
-    if (overlaps) continue;
+    const parsed = parseBibleReference(raw);
+    if (!parsed || parsed.verseStart != null) continue;
 
-    matches.push({ reference: parsed, start, end });
+    pushIfNoOverlap(matches, { reference: parsed, start, end });
   }
 
   return matches.sort((a, b) => a.start - b.start);
+}
+
+function pushIfNoOverlap(
+  matches: BibleReferenceMatch[],
+  candidate: BibleReferenceMatch,
+): void {
+  const overlaps = matches.some(
+    (existing) =>
+      !(candidate.end <= existing.start || candidate.start >= existing.end),
+  );
+  if (!overlaps) matches.push(candidate);
 }
 
 /**
@@ -105,8 +157,7 @@ export function collectUniqueReferences(
   const map = new Map<string, ResolvedBibleReference>();
 
   for (const detected of detectBibleReferences(body)) {
-    const key = referenceKey(detected.reference);
-    map.set(key, detected.reference);
+    map.set(referenceKey(detected.reference), detected.reference);
   }
 
   for (const label of structuredLabels) {
@@ -119,5 +170,9 @@ export function collectUniqueReferences(
 }
 
 export function referenceKey(ref: ResolvedBibleReference): string {
-  return `${ref.bookId}:${ref.chapter}:${ref.verseStart}-${ref.verseEnd}`;
+  if (ref.verseStart == null) {
+    return `${ref.bookId}:${ref.chapter}:*`;
+  }
+  const end = ref.verseEnd ?? ref.verseStart;
+  return `${ref.bookId}:${ref.chapter}:${ref.verseStart}-${end}`;
 }
