@@ -37,4 +37,6 @@ export const API_ROUTES = {
   newsletterSubscribe: "/api/newsletter/subscribe",
   newsletterUnsubscribe: "/api/newsletter/unsubscribe",
   newsletterNotifyPublication: "/api/admin/newsletter/notify-publication",
+  analyticsView: "/api/analytics/view",
+  analyticsDownload: "/api/analytics/download",
 } as const;

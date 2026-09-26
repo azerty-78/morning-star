@@ -17,6 +17,11 @@ import {
   PrismaNewsletterRepository,
   type NewsletterRepository,
 } from "@/repositories/newsletter";
+import {
+  MockAnalyticsRepository,
+  PrismaAnalyticsRepository,
+  type AnalyticsRepository,
+} from "@/repositories/analytics";
 
 /**
  * Composition root — sélectionne mock ou Prisma selon DATA_SOURCE.
@@ -43,4 +48,9 @@ export function getBibleRepository(): BibleRepository {
 export function getNewsletterRepository(): NewsletterRepository {
   if (isMockMode()) return new MockNewsletterRepository();
   return new PrismaNewsletterRepository();
+}
+
+export function getAnalyticsRepository(): AnalyticsRepository {
+  if (isMockMode()) return new MockAnalyticsRepository();
+  return new PrismaAnalyticsRepository();
 }

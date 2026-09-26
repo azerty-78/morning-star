@@ -6,4 +6,10 @@
  * Voir ARCHITECTURE.md — stratégie Prisma / PostgreSQL.
  */
 
-export { getMeditationRepository, getUserRepository, getBibleRepository, getNewsletterRepository } from "./repositories";
+export {
+  getMeditationRepository,
+  getUserRepository,
+  getBibleRepository,
+  getNewsletterRepository,
+  getAnalyticsRepository,
+} from "./repositories";
