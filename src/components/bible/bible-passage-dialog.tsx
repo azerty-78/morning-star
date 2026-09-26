@@ -62,7 +62,8 @@ export function BiblePassageDialog({
     translations.find((t) => t.code === translationCode) ?? null;
 
   const passage = reference
-    ? passages[passageLookupKey(translationCode, referenceKey(reference))]
+    ? (passages[passageLookupKey(translationCode, referenceKey(reference))] ??
+      null)
     : null;
 
   const title = reference?.label ?? "Passage biblique";
