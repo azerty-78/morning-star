@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui";
+import { API_ROUTES } from "@/constants/routes";
 import type { DailyMeditation } from "@/domain/meditation";
 import { meditationCanonical } from "@/lib/seo";
 
@@ -66,6 +67,16 @@ export function ReaderActions({
     anchor.click();
     URL.revokeObjectURL(url);
     setShareStatus("Fichier texte téléchargé.");
+
+    void fetch(API_ROUTES.analyticsDownload, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ meditationId: meditation.id }),
+      credentials: "same-origin",
+      keepalive: true,
+    }).catch(() => {
+      /* analytics non bloquant */
+    });
   }, [authorName, meditation, shareUrl]);
 
   return (

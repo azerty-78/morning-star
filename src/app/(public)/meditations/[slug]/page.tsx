@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { MeditationViewTracker } from "@/components/analytics";
 import { Container } from "@/components/ui";
 import { MeditationReader } from "@/components/meditation";
 import { JsonLd } from "@/components/seo";
