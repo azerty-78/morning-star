@@ -12,7 +12,7 @@ const navItems = [
 
 export function SiteHeader() {
   return (
-    <header className="bg-ms-bg">
+    <header className="bg-ms-bg" role="banner">
       <Container className="flex flex-col gap-6 py-5 md:flex-row md:items-end md:justify-between md:py-6">
         <div className="min-w-0">
           <Link href={PUBLIC_ROUTES.home} className="no-underline block">

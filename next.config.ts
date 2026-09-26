@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
+  poweredByHeader: false,
+  // URLs propres — pas de trailing slash technique.
+  trailingSlash: false,
 };
 
 export default nextConfig;

@@ -70,7 +70,11 @@ export function ReaderHeader({
         </div>
 
         <div className="md:col-span-8 md:col-start-5">
-          <Typography variant="display" className="max-w-[16ch]">
+          <Typography
+            variant="display"
+            id="meditation-title"
+            className="max-w-[16ch]"
+          >
             {title}
           </Typography>
           {subtitle ? (

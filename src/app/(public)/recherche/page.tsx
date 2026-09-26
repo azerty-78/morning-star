@@ -1,10 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { archiveHref } from "@/lib/archive";
-import { parseArchiveSearchParams } from "@/lib/archive";
+import { archiveHref, parseArchiveSearchParams } from "@/lib/archive";
+import { PUBLIC_ROUTES } from "@/constants/routes";
+import { buildPublicPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata: Metadata = buildPublicPageMetadata({
   title: "Recherche",
-};
+  description: "Rechercher une méditation Morning Star.",
+  path: PUBLIC_ROUTES.recherche,
+});
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

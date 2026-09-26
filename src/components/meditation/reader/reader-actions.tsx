@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui";
 import type { DailyMeditation } from "@/domain/meditation";
+import { meditationCanonical } from "@/lib/seo";
 
 export interface ReaderActionsProps {
   meditation: DailyMeditation;
@@ -14,17 +15,13 @@ export function ReaderActions({
   authorName,
 }: ReaderActionsProps) {
   const [shareStatus, setShareStatus] = useState<string | null>(null);
-
-  const shareUrl =
-    typeof window !== "undefined"
-      ? window.location.href
-      : `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/meditations/${meditation.slug}`;
+  const shareUrl = meditationCanonical(meditation.slug);
 
   const handleShare = useCallback(async () => {
     const payload = {
       title: meditation.title,
       text: `${meditation.title} — ${meditation.excerpt}`,
-      url: window.location.href,
+      url: shareUrl,
     };
 
     try {
@@ -33,12 +30,12 @@ export function ReaderActions({
         setShareStatus("Partage ouvert.");
         return;
       }
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(shareUrl);
       setShareStatus("Lien copié dans le presse-papiers.");
     } catch {
       setShareStatus("Partage annulé.");
     }
-  }, [meditation.excerpt, meditation.title]);
+  }, [meditation.excerpt, meditation.title, shareUrl]);
 
   const handleDownload = useCallback(() => {
     const lines = [

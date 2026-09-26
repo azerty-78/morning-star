@@ -1,5 +1,7 @@
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { JsonLd } from "@/components/seo";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export default function PublicLayout({
   children,
@@ -8,8 +10,11 @@ export default function PublicLayout({
 }>) {
   return (
     <>
+      <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main id="contenu-principal" className="flex-1" tabIndex={-1}>
+        {children}
+      </main>
       <SiteFooter />
     </>
   );

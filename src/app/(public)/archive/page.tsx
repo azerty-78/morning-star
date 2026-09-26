@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container, PageHeader } from "@/components/ui";
 import {
   ArchiveEmpty,
@@ -11,13 +12,17 @@ import {
   ArchiveSort,
 } from "@/domain/meditation";
 import { parseArchiveSearchParams } from "@/lib/archive";
+import { PUBLIC_ROUTES } from "@/constants/routes";
+import { buildPublicPageMetadata } from "@/lib/seo";
 import { createMeditationService } from "@/services/meditation";
 
-export const metadata = {
+export const metadata: Metadata = buildPublicPageMetadata({
   title: "Archive",
   description:
     "Parcourir, rechercher et filtrer les méditations Morning Star.",
-};
+  path: PUBLIC_ROUTES.archive,
+});
+
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

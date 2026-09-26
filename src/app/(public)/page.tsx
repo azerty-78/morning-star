@@ -1,16 +1,20 @@
+import type { Metadata } from "next";
 import { Container, Separator, Typography } from "@/components/ui";
 import {
   HomeArchiveTeaser,
   HomeToday,
   NewsletterSignup,
 } from "@/components/public";
-import { APP_DESCRIPTION, APP_NAME } from "@/constants/app";
+import { APP_DESCRIPTION } from "@/constants/app";
+import { PUBLIC_ROUTES } from "@/constants/routes";
+import { buildPublicPageMetadata } from "@/lib/seo";
 import { createMeditationService } from "@/services/meditation";
 
-export const metadata = {
-  title: `${APP_NAME} · Méditation du jour`,
+export const metadata: Metadata = buildPublicPageMetadata({
+  title: "Méditation du jour",
   description: APP_DESCRIPTION,
-};
+  path: PUBLIC_ROUTES.home,
+});
 
 export default async function HomePage() {
   const service = createMeditationService();

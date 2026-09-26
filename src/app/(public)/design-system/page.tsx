@@ -21,6 +21,10 @@ import {
 
 export const metadata = {
   title: "Design System",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 /**

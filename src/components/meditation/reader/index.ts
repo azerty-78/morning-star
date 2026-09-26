@@ -1,4 +1,5 @@
 export { MeditationReader } from "./meditation-reader";
+export { MeditationReaderInteractive } from "./meditation-reader-interactive";
 export { ReaderHeader } from "./reader-header";
 export { ReaderBody } from "./reader-body";
 export { ReaderActions } from "./reader-actions";
