@@ -2,18 +2,20 @@
 
 import { useId, useState, useTransition } from "react";
 import { Button, Grid, GridItem, Input, Typography } from "@/components/ui";
+import { API_ROUTES } from "@/constants/routes";
 import { isValidEmail } from "@/lib/validation";
+import type { NewsletterPublicResult } from "@/domain/newsletter";
 
 /**
- * Inscription newsletter — structure éditoriale.
- * Backend réel à brancher ultérieurement (mock pour l'instant).
+ * Inscription newsletter — double opt-in.
+ * L’API ne renvoie jamais l’adresse email.
  */
 export function NewsletterSignup() {
   const formId = useId();
   const statusId = `${formId}-status`;
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | undefined>();
-  const [status, setStatus] = useState<"idle" | "ok">("idle");
+  const [message, setMessage] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -22,15 +24,30 @@ export function NewsletterSignup() {
 
     if (!isValidEmail(value)) {
       setError("Indiquez une adresse email valide.");
-      setStatus("idle");
+      setMessage(null);
       return;
     }
 
     setError(undefined);
-    startTransition(() => {
-      // Stub : pas d’API newsletter à cette étape.
-      setStatus("ok");
-      setEmail("");
+    startTransition(async () => {
+      try {
+        const res = await fetch(API_ROUTES.newsletterSubscribe, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: value, source: "homepage" }),
+        });
+        const data = (await res.json()) as NewsletterPublicResult;
+        if (!data.ok) {
+          setError(data.message);
+          setMessage(null);
+          return;
+        }
+        setMessage(data.message);
+        setEmail("");
+      } catch {
+        setError("Impossible d’enregistrer la demande pour le moment.");
+        setMessage(null);
+      }
     });
   }
 
@@ -51,13 +68,15 @@ export function NewsletterSignup() {
 
         <GridItem span={12} className="md:col-span-7 md:col-start-6">
           <Typography variant="lede" className="max-w-[var(--ms-measure)]">
-            Un envoi par jour, sans bruit. Désinscription possible à tout moment.
+            Un envoi par jour, sans bruit. Confirmation par email, désinscription
+            possible à tout moment.
           </Typography>
 
           <form
             onSubmit={handleSubmit}
             className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-end"
             noValidate
+            aria-describedby={statusId}
           >
             <div className="min-w-0 flex-1">
               <Input
@@ -72,7 +91,7 @@ export function NewsletterSignup() {
                 onChange={(e) => {
                   setEmail(e.target.value);
                   if (error) setError(undefined);
-                  if (status === "ok") setStatus("idle");
+                  if (message) setMessage(null);
                 }}
                 disabled={pending}
               />
@@ -88,9 +107,7 @@ export function NewsletterSignup() {
             aria-live="polite"
             className="mt-4 text-[length:var(--ms-text-sm)] text-ms-muted"
           >
-            {status === "ok"
-              ? "Demande enregistrée (démonstration). Le service email sera branché ultérieurement."
-              : null}
+            {message}
           </p>
         </GridItem>
       </Grid>
