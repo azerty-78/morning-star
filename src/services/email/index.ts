@@ -6,9 +6,9 @@ import { MockEmailService } from "./mock-email.service";
  * Plus tard : resend | ses | smtp → implémentations dédiées.
  */
 export function getEmailService(): EmailService {
-  const provider = (process.env.EMAIL_PROVIDER ?? "mock").toLowerCase();
+  const provider = (process.env.EMAIL_PROVIDER ?? "mock").trim().toLowerCase();
 
-  switch (provider) {
+  switch (provider || "mock") {
     case "mock":
       return new MockEmailService();
     // case "resend":
