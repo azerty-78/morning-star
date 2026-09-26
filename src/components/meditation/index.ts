@@ -1,2 +1,3 @@
 export { MeditationHero } from "./meditation-hero";
 export { MeditationList } from "./meditation-list";
+export { MeditationReader } from "./reader";

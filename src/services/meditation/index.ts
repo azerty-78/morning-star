@@ -28,6 +28,26 @@ export class MeditationService {
   async search(query: string): Promise<DailyMeditation[]> {
     return this.repo.search(query);
   }
+
+  /**
+   * Méditations précédente / suivante selon la date de publication (ordre chronologique inverse).
+   */
+  async getNeighbors(slug: string): Promise<{
+    previous: DailyMeditation | null;
+    next: DailyMeditation | null;
+  }> {
+    const published = await this.repo.findPublished(200);
+    const index = published.findIndex((m) => m.slug === slug);
+    if (index < 0) {
+      return { previous: null, next: null };
+    }
+    return {
+      // Liste triée desc : index+1 = plus ancienne = « précédente »
+      previous: published[index + 1] ?? null,
+      // index-1 = plus récente = « suivante »
+      next: published[index - 1] ?? null,
+    };
+  }
 }
 
 function todayIso(): string {
