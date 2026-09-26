@@ -1,6 +1,10 @@
 /**
- * MOCK DATA Bible — clairement identifié.
- * Architecture multi-traductions prête ; contenu minimal pour la démo.
+ * MOCK DATA Bible — architecture multi-traductions.
+ *
+ * LICENCE :
+ * - LSG1910 : domaine public (texte de démo minimal uniquement).
+ * - LSG1990 / BDS : métadonnées seulement — AUCUN texte verset embarqué
+ *   (contenu protégé ; import autorisé requis).
  */
 
 import type {
@@ -9,60 +13,87 @@ import type {
   BibleVerseUnit,
   ResolvedBibleReference,
 } from "@/domain/bible";
-import { referenceKey } from "@/lib/bible";
+import { referenceKey } from "@/lib/bible/parse-reference";
 
-export const MOCK_DEFAULT_TRANSLATION_CODE = "LSG" as const;
+export const MOCK_DEFAULT_TRANSLATION_CODE = "LSG1910" as const;
 
 export const mockBibleTranslations: BibleTranslation[] = [
   {
-    id: "tr_mock_lsg",
-    code: "LSG",
+    id: "tr_lsg1910",
+    code: "LSG1910",
     name: "Louis Segond 1910",
+    language: "fr",
+    licenseKind: "public_domain",
+    licenseVerified: true,
+    requiresImport: false,
+    isDefault: true,
+    licenseNotice:
+      "Louis Segond 1910 — domaine public. Extraits de démonstration uniquement.",
   },
   {
-    id: "tr_mock_s21",
-    code: "S21",
-    name: "Segond 21",
+    id: "tr_lsg1990",
+    code: "LSG1990",
+    name: "Louis Segond 1990",
+    language: "fr",
+    licenseKind: "restricted",
+    licenseVerified: false,
+    requiresImport: true,
+    isDefault: false,
+    licenseNotice:
+      "LSG1990 — droits réservés. Ne pas importer sans autorisation.",
+  },
+  {
+    id: "tr_bds",
+    code: "BDS",
+    name: "Bible du Semeur",
+    language: "fr",
+    licenseKind: "restricted",
+    licenseVerified: false,
+    requiresImport: true,
+    isDefault: false,
+    licenseNotice:
+      "Bible du Semeur — droits réservés. Ne pas importer sans autorisation.",
   },
 ];
 
 type VerseStore = Record<string, BibleVerseUnit[]>;
 
 /**
+ * Uniquement LSG1910 (domaine public) — volume minimal pour tests UI.
  * Clé : `${translationCode}|${bookId}|${chapter}|${verse}`
  */
 const mockVerseStore: VerseStore = {
-  "LSG|rev|22|16": [
+  "LSG1910|rev|22|16": [
     {
       verse: 16,
       text: "Moi, Jésus, j'ai envoyé mon ange pour vous attester ces choses dans les Églises. Je suis la racine et la postérité de David, l'étoile brillante du matin.",
     },
   ],
-  "LSG|2pe|1|19": [
+  "LSG1910|2pe|1|19": [
     {
       verse: 19,
       text: "Et nous tenons pour d'autant plus certaine la parole prophétique, à laquelle vous faites bien de prêter attention, comme à une lampe qui brille dans un lieu obscur, jusqu'à ce que le jour vienne à paraître et que l'étoile du matin se lève dans vos cœurs.",
     },
   ],
-  "LSG|psa|46|10": [
+  "LSG1910|psa|46|10": [
     {
       verse: 10,
       text: "Arrêtez, et sachez que je suis Dieu : Je domine sur les nations, je domine sur la terre.",
     },
   ],
-  "LSG|1jn|1|7": [
+  "LSG1910|1jn|1|7": [
     {
       verse: 7,
       text: "Mais si nous marchons dans la lumière, comme il est lui-même dans la lumière, nous sommes en communion les uns avec les autres, et le sang de Jésus son Fils nous purifie de tout péché.",
     },
   ],
-  "LSG|jhn|3|16": [
+  "LSG1910|jhn|3|16": [
     {
       verse: 16,
       text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.",
     },
   ],
-  "LSG|jhn|3|16-17": [
+  "LSG1910|jhn|3|16-17": [
     {
       verse: 16,
       text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.",
@@ -72,17 +103,10 @@ const mockVerseStore: VerseStore = {
       text: "Dieu, en effet, n'a pas envoyé son Fils dans le monde pour qu'il juge le monde, mais pour que le monde soit sauvé par lui.",
     },
   ],
-  // Variante S21 (même sens, formulation distincte pour démontrer multi-traduction)
-  "S21|jhn|3|16": [
+  "LSG1910|rom|8|28": [
     {
-      verse: 16,
-      text: "Oui, Dieu a tant aimé le monde qu'il a donné son Fils unique afin que quiconque croit en lui ne périsse pas mais ait la vie éternelle.",
-    },
-  ],
-  "S21|rev|22|16": [
-    {
-      verse: 16,
-      text: "Moi, Jésus, j'ai envoyé mon ange pour vous apporter ce témoignage au sujet des Églises. Je suis le rejeton de la racine de David, l'étoile brillante du matin.",
+      verse: 28,
+      text: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein.",
     },
   ],
 };
@@ -102,11 +126,12 @@ function verseRangeKey(
 
 export function getMockTranslation(
   code: string = MOCK_DEFAULT_TRANSLATION_CODE,
-): BibleTranslation {
-  return (
-    mockBibleTranslations.find((t) => t.code === code) ??
-    mockBibleTranslations[0]!
-  );
+): BibleTranslation | undefined {
+  return mockBibleTranslations.find((t) => t.code === code);
+}
+
+export function translationHasMockContent(code: string): boolean {
+  return Object.keys(mockVerseStore).some((k) => k.startsWith(`${code}|`));
 }
 
 export function buildMockPassage(
@@ -114,10 +139,17 @@ export function buildMockPassage(
   translationCode: string = MOCK_DEFAULT_TRANSLATION_CODE,
 ): BiblePassage | null {
   const translation = getMockTranslation(translationCode);
+  if (!translation) return null;
+
+  // Pas de texte pour traductions non vérifiées / non importées
+  if (!translation.licenseVerified || translation.requiresImport) {
+    if (!translationHasMockContent(translation.code)) {
+      return null;
+    }
+  }
+
   const verseStart = reference.verseStart;
   const verseEnd = reference.verseEnd ?? reference.verseStart;
-
-  // Chapitre entier sans versets précis : pas de mock passage détaillé pour l'instant
   if (verseStart == null || verseEnd == null) {
     return null;
   }
@@ -151,10 +183,6 @@ export function buildMockPassage(
   }
 
   if (!verses || verses.length === 0) {
-    // Fallback LSG si traduction demandée absente
-    if (translation.code !== MOCK_DEFAULT_TRANSLATION_CODE) {
-      return buildMockPassage(reference, MOCK_DEFAULT_TRANSLATION_CODE);
-    }
     return null;
   }
 

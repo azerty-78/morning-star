@@ -379,12 +379,17 @@ model NewsletterEvent {
 
 model BibleTranslation {
   id       String  @id @default(cuid())
-  /// Code court : LSG, S21, NBS…
+  /// Code court : LSG1910, LSG1990, BDS…
   code     String  @unique
   name     String
   language String  @default("fr")
   /// Notice de licence / attribution affichée dans le Dialog lecteur.
   license  String?
+  /// public_domain | licensed | unknown | restricted
+  licenseKind String @default("unknown")
+  licenseVerified Boolean @default(false)
+  /// true = texte à importer (pas de seed protégé).
+  requiresImport Boolean @default(true)
   isDefault Boolean @default(false)
 
   books BibleBook[]

@@ -146,6 +146,10 @@ Voir `src/domain/meditation/archive.ts` et `MeditationRepository.findArchive`.
 
 Voir [docs/IMPORT.md](./docs/IMPORT.md). Pipeline jusqu'à preview ; publication manuelle uniquement.
 
+### Module Bible
+
+Voir [docs/BIBLE.md](./docs/BIBLE.md). Parser / Resolver / Service ; traductions licenciées uniquement ; pas de redirection externe.
+
 ## Design system
 
 Tokens dans `src/styles/globals.css` (palette sobre, accent doré, typographie IBM Plex, grille 8px, radius quasi nul). Inspiration Swiss International Typographic Style.

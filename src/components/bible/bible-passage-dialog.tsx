@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   BiblePassage,
+  BibleResolveStatus,
   BibleTranslation,
   ResolvedBibleReference,
 } from "@/domain/bible";
@@ -10,6 +11,7 @@ import { Typography } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { passageLookupKey, referenceKey } from "@/lib/bible";
+import { cn } from "@/lib/utils";
 
 export interface BiblePassageDialogProps {
   open: boolean;
@@ -19,6 +21,9 @@ export interface BiblePassageDialogProps {
   defaultTranslationCode: string;
   /** Clé : `${translationCode}::${referenceKey}` */
   passages: Record<string, BiblePassage>;
+  /** Statut de résolution optionnel (API / service). */
+  resolveStatus?: BibleResolveStatus;
+  resolveMessage?: string;
 }
 
 export function BiblePassageDialog({
@@ -28,30 +33,39 @@ export function BiblePassageDialog({
   translations,
   defaultTranslationCode,
   passages,
+  resolveStatus,
+  resolveMessage,
 }: BiblePassageDialogProps) {
-  const [translationCode, setTranslationCode] = useState(
-    defaultTranslationCode,
+  const usableTranslations = useMemo(
+    () => translations.filter((t) => t.licenseVerified),
+    [translations],
   );
+
+  const initialCode =
+    usableTranslations.find((t) => t.code === defaultTranslationCode)?.code ??
+    usableTranslations[0]?.code ??
+    defaultTranslationCode;
+
+  const [translationCode, setTranslationCode] = useState(initialCode);
 
   useEffect(() => {
     if (open) {
-      setTranslationCode(defaultTranslationCode);
+      setTranslationCode(initialCode);
     }
-  }, [open, reference, defaultTranslationCode]);
+  }, [open, reference, initialCode]);
 
   const handleClose = useCallback(() => {
     onClose();
   }, [onClose]);
 
-  const title = reference?.label ?? "Passage biblique";
+  const translation =
+    translations.find((t) => t.code === translationCode) ?? null;
+
   const passage = reference
-    ? (passages[
-        passageLookupKey(translationCode, referenceKey(reference))
-      ] ??
-      passages[
-        passageLookupKey(defaultTranslationCode, referenceKey(reference))
-      ])
+    ? passages[passageLookupKey(translationCode, referenceKey(reference))]
     : null;
+
+  const title = reference?.label ?? "Passage biblique";
 
   const verseLabel = reference
     ? reference.verseStart == null
@@ -61,6 +75,14 @@ export function BiblePassageDialog({
         : `${reference.verseStart}–${reference.verseEnd}`
     : "";
 
+  const emptyReason = describeEmptyState({
+    reference,
+    translation,
+    passage,
+    resolveStatus,
+    resolveMessage,
+  });
+
   return (
     <Dialog
       open={open}
@@ -69,7 +91,10 @@ export function BiblePassageDialog({
       className="w-[min(100%,32rem)] max-w-[calc(100vw-2rem)]"
     >
       {!reference ? (
-        <Typography variant="meta">Aucune référence sélectionnée.</Typography>
+        <Typography variant="meta">
+          {resolveMessage ??
+            "Référence invalide ou non reconnue. Aucune redirection externe."}
+        </Typography>
       ) : (
         <div className="flex flex-col gap-5">
           <dl className="grid grid-cols-2 gap-x-4 gap-y-3">
@@ -102,18 +127,18 @@ export function BiblePassageDialog({
                 Traduction
               </Typography>
               <dd className="m-0 text-[length:var(--ms-text-sm)] text-ms-fg">
-                {passage?.translation.name ?? translationCode}
+                {translation?.name ?? translationCode}
               </dd>
             </div>
           </dl>
 
-          {translations.length > 1 ? (
+          {usableTranslations.length > 0 ? (
             <div>
               <label
                 htmlFor="bible-translation"
                 className="mb-2 block text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted"
               >
-                Changer de traduction
+                Traduction (textes licenciés uniquement)
               </label>
               <select
                 id="bible-translation"
@@ -121,7 +146,7 @@ export function BiblePassageDialog({
                 onChange={(e) => setTranslationCode(e.target.value)}
                 className="w-full rounded-none border-0 border-b border-ms-border bg-transparent py-2 text-[length:var(--ms-text-base)] text-ms-fg focus-visible:border-ms-black focus-visible:outline-none"
               >
-                {translations.map((t) => (
+                {usableTranslations.map((t) => (
                   <option key={t.code} value={t.code}>
                     {t.name} ({t.code})
                   </option>
@@ -146,11 +171,23 @@ export function BiblePassageDialog({
                 ))}
               </div>
             ) : (
-              <Typography variant="meta">
-                Passage non disponible dans cette traduction pour le moment.
-              </Typography>
+              <div
+                role="status"
+                className={cn("border border-ms-border px-4 py-5")}
+              >
+                <Typography variant="label" className="mb-2 text-ms-gold-dark">
+                  Passage non disponible
+                </Typography>
+                <Typography variant="meta">{emptyReason}</Typography>
+              </div>
             )}
           </div>
+
+          {translation?.licenseNotice ? (
+            <Typography variant="meta" className="text-[length:var(--ms-text-2xs)]">
+              {translation.licenseNotice}
+            </Typography>
+          ) : null}
 
           <div className="flex justify-end border-t border-ms-border pt-4">
             <Button
@@ -166,4 +203,30 @@ export function BiblePassageDialog({
       )}
     </Dialog>
   );
+}
+
+function describeEmptyState(input: {
+  reference: ResolvedBibleReference | null;
+  translation: BibleTranslation | null;
+  passage: BiblePassage | null;
+  resolveStatus?: BibleResolveStatus;
+  resolveMessage?: string;
+}): string {
+  if (input.resolveMessage) return input.resolveMessage;
+  if (input.resolveStatus === "LICENSE_BLOCKED") {
+    return "Licence non vérifiée pour cette traduction. Aucun texte n'est affiché.";
+  }
+  if (input.resolveStatus === "IMPORT_REQUIRED") {
+    return "Traduction déclarée mais non importée. Utilisez l'importeur de traductions autorisées.";
+  }
+  if (input.translation && !input.translation.licenseVerified) {
+    return "Cette traduction est restreinte (licence). Importez uniquement des textes autorisés.";
+  }
+  if (input.translation?.requiresImport) {
+    return `Aucun contenu chargé pour ${input.translation.code}. Import requis.`;
+  }
+  if (input.reference) {
+    return `Le passage ${input.reference.label} n'est pas présent dans la base locale. Aucune redirection vers une Bible externe.`;
+  }
+  return "Passage introuvable.";
 }

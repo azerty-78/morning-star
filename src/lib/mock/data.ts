@@ -251,4 +251,5 @@ export {
   buildMockPassage,
   listMockPassagesForReferences,
   getMockTranslation,
+  translationHasMockContent,
 } from "./bible";

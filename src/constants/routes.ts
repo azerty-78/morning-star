@@ -14,4 +14,5 @@ export const ADMIN_ROUTES = {
 export const API_ROUTES = {
   health: "/api/health",
   import: "/api/admin/import",
+  bibleResolve: "/api/bible/resolve",
 } as const;
