@@ -114,19 +114,27 @@ export function buildMockPassage(
   translationCode: string = MOCK_DEFAULT_TRANSLATION_CODE,
 ): BiblePassage | null {
   const translation = getMockTranslation(translationCode);
+  const verseStart = reference.verseStart;
+  const verseEnd = reference.verseEnd ?? reference.verseStart;
+
+  // Chapitre entier sans versets précis : pas de mock passage détaillé pour l'instant
+  if (verseStart == null || verseEnd == null) {
+    return null;
+  }
+
   const rangeKey = verseRangeKey(
     translation.code,
     reference.bookId,
     reference.chapter,
-    reference.verseStart,
-    reference.verseEnd,
+    verseStart,
+    verseEnd,
   );
 
   let verses = mockVerseStore[rangeKey];
 
-  if (!verses && reference.verseStart !== reference.verseEnd) {
+  if (!verses && verseStart !== verseEnd) {
     verses = [];
-    for (let v = reference.verseStart; v <= reference.verseEnd; v += 1) {
+    for (let v = verseStart; v <= verseEnd; v += 1) {
       const single =
         mockVerseStore[
           verseRangeKey(
