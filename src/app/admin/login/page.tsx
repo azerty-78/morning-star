@@ -18,11 +18,7 @@ export default function AdminLoginPage() {
         description="Accès réservé à l'auteur. Authentification non active à cette étape."
       />
 
-      <form
-        className="mt-10 flex flex-col gap-5"
-        onSubmit={(e) => e.preventDefault()}
-        aria-describedby="auth-note"
-      >
+      <form className="mt-10 flex flex-col gap-5" aria-describedby="auth-note">
         <Input
           name="email"
           type="email"
