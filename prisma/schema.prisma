@@ -314,22 +314,39 @@ model Comment {
 // Statistiques de lecture
 // -----------------------------------------------------------------------------
 
-/// Vue atomique (une ligne ≈ un hit). Agrégations = requêtes / vues matérialisées futures.
-model ArticleView {
-  id        String   @id @default(cuid())
-  articleId String
-  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+/// Type d’événement de lecture (vue page vs téléchargement).
+enum ArticleViewKind {
+  PAGE_VIEW
+  DOWNLOAD
+}
 
-  viewedAt DateTime @default(now())
-  /// Identifiant de session anonyme — pas de PII.
-  sessionKey String?
-  referrer   String?
-  /// User-Agent tronqué / hashé côté app avant insertion si besoin.
-  userAgent  String?
+/// Classe d’appareil grossière — évite de stocker le User-Agent brut.
+enum DeviceClass {
+  UNKNOWN
+  DESKTOP
+  MOBILE
+}
+
+/// Vue atomique (une ligne ≈ un hit). Agrégations = requêtes / vues matérialisées futures.
+/// Déduplication refresh : appliquée côté application (debounce session + article).
+model ArticleView {
+  id        String          @id @default(cuid())
+  articleId String
+  article   Article         @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  kind     ArticleViewKind @default(PAGE_VIEW)
+  viewedAt DateTime        @default(now())
+
+  /// Identifiant de session anonyme — pas de PII (pas d’IP, pas d’email).
+  sessionKey String
+  /// Host du referrer uniquement (sans chemin ni query).
+  referrerHost String?
+  deviceClass  DeviceClass @default(UNKNOWN)
 
   @@index([articleId, viewedAt])
+  @@index([articleId, kind, viewedAt])
   @@index([viewedAt])
-  @@index([sessionKey])
+  @@index([sessionKey, articleId, kind, viewedAt])
 }
 
 // -----------------------------------------------------------------------------
