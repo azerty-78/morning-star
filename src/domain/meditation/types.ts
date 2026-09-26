@@ -28,6 +28,8 @@ export interface DailyMeditation {
   subtitle?: string;
   /** Date de publication éditoriale (YYYY-MM-DD) */
   publicationDate: string;
+  /** Programmation technique (ISO) — si status SCHEDULED */
+  scheduledAt?: string;
   status: MeditationStatus;
   excerpt: string;
   body: string;

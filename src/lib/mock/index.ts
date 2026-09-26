@@ -11,3 +11,9 @@ export {
   getMockTranslation,
   translationHasMockContent,
 } from "./data";
+export {
+  mockPendingComments,
+  mockNewsletterStats,
+  mockArticleViews,
+  sumMockViews,
+} from "./admin";
