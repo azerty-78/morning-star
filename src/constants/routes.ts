@@ -3,6 +3,8 @@ export const PUBLIC_ROUTES = {
   meditations: "/meditations",
   archive: "/archive",
   recherche: "/recherche",
+  newsletterConfirm: "/newsletter/confirm",
+  newsletterUnsubscribe: "/newsletter/unsubscribe",
 } as const;
 
 export const ADMIN_ROUTES = {
@@ -32,4 +34,6 @@ export const API_ROUTES = {
   health: "/api/health",
   import: "/api/admin/import",
   bibleResolve: "/api/bible/resolve",
+  newsletterSubscribe: "/api/newsletter/subscribe",
+  newsletterUnsubscribe: "/api/newsletter/unsubscribe",
 } as const;

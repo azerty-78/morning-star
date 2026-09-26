@@ -1,12 +1,3 @@
-import type { NewsletterSubscriber } from "@/domain/newsletter";
-
-export interface NewsletterRepository {
-  findByEmail(email: string): Promise<NewsletterSubscriber | null>;
-}
-
-/** Stub mock minimal — newsletter métier plus tard. */
-export class MockNewsletterRepository implements NewsletterRepository {
-  async findByEmail(): Promise<NewsletterSubscriber | null> {
-    return null;
-  }
-}
+export type { NewsletterRepository, CreateSubscriberInput } from "./newsletter.repository";
+export { MockNewsletterRepository } from "./mock-newsletter.repository";
+export { PrismaNewsletterRepository } from "./prisma-newsletter.repository";

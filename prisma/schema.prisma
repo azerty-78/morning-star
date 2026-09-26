@@ -74,6 +74,7 @@ enum PublicationType {
 
 /// État d'un abonné newsletter.
 enum NewsletterStatus {
+  PENDING
   ACTIVE
   UNSUBSCRIBED
   BOUNCED
@@ -338,9 +339,11 @@ model ArticleView {
 model NewsletterSubscriber {
   id     String            @id @default(cuid())
   email  String            @unique
-  status NewsletterStatus  @default(ACTIVE)
+  status NewsletterStatus  @default(PENDING)
 
-  /// Token opaque pour confirmation / désinscription one-click.
+  /// Token opaque pour confirmation double opt-in.
+  confirmToken String @unique @default(cuid())
+  /// Token opaque pour désinscription one-click.
   unsubscribeToken String @unique @default(cuid())
 
   subscribedAt   DateTime  @default(now())
