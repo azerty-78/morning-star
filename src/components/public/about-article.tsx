@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { BiblePassageDialog } from "@/components/bible/bible-passage-dialog";
-import { Container, PageHeader, Typography } from "@/components/ui";
+import { Container, Typography } from "@/components/ui";
 import type {
   BiblePassage,
   BibleTranslation,
@@ -79,7 +79,7 @@ export function AboutArticle({
 
   return (
     <article>
-      <figure>
+      <figure className="relative">
         <Image
           src="/about/dawn.jpg"
           alt="Un ciel pâle avant le jour, une étoile encore visible au-dessus des collines."
@@ -88,6 +88,19 @@ export function AboutArticle({
           priority
           className="about-hero"
         />
+        <header className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ms-black/80 via-ms-black/35 to-transparent px-[var(--ms-gutter)] pb-8 pt-28">
+          <div className="mx-auto w-full max-w-[var(--ms-container-narrow)]">
+            <p className="mb-3 font-sans text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-gold-light">
+              La publication
+            </p>
+            <h1 className="font-sans text-[length:var(--ms-text-3xl)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-white">
+              À propos
+            </h1>
+            <p className="mt-3 max-w-[var(--ms-measure)] font-sans text-[length:var(--ms-text-lg)] leading-[var(--ms-leading-snug)] text-white/90">
+              Une méditation par jour, pour commencer la journée dans la Parole.
+            </p>
+          </div>
+        </header>
         <figcaption className="mx-auto max-w-[var(--ms-container-narrow)] px-[var(--ms-gutter)] pt-3">
           <Typography variant="meta">
             Avant le jour. L&apos;étoile reste ; le soleil n&apos;est pas encore
@@ -96,13 +109,7 @@ export function AboutArticle({
         </figcaption>
       </figure>
 
-      <Container narrow className="pb-6">
-        <PageHeader
-          eyebrow="La publication"
-          title="À propos"
-          description="Une méditation par jour, pour commencer la journée dans la Parole."
-          className="pt-[var(--ms-space-7)]"
-        />
+      <Container narrow className="pb-6 pt-[var(--ms-space-7)]">
 
         <div className="flex max-w-[var(--ms-measure)] flex-col gap-6">
           <LinkedProse text={ORIGIN} onOpen={openReference} />
