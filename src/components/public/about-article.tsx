@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { BiblePassageDialog } from "@/components/bible/bible-passage-dialog";
-import { Container, Typography } from "@/components/ui";
+import { Typography } from "@/components/ui";
 import type {
   BiblePassage,
   BibleTranslation,
@@ -101,31 +101,31 @@ export function AboutArticle({
 
   return (
     <article>
-      <figure>
-        <div className="relative">
+      <div className="mx-auto flex w-full max-w-[var(--ms-container)] flex-col gap-4 px-[var(--ms-gutter)] pb-8 pt-4 sm:pt-6 lg:pb-10">
+      <figure className="min-w-0">
+        <div className="relative -mx-[var(--ms-gutter)] overflow-hidden md:mx-0 md:rounded-[22px]">
           <Image
             src="/about/dawn.jpg"
             alt="Un ciel pâle avant le jour, une étoile encore visible au-dessus des collines."
             width={1280}
             height={720}
             priority
+            sizes="(min-width: 64rem) 72rem, 100vw"
             className="about-hero"
           />
-          <header className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ms-black/80 via-ms-black/35 to-transparent px-[var(--ms-gutter)] pb-5 pt-16 sm:pb-8 sm:pt-28">
-            <div className="mx-auto w-full max-w-[var(--ms-container-narrow)]">
-              <p className="mb-2 text-[13px] font-medium text-ms-gold-light">
-                La publication
-              </p>
-              <h1 className="font-sans text-[clamp(2rem,7vw,2.75rem)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-white">
-                À propos
-              </h1>
-              <p className="mt-2 max-w-[var(--ms-measure)] font-sans text-[clamp(1rem,3.2vw,1.25rem)] leading-snug text-white/90 sm:mt-3">
-                Une méditation par jour, pour commencer la journée dans la Parole.
-              </p>
-            </div>
+          <header className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ms-black/80 via-ms-black/35 to-transparent px-[var(--ms-gutter)] pb-5 pt-14 md:px-7 md:pb-7 md:pt-20">
+            <p className="mb-2 text-[13px] font-medium text-ms-black">
+              La publication
+            </p>
+            <h1 className="max-w-[16ch] font-sans text-[clamp(2rem,5vw,2.75rem)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-white">
+              À propos
+            </h1>
+            <p className="mt-2 max-w-[var(--ms-measure)] font-sans text-[clamp(1rem,2.4vw,1.25rem)] leading-snug text-white/90 sm:mt-3">
+              Une méditation par jour, pour commencer la journée dans la Parole.
+            </p>
           </header>
         </div>
-        <figcaption className="mx-auto max-w-[var(--ms-container-narrow)] px-[var(--ms-gutter)] pt-3">
+        <figcaption className="pt-3">
           <Typography variant="meta">
             Avant le jour. L&apos;étoile reste ; le soleil n&apos;est pas encore
             levé.
@@ -133,21 +133,22 @@ export function AboutArticle({
         </figcaption>
       </figure>
 
-      <Container narrow className="flex flex-col gap-4 pb-6 pt-6">
+      <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-12">
 
-        <div className="flex flex-col gap-6 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7">
+        <div className="flex min-w-0 flex-col gap-6 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7 md:col-span-7">
           <LinkedProse text={NAME} onOpen={openReference} />
           <LinkedProse text={ORIGIN} onOpen={openReference} />
           <LinkedProse text={LAMP} onOpen={openReference} />
         </div>
 
-        <figure className="overflow-hidden rounded-[22px] bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <figure className="min-w-0 overflow-hidden rounded-[22px] bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)] md:col-span-5">
           <Image
             src="/about/reading.jpg"
             alt="Un livre ouvert près d'une fenêtre, à la première lumière du matin."
             width={1152}
             height={864}
-            className="w-full"
+            sizes="(min-width: 48rem) 28rem, 100vw"
+            className="about-reading"
           />
           <figcaption className="px-5 py-3">
             <Typography variant="meta">
@@ -155,10 +156,11 @@ export function AboutArticle({
             </Typography>
           </figcaption>
         </figure>
+      </div>
 
         <section
           aria-labelledby="origine-ecriture"
-          className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+          className="min-w-0 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
         >
           <Typography
             variant="label"
@@ -168,16 +170,16 @@ export function AboutArticle({
           >
             Dans l&apos;Écriture
           </Typography>
-          <ol className="overflow-hidden rounded-2xl bg-ms-cream-deep">
+          <ol className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {INDEX.map((item, index) => (
               <li
                 key={item.label}
-                className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-black/5 px-4 py-4 last:border-b-0"
+                className="grid min-w-0 grid-cols-[2.5rem_1fr] gap-4 rounded-2xl bg-ms-cream-deep px-4 py-4"
               >
                 <Typography variant="meta" as="span" className="pt-1">
                   {String(index + 1).padStart(2, "0")}
                 </Typography>
-                <div>
+                <div className="min-w-0">
                   <ReferenceButton
                     label={item.label}
                     onClick={() => openFromLabel(item.label)}
@@ -189,16 +191,18 @@ export function AboutArticle({
               </li>
             ))}
           </ol>
-          <div className="mt-8 flex flex-col gap-6">
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-x-10">
             <LinkedProse text={PROMISE} onOpen={openReference} />
             <LinkedProse text={STAR_OF_JACOB} onOpen={openReference} />
-            <LinkedProse text={DISTINCTION} onOpen={openReference} />
+            <div className="md:col-span-2">
+              <LinkedProse text={DISTINCTION} onOpen={openReference} />
+            </div>
           </div>
         </section>
 
         <section
           aria-labelledby="le-rythme"
-          className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+          className="min-w-0 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
         >
           <Typography
             variant="label"
@@ -208,16 +212,16 @@ export function AboutArticle({
           >
             Le rythme
           </Typography>
-          <ol className="overflow-hidden rounded-2xl bg-ms-cream-deep">
+          <ol className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {RHYTHM.map((step, index) => (
               <li
                 key={step.title}
-                className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-black/5 px-4 py-4 last:border-b-0"
+                className="grid min-w-0 grid-cols-[2.5rem_1fr] gap-4 rounded-2xl bg-ms-cream-deep px-4 py-4 md:grid-cols-1 md:gap-2"
               >
                 <span className="pt-0.5 text-[13px] font-medium text-ms-gold-dark">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <div>
+                <div className="min-w-0">
                   <p className="text-[16px] font-semibold text-ms-black">
                     {step.title}
                   </p>
@@ -232,7 +236,7 @@ export function AboutArticle({
 
         <section
           aria-labelledby="la-publication"
-          className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+          className="min-w-0 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
         >
           <Typography
             variant="label"
@@ -242,7 +246,7 @@ export function AboutArticle({
           >
             Comment cela se lit
           </Typography>
-          <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-x-10">
             {PRACTICE.map((paragraph) => (
               <Typography key={paragraph.slice(0, 24)} variant="body">
                 {paragraph}
@@ -250,7 +254,7 @@ export function AboutArticle({
             ))}
           </div>
         </section>
-      </Container>
+      </div>
 
       <BiblePassageDialog
         open={open}
