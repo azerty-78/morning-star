@@ -111,14 +111,14 @@ export function AboutArticle({
         </figcaption>
       </figure>
 
-      <Container narrow className="pb-6 pt-[var(--ms-space-7)]">
+      <Container narrow className="flex flex-col gap-4 pb-6 pt-6">
 
-        <div className="flex max-w-[var(--ms-measure)] flex-col gap-6">
+        <div className="flex flex-col gap-6 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7">
           <LinkedProse text={ORIGIN} onOpen={openReference} />
           <LinkedProse text={LAMP} onOpen={openReference} />
         </div>
 
-        <figure className="my-[var(--ms-space-7)]">
+        <figure className="overflow-hidden rounded-[22px] bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
           <Image
             src="/about/reading.jpg"
             alt="Un livre ouvert près d'une fenêtre, à la première lumière du matin."
@@ -126,27 +126,30 @@ export function AboutArticle({
             height={864}
             className="w-full"
           />
-          <figcaption className="mt-3">
+          <figcaption className="px-5 py-3">
             <Typography variant="meta">
               La lecture du matin : une lampe, puis le jour.
             </Typography>
           </figcaption>
         </figure>
 
-        <section aria-labelledby="origine-ecriture">
+        <section
+          aria-labelledby="origine-ecriture"
+          className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+        >
           <Typography
             variant="label"
             as="h2"
             id="origine-ecriture"
-            className="mb-5 text-ms-gold-dark"
+            className="mb-4 text-ms-gold-dark"
           >
             Dans l&apos;Écriture
           </Typography>
-          <ol className="flex flex-col border-t border-ms-border">
+          <ol className="overflow-hidden rounded-2xl bg-ms-cream-deep">
             {INDEX.map((item, index) => (
               <li
                 key={item.label}
-                className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-ms-border py-4"
+                className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-black/5 px-4 py-4 last:border-b-0"
               >
                 <Typography variant="meta" as="span" className="pt-1">
                   0{index + 1}
@@ -170,12 +173,15 @@ export function AboutArticle({
           </div>
         </section>
 
-        <section aria-labelledby="la-publication" className="mt-[var(--ms-space-8)]">
+        <section
+          aria-labelledby="la-publication"
+          className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+        >
           <Typography
             variant="label"
             as="h2"
             id="la-publication"
-            className="mb-5 text-ms-gold-dark"
+            className="mb-4 text-ms-gold-dark"
           >
             Comment cela se lit
           </Typography>
