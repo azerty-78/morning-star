@@ -2,6 +2,7 @@
  * Snapshot dashboard admin — agrégats pour auteur unique.
  */
 
+import type { DailyBucket } from "@/domain/analytics";
 import type { DailyMeditation } from "@/domain/meditation";
 
 export interface AdminCommentItem {
@@ -21,6 +22,10 @@ export interface AdminDashboardSnapshot {
   drafts: DailyMeditation[];
   totalViews: number;
   viewsThisWeek: number;
+  viewsToday: number;
+  downloadsAllTime: number;
+  /** Série récente pour le graphique du dashboard. */
+  daily: DailyBucket[];
   newsletterActive: number;
   newsletterTotal: number;
   pendingComments: AdminCommentItem[];

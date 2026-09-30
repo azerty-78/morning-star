@@ -1,6 +1,5 @@
-import { AdminDashboardView } from "@/components/admin";
-import { Badge, Container, PageHeader } from "@/components/ui";
-import { MOCK_DATA_BANNER } from "@/constants/app";
+import { AdminDashboardView } from "@/components/admin/admin-dashboard";
+import { Container } from "@/components/ui";
 import { createAdminService } from "@/services/admin";
 
 export const metadata = {
@@ -11,16 +10,7 @@ export default async function AdminDashboardPage() {
   const snapshot = await createAdminService().getDashboard();
 
   return (
-    <Container className="pb-[var(--ms-space-10)]">
-      <PageHeader
-        omitTitle
-        eyebrow="Administration"
-        title="Dashboard"
-        description="Vue d’ensemble pour un auteur unique — publication, file d’attente, audience."
-      />
-      <div className="mb-8">
-        <Badge tone="accent">{MOCK_DATA_BANNER}</Badge>
-      </div>
+    <Container className="py-4 pb-[var(--ms-space-10)]">
       <AdminDashboardView snapshot={snapshot} />
     </Container>
   );
