@@ -341,8 +341,9 @@ function buildConfirmHtml(input: {
   confirmUrl: string;
   unsubUrl: string;
 }): string {
-  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#0a0a0a;background:#f3f2ee;padding:32px;">
-  <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#7d6523;">${APP_NAME}</p>
+  const logo = absoluteUrl("/logo.png");
+  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#0a0a0a;background:#f7f4ee;padding:32px;">
+  <img src="${logo}" alt="${APP_NAME}" width="120" height="120" style="display:block;width:120px;height:120px;" />
   <h1 style="font-size:28px;letter-spacing:-0.02em;">Confirmez votre inscription</h1>
   <p>Un clic suffit pour recevoir la méditation du jour.</p>
   <p><a href="${input.confirmUrl}" style="color:#0a0a0a;font-weight:600;">Confirmer mon email</a></p>
@@ -356,7 +357,9 @@ function buildPublicationHtml(input: {
   readUrl: string;
   unsubUrl: string;
 }): string {
-  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#0a0a0a;background:#f3f2ee;padding:32px;">
+  const logo = absoluteUrl("/logo.png");
+  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#0a0a0a;background:#f7f4ee;padding:32px;">
+  <img src="${logo}" alt="${APP_NAME}" width="96" height="96" style="display:block;width:96px;height:96px;" />
   <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#7d6523;">Méditation du jour</p>
   <h1 style="font-size:28px;letter-spacing:-0.02em;">${escapeHtml(input.title)}</h1>
   <p style="font-size:18px;line-height:1.5;color:#3a3834;">${escapeHtml(input.excerpt)}</p>

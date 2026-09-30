@@ -1,4 +1,5 @@
 export { getSiteUrl, absoluteUrl, SITE } from "./site";
+export { LOGO_PUBLIC_PATH, LOGO_INTRINSIC_SIZE, loadLogoDataUrl } from "./logo";
 export {
   buildMeditationMetadata,
   buildPublicPageMetadata,

@@ -28,4 +28,6 @@ export const SITE = {
   description: APP_DESCRIPTION,
   locale: "fr_FR",
   language: "fr",
+  logoPath: "/logo.png",
+  logoSize: 1254,
 } as const;

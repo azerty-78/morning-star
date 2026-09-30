@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { APP_NAME } from "@/constants/app";
+import { BrandLogo } from "@/components/brand";
 import { PUBLIC_ROUTES } from "@/constants/routes";
 import { Container, Separator } from "@/components/ui";
 
@@ -10,11 +10,9 @@ export function SiteFooter() {
     <footer className="mt-auto" role="contentinfo">
       <Separator tone="default" />
       <Container className="flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-[length:var(--ms-text-2xs)] uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted">
-            {APP_NAME}
-          </p>
-          <p className="mt-1 text-[length:var(--ms-text-sm)] text-ms-muted">
+        <div className="flex items-center gap-4">
+          <BrandLogo className="h-16 w-16" />
+          <p className="text-[length:var(--ms-text-sm)] text-ms-muted">
             Publication éditoriale · méditations quotidiennes · {year}
           </p>
         </div>

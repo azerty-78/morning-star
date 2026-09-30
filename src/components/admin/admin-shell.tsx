@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { APP_NAME } from "@/constants/app";
+import { BRAND_LOGO_ALT, BrandLogo } from "@/components/brand";
 import { ADMIN_NAV, ADMIN_ROUTES, PUBLIC_ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 
@@ -23,15 +23,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <aside className="shrink-0 border-b border-ms-black md:w-56 md:border-b-0 md:border-r">
         <div className="sticky top-0 flex flex-col gap-8 px-5 py-6 md:min-h-screen">
           <div>
-            <p className="text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted">
-              Espace auteur
-            </p>
             <Link
               href={ADMIN_ROUTES.dashboard}
-              className="mt-1 block text-lg font-semibold tracking-tight text-ms-fg no-underline"
+              aria-label={BRAND_LOGO_ALT}
+              className="block w-fit no-underline"
             >
-              {APP_NAME}
+              <BrandLogo decorative className="h-20 w-20" />
             </Link>
+            <p className="mt-2 text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted">
+              Espace auteur
+            </p>
           </div>
 
           <nav aria-label="Administration">

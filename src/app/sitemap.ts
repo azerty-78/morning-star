@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: "daily",
       priority: 1,
+      images: [absoluteUrl("/logo.png")],
     },
     {
       url: absoluteUrl(PUBLIC_ROUTES.meditations),
@@ -37,8 +38,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const meditationEntries: MetadataRoute.Sitemap = meditations.map((m) => ({
     url: absoluteUrl(meditationPath(m.slug)),
     lastModified: m.updatedAt,
-    changeFrequency: "monthly",
+    changeFrequency: "monthly" as const,
     priority: 0.7,
+    images: [absoluteUrl(`${meditationPath(m.slug)}/opengraph-image`)],
   }));
 
   return [...staticEntries, ...meditationEntries];

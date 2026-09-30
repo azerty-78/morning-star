@@ -1,14 +1,16 @@
 import { ImageResponse } from "next/og";
-import { SITE } from "@/lib/seo";
+import { loadLogoDataUrl, SITE } from "@/lib/seo";
 
 export const alt = `${SITE.name} — ${SITE.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 /**
- * Image Open Graph par défaut — typographie Swiss, sans décor superflu.
+ * Carte de partage par défaut — logo officiel sur fond clair.
  */
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const logo = await loadLogoDataUrl();
+
   return new ImageResponse(
     (
       <div
@@ -16,60 +18,13 @@ export default function OpenGraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          backgroundColor: "#f3f2ee",
-          color: "#0a0a0a",
-          padding: "64px",
-          fontFamily: "Helvetica, Arial, sans-serif",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#f7f4ee",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            borderBottom: "2px solid #0a0a0a",
-            paddingBottom: "24px",
-            fontSize: 22,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: "#7d6523",
-          }}
-        >
-          Méditation quotidienne
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div
-            style={{
-              fontSize: 72,
-              fontWeight: 700,
-              letterSpacing: "-0.03em",
-              lineHeight: 1.05,
-            }}
-          >
-            {SITE.name}
-          </div>
-          <div
-            style={{
-              fontSize: 28,
-              color: "#3a3834",
-              letterSpacing: "-0.01em",
-              maxWidth: 800,
-            }}
-          >
-            {SITE.tagline}
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 18,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "#6f6d67",
-          }}
-        >
-          Publication éditoriale
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logo} width={560} height={560} alt="" />
       </div>
     ),
     { ...size },

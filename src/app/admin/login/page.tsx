@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/brand";
 import { Container, Input, PageHeader, Typography } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +13,9 @@ export const metadata = {
 export default function AdminLoginPage() {
   return (
     <Container narrow className="pb-16">
+      <div className="pt-[var(--ms-space-8)]">
+        <BrandLogo className="h-28 w-28" />
+      </div>
       <PageHeader
         eyebrow="Admin"
         title="Connexion"

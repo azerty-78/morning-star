@@ -12,6 +12,12 @@ export function websiteJsonLd(): JsonLd {
     description: SITE.description,
     url: absoluteUrl("/"),
     inLanguage: SITE.language,
+    image: absoluteUrl(SITE.logoPath),
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      logo: logoObject(),
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -23,6 +29,16 @@ export function websiteJsonLd(): JsonLd {
   };
 }
 
+function logoObject(): JsonLd {
+  return {
+    "@type": "ImageObject",
+    url: absoluteUrl(SITE.logoPath),
+    width: SITE.logoSize,
+    height: SITE.logoSize,
+    caption: SITE.name,
+  };
+}
+
 export function organizationJsonLd(): JsonLd {
   return {
     "@context": "https://schema.org",
@@ -30,6 +46,8 @@ export function organizationJsonLd(): JsonLd {
     name: SITE.name,
     url: absoluteUrl("/"),
     description: SITE.description,
+    logo: logoObject(),
+    image: absoluteUrl(SITE.logoPath),
   };
 }
 
@@ -66,6 +84,7 @@ export function meditationArticleJsonLd(
       "@type": "Organization",
       name: SITE.name,
       url: absoluteUrl("/"),
+      logo: logoObject(),
     },
     articleSection: "Méditation",
     keywords: (meditation.themes ?? []).join(", "),
