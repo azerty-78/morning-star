@@ -39,12 +39,40 @@ const iconForHref: Record<string, IconName> = {
   [PUBLIC_ROUTES.home]: "site",
 };
 
-function sectionTitle(pathname: string): string {
-  if (pathname.startsWith(ADMIN_ROUTES.import)) return "Import";
+const sectionHint: Record<string, string> = {
+  [ADMIN_ROUTES.dashboard]: "Publication, file et audience",
+  [ADMIN_ROUTES.meditations]: "Brouillons, programmés, publiés",
+  [ADMIN_ROUTES.calendrier]: "Le mois éditorial",
+  [ADMIN_ROUTES.commentaires]: "Messages à traiter",
+  [ADMIN_ROUTES.newsletter]: "Abonnés et envois",
+  [ADMIN_ROUTES.statistiques]: "Lectures et téléchargements",
+  [ADMIN_ROUTES.parametres]: "La publication",
+  [ADMIN_ROUTES.import]: "Document vers méditation",
+};
+
+function sectionMeta(pathname: string): {
+  title: string;
+  hint: string;
+  icon: IconName;
+} {
+  if (pathname.startsWith(ADMIN_ROUTES.import)) {
+    return {
+      title: "Import",
+      hint: sectionHint[ADMIN_ROUTES.import] ?? "",
+      icon: "import",
+    };
+  }
   const match = ADMIN_NAV.find(
     (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
   );
-  return match?.label ?? "Administration";
+  if (!match) {
+    return { title: "Administration", hint: "Espace auteur", icon: "dashboard" };
+  }
+  return {
+    title: match.label,
+    hint: sectionHint[match.href] ?? "Espace auteur",
+    icon: iconForHref[match.href] ?? "dashboard",
+  };
 }
 
 function isCurrent(pathname: string, href: string): boolean {
@@ -168,9 +196,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const isLogin = pathname === ADMIN_ROUTES.login;
   const [collapsed, setCollapsed] = useState(false);
   const [ready, setReady] = useState(false);
+  const [todayLabel, setTodayLabel] = useState<string | null>(null);
 
   useEffect(() => {
     setCollapsed(window.localStorage.getItem(STORAGE_KEY) === "collapsed");
+    const label = new Intl.DateTimeFormat("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }).format(new Date());
+    setTodayLabel(label.charAt(0).toUpperCase() + label.slice(1));
     setReady(true);
   }, []);
 
@@ -186,7 +221,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  const title = sectionTitle(pathname);
+  const section = sectionMeta(pathname);
 
   return (
     <div className="ios-ui flex min-h-full flex-col bg-ms-cream-deep md:flex-row">
@@ -210,12 +245,29 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           >
             <BrandLogo decorative />
           </Link>
-          <div className={cn("min-w-0", collapsed && "md:hidden")}>
+          <div className={cn("min-w-0 flex-1", collapsed && "md:hidden")}>
             <p className="truncate text-[17px] font-semibold tracking-tight text-ms-black">
               Morning Star
             </p>
             <p className="text-[13px] text-ms-gold-dark">Espace auteur</p>
           </div>
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            aria-expanded={!collapsed}
+            aria-controls="admin-sidebar-nav"
+            aria-label={collapsed ? "Étendre le menu" : "Réduire le menu"}
+            title={collapsed ? "Étendre le menu" : "Réduire le menu"}
+            className={cn(
+              "flex shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15",
+              collapsed ? "h-9 w-9" : "h-9 gap-2 px-2.5",
+            )}
+          >
+            <NavIcon name={collapsed ? "expand" : "collapse"} />
+            <span className={cn("text-[13px] font-medium", collapsed && "hidden")}>
+              Réduire
+            </span>
+          </button>
         </div>
 
         <nav id="admin-sidebar-nav" aria-label="Administration" className="px-3 pb-3 md:px-0">
@@ -248,31 +300,39 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </ul>
         </nav>
 
-        <div className="px-3 pb-3 md:mt-auto md:px-0 md:pt-3">
-          <button
-            type="button"
-            onClick={toggleSidebar}
-            aria-expanded={!collapsed}
-            aria-controls="admin-sidebar-nav"
-            title={collapsed ? "Étendre le menu" : "Réduire le menu"}
-            className={cn(
-              "flex w-full items-center gap-3 rounded-[10px] bg-white px-3 py-2 text-[15px] font-medium text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15",
-              collapsed && "md:justify-center md:px-2",
-            )}
-          >
-            <NavIcon name={collapsed ? "expand" : "collapse"} />
-            <span className={cn(collapsed && "md:hidden")}>
-              {collapsed ? "Étendre" : "Réduire"}
-            </span>
-          </button>
-        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center border-b border-ms-gold/25 bg-ms-cream-deep/80 px-5 backdrop-blur-xl">
-          <h1 className="text-[17px] font-semibold tracking-tight text-ms-black">
-            {title}
-          </h1>
+        <header className="sticky top-0 z-30 border-b border-ms-gold/30 bg-ms-off-white/90 backdrop-blur-xl">
+          <div className="flex h-[4.25rem] items-center justify-between gap-4 px-4 sm:px-6">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-ms-gold text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.08)]">
+                <NavIcon name={section.icon} />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-[12px] font-medium text-ms-gold-dark">
+                  {section.hint}
+                </p>
+                <h1 className="truncate text-[20px] font-semibold leading-tight tracking-tight text-ms-black">
+                  {section.title}
+                </h1>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              {todayLabel ? (
+                <p className="hidden text-[13px] text-ms-gray-600 md:block">
+                  {todayLabel}
+                </p>
+              ) : null}
+              <Link
+                href={PUBLIC_ROUTES.home}
+                className="inline-flex h-9 items-center gap-2 rounded-full bg-ms-black px-3.5 text-[13px] font-medium text-ms-off-white no-underline transition-colors hover:bg-ms-gold hover:text-ms-black"
+              >
+                <NavIcon name="site" />
+                <span className="hidden sm:inline">Voir le site</span>
+              </Link>
+            </div>
+          </div>
         </header>
         <div className="min-w-0 flex-1">{children}</div>
       </div>
