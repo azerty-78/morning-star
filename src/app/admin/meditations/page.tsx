@@ -10,7 +10,7 @@ export default async function AdminMeditationsPage() {
   const items = await createAdminService().listMeditations();
 
   return (
-    <Container className="py-4 pb-[var(--ms-space-10)]">
+    <Container className="ios-meditations py-4 pb-[var(--ms-space-10)]">
       <MeditationAdminTable items={items} />
     </Container>
   );

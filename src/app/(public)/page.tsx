@@ -25,7 +25,7 @@ export default async function HomePage() {
     : published.slice(0, 3);
 
   return (
-    <Container className="pb-[var(--ms-space-10)] pt-[var(--ms-space-7)] md:pt-[var(--ms-space-8)]">
+    <Container className="pb-6 pt-[var(--ms-space-7)] md:pt-[var(--ms-space-8)]">
       {today ? (
         <HomeToday meditation={today} />
       ) : (
