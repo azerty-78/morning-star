@@ -356,6 +356,24 @@ hr {
   transform: none;
 }
 
+/* Barre latérale admin : emblème à hauteur de la ligne de titre. */
+.brand-mark--sidebar {
+  width: auto;
+  height: 2.25rem;
+  overflow: visible;
+  border-radius: 0;
+}
+
+.brand-mark--sidebar img {
+  position: static;
+  top: auto;
+  left: auto;
+  width: auto;
+  height: 2.25rem;
+  max-width: none;
+  transform: none;
+}
+
 /* Chrome iOS — header, footer, newsletter, admin. Le corps éditorial reste suisse. */
 .ios-ui {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",

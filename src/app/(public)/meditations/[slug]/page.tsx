@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MeditationViewTracker } from "@/components/analytics";
 import { Container } from "@/components/ui";
-import { MeditationReader } from "@/components/meditation";
+import { MeditationReader } from "@/components/meditation/reader/meditation-reader";
 import { JsonLd } from "@/components/seo";
 import { PUBLIC_ROUTES } from "@/constants/routes";
 import { getUserRepository } from "@/lib/db";

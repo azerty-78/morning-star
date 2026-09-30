@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui";
 import { API_ROUTES } from "@/constants/routes";
 import type { DailyMeditation } from "@/domain/meditation";
-import { meditationCanonical } from "@/lib/seo";
+import { meditationCanonical } from "@/lib/seo/metadata";
 
 export interface ReaderActionsProps {
   meditation: DailyMeditation;

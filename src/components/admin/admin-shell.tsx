@@ -240,15 +240,17 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <Link
             href={ADMIN_ROUTES.dashboard}
             aria-label={BRAND_LOGO_ALT}
-            className="brand-mark no-underline"
+            className="brand-mark brand-mark--sidebar no-underline"
           >
-            <BrandLogo decorative />
+            <BrandLogo decorative mark />
           </Link>
           <div className={cn("min-w-0 flex-1", collapsed && "md:hidden")}>
-            <p className="truncate text-[17px] font-semibold tracking-tight text-ms-black">
+            <p className="truncate text-[15px] font-semibold leading-tight tracking-tight text-ms-black">
               Morning Star
             </p>
-            <p className="text-[13px] text-ms-gold-dark">Espace auteur</p>
+            <p className="mt-0.5 truncate text-[12px] leading-tight text-ms-gold-dark">
+              Espace auteur
+            </p>
           </div>
           <button
             type="button"
@@ -257,15 +259,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             aria-controls="admin-sidebar-nav"
             aria-label={collapsed ? "Étendre le menu" : "Réduire le menu"}
             title={collapsed ? "Étendre le menu" : "Réduire le menu"}
-            className={cn(
-              "flex shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15",
-              collapsed ? "h-9 w-9" : "h-9 gap-2 px-2.5",
-            )}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15"
           >
             <NavIcon name={collapsed ? "expand" : "collapse"} />
-            <span className={cn("text-[13px] font-medium", collapsed && "hidden")}>
-              Réduire
-            </span>
           </button>
         </div>
 
