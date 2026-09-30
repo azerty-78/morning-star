@@ -104,7 +104,7 @@ export function detectBibleReferences(text: string): BibleReferenceMatch[] {
   const matches: BibleReferenceMatch[] = [];
 
   const versePattern =
-    /\b(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+)\s+(\d+)\s*[:\.]\s*(\d+)(?:\s*[-–—]\s*(\d+))?/gu;
+    /(?<![\p{L}\p{N}_])(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+)\s+(\d+)\s*[:\.]\s*(\d+)(?:\s*[-–—]\s*(\d+))?/gu;
 
   let match: RegExpExecArray | null;
   while ((match = versePattern.exec(text)) !== null) {
@@ -118,7 +118,7 @@ export function detectBibleReferences(text: string): BibleReferenceMatch[] {
   }
 
   const chapterPattern =
-    /\b(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+)\s+(\d+)\b/gu;
+    /(?<![\p{L}\p{N}_])(\d+\s+[A-Za-zÀ-ÿœŒ]+(?:\s+[A-Za-zÀ-ÿœŒ]+)?|[A-Za-zÀ-ÿœŒ]+)\s+(\d+)(?![\p{L}\p{N}_])/gu;
 
   while ((match = chapterPattern.exec(text)) !== null) {
     const raw = match[0];

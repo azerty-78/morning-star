@@ -248,6 +248,14 @@ img {
   display: block;
 }
 
+img.about-hero {
+  width: 100%;
+  max-width: none;
+  height: min(52vh, 26rem);
+  object-fit: cover;
+  object-position: center 40%;
+}
+
 hr {
   border: 0;
   border-top: var(--ms-rule) solid var(--ms-border);

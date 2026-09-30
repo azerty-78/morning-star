@@ -12,7 +12,7 @@ export default function PublicLayout({
     <>
       <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
       <SiteHeader />
-      <main id="contenu-principal" className="flex-1" tabIndex={-1}>
+      <main id="contenu-principal" className="flex-1 bg-ms-white" tabIndex={-1}>
         {children}
       </main>
       <SiteFooter />
