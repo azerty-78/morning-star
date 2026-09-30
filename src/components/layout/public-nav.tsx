@@ -2,20 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PUBLIC_ROUTES } from "@/constants/routes";
+import { isPathActive, PUBLIC_NAV } from "@/constants/routes";
 import { cn } from "@/lib/utils";
-
-const items = [
-  { href: PUBLIC_ROUTES.home, label: "Aujourd'hui" },
-  { href: PUBLIC_ROUTES.meditations, label: "Méditations" },
-  { href: PUBLIC_ROUTES.archive, label: "Archive" },
-  { href: PUBLIC_ROUTES.about, label: "À propos" },
-] as const;
-
-function isCurrent(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
 
 export function PublicNav() {
   const pathname = usePathname();
@@ -23,8 +11,8 @@ export function PublicNav() {
   return (
     <nav aria-label="Navigation principale" className="ios-ui w-full md:w-auto">
       <ul className="flex gap-0.5 overflow-x-auto rounded-full bg-ms-gold/15 p-1">
-        {items.map((item) => {
-          const active = isCurrent(pathname, item.href);
+        {PUBLIC_NAV.map((item) => {
+          const active = isPathActive(pathname, item.href);
           return (
             <li key={item.href} className="shrink-0">
               <Link

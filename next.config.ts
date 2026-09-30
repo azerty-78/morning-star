@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // URLs propres — pas de trailing slash technique.
   trailingSlash: false,
+  async redirects() {
+    return [
+      { source: "/about", destination: "/a-propos", permanent: true },
+      { source: "/search", destination: "/archive", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

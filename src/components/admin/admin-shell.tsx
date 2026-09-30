@@ -4,7 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { BRAND_LOGO_ALT, BrandLogo } from "@/components/brand";
-import { ADMIN_NAV, ADMIN_ROUTES, PUBLIC_ROUTES } from "@/constants/routes";
+import {
+  ADMIN_NAV,
+  ADMIN_ROUTES,
+  isPathActive,
+  PUBLIC_ROUTES,
+} from "@/constants/routes";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "ms-admin-sidebar";
@@ -62,9 +67,7 @@ function sectionMeta(pathname: string): {
       icon: "import",
     };
   }
-  const match = ADMIN_NAV.find(
-    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
-  );
+  const match = ADMIN_NAV.find((item) => isPathActive(pathname, item.href));
   if (!match) {
     return { title: "Administration", hint: "Espace auteur", icon: "dashboard" };
   }
@@ -73,10 +76,6 @@ function sectionMeta(pathname: string): {
     hint: sectionHint[match.href] ?? "Espace auteur",
     icon: iconForHref[match.href] ?? "dashboard",
   };
-}
-
-function isCurrent(pathname: string, href: string): boolean {
-  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 function NavIcon({ name }: { name: IconName }) {
@@ -277,7 +276,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 <NavLink
                   href={item.href}
                   label={item.label}
-                  active={isCurrent(pathname, item.href)}
+                  active={isPathActive(pathname, item.href)}
                   collapsed={collapsed}
                 />
               </li>
@@ -292,7 +291,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 <NavLink
                   href={item.href}
                   label={item.label}
-                  active={isCurrent(pathname, item.href)}
+                  active={isPathActive(pathname, item.href)}
                   collapsed={collapsed}
                 />
               </li>

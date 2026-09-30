@@ -8,6 +8,20 @@ export const PUBLIC_ROUTES = {
   newsletterUnsubscribe: "/newsletter/unsubscribe",
 } as const;
 
+/** Navigation publique — en-tête et pied de page, dans cet ordre. */
+export const PUBLIC_NAV = [
+  { href: PUBLIC_ROUTES.home, label: "Aujourd'hui" },
+  { href: PUBLIC_ROUTES.meditations, label: "Méditations" },
+  { href: PUBLIC_ROUTES.archive, label: "Archive" },
+  { href: PUBLIC_ROUTES.about, label: "À propos" },
+] as const;
+
+/** Page courante : l’accueil ne s’active que sur `/`. */
+export function isPathActive(pathname: string, href: string): boolean {
+  if (href === PUBLIC_ROUTES.home) return pathname === PUBLIC_ROUTES.home;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export const ADMIN_ROUTES = {
   login: "/admin/login",
   dashboard: "/admin/dashboard",
