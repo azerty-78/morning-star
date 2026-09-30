@@ -162,6 +162,28 @@ function NavIcon({ name }: { name: IconName }) {
   );
 }
 
+function SidebarToggle({
+  collapsed,
+  onToggle,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={!collapsed}
+      aria-controls="admin-sidebar-nav"
+      aria-label={collapsed ? "Étendre le menu" : "Réduire le menu"}
+      title={collapsed ? "Étendre le menu" : "Réduire le menu"}
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15"
+    >
+      <NavIcon name={collapsed ? "expand" : "collapse"} />
+    </button>
+  );
+}
+
 function NavLink({
   href,
   label,
@@ -251,7 +273,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div
           className={cn(
             "flex h-[4.25rem] items-center gap-3 border-b border-ms-gold/30 px-4 md:px-2",
-            collapsed && "md:flex-col md:justify-center md:gap-1 md:px-0",
+            collapsed && "md:justify-center md:px-0",
           )}
         >
           <Link
@@ -272,20 +294,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               Espace auteur
             </p>
           </div>
-          <button
-            type="button"
-            onClick={toggleSidebar}
-            aria-expanded={!collapsed}
-            aria-controls="admin-sidebar-nav"
-            aria-label={collapsed ? "Étendre le menu" : "Réduire le menu"}
-            title={collapsed ? "Étendre le menu" : "Réduire le menu"}
-            className={cn(
-              "flex shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15",
-              collapsed ? "h-6 w-6" : "h-9 w-9",
-            )}
-          >
-            <NavIcon name={collapsed ? "expand" : "collapse"} />
-          </button>
+          {collapsed ? null : (
+            <SidebarToggle collapsed={false} onToggle={toggleSidebar} />
+          )}
         </div>
 
         <nav id="admin-sidebar-nav" aria-label="Administration" className="px-3 pb-3 md:px-0">
@@ -340,6 +351,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-30 border-b border-ms-gold/30 bg-ms-off-white/90 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
           <div className="flex h-14 items-center justify-between gap-3 px-3 sm:h-[4.25rem] sm:gap-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
+              {collapsed ? (
+                <span className="hidden md:inline-flex">
+                  <SidebarToggle collapsed onToggle={toggleSidebar} />
+                </span>
+              ) : null}
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-ms-gold text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.08)] sm:h-10 sm:w-10">
                 <NavIcon name={section.icon} />
               </span>

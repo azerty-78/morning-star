@@ -2,7 +2,7 @@ export const PUBLIC_ROUTES = {
   home: "/",
   meditations: "/meditations",
   archive: "/archive",
-  about: "/a-propos",
+  about: "/about",
   recherche: "/recherche",
   newsletterConfirm: "/newsletter/confirm",
   newsletterUnsubscribe: "/newsletter/unsubscribe",

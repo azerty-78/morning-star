@@ -13,7 +13,9 @@ import { APP_NAME } from "@/constants/app";
 import { parseBibleReference, segmentParagraph } from "@/lib/bible";
 import { cn } from "@/lib/utils";
 
-const ORIGIN = `Le nom Morning Star vient de là. Dans Apocalypse 22:16, Jésus se désigne lui-même : « Je suis la racine et la postérité de David, l'étoile brillante du matin. » L'étoile du matin est la dernière lumière de la nuit. Elle ne remplace pas le jour : elle l'annonce. Cette publication tient son rythme de cette image — un texte, avant que la journée ne soit levée.`;
+const NAME = `Morning Star est le nom de l'étoile du matin. En français, cette page s'appelle À propos : elle dit d'où vient le nom, puis comment la publication se lit. Le nom anglais reste sur la porte. Le texte, lui, est en français.`;
+
+const ORIGIN = `Le nom vient de l'Écriture. Dans Apocalypse 22:16, Jésus se désigne lui-même : « Je suis la racine et la postérité de David, l'étoile brillante du matin. » L'étoile du matin est la dernière lumière de la nuit. Elle ne remplace pas le jour : elle l'annonce. Cette publication tient son rythme de cette image — un texte, avant que la journée ne soit levée.`;
 
 const LAMP = `Pierre reprend la même image. Dans 2 Pierre 1:19, la parole prophétique est une lampe dans un lieu obscur, jusqu'à ce que le jour paraisse et que l'étoile du matin se lève dans les cœurs. Lire, ici, c'est prêter attention à cette lampe.`;
 
@@ -25,9 +27,25 @@ const DISTINCTION = `Un passage emploie une image voisine, et il ne faut pas les
 
 const PRACTICE = [
   `${APP_NAME} publie une méditation chrétienne chaque jour. Chaque texte est écrit pour être lu lentement : un titre, quelques paragraphes, une référence biblique que l'on ouvre sans quitter la page.`,
-  `Il n'y a pas de fil d'actualité, pas de commentaires publics bruyants, pas de redirection vers un site extérieur pour lire la Bible. La lecture reste ici.`,
+  `La veille et le lendemain restent à portée : méditation précédente, méditation suivante, archive. On peut chercher un mot, une date, un thème. On ne fait pas défiler un fil.`,
+  `Il n'y a pas de commentaires publics, pas de redirection vers un site extérieur pour lire la Bible. La lecture reste ici.`,
   `L'auteur prépare, programme et publie seul. La newsletter envoie la méditation du jour à celles et ceux qui l'ont confirmée — un message, puis le silence.`,
 ];
+
+const RHYTHM = [
+  {
+    title: "Un texte",
+    note: "Pas une suite d'articles. Une méditation, écrite pour le matin.",
+  },
+  {
+    title: "Un passage",
+    note: "La référence s'ouvre sur la page. Le verset se lit ici.",
+  },
+  {
+    title: "Puis le jour",
+    note: "On s'arrête. L'étoile a annoncé. Elle n'a pas à tenir jusqu'au soir.",
+  },
+] as const;
 
 const INDEX = [
   {
@@ -45,6 +63,10 @@ const INDEX = [
   {
     label: "Nombres 24:17",
     note: "Un astre sort de Jacob.",
+  },
+  {
+    label: "Ésaïe 14:12",
+    note: "Un astre qui tombe : le roi de Babylone, non le Christ.",
   },
 ] as const;
 
@@ -114,6 +136,7 @@ export function AboutArticle({
       <Container narrow className="flex flex-col gap-4 pb-6 pt-6">
 
         <div className="flex flex-col gap-6 rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7">
+          <LinkedProse text={NAME} onOpen={openReference} />
           <LinkedProse text={ORIGIN} onOpen={openReference} />
           <LinkedProse text={LAMP} onOpen={openReference} />
         </div>
@@ -152,7 +175,7 @@ export function AboutArticle({
                 className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-black/5 px-4 py-4 last:border-b-0"
               >
                 <Typography variant="meta" as="span" className="pt-1">
-                  0{index + 1}
+                  {String(index + 1).padStart(2, "0")}
                 </Typography>
                 <div>
                   <ReferenceButton
@@ -171,6 +194,40 @@ export function AboutArticle({
             <LinkedProse text={STAR_OF_JACOB} onOpen={openReference} />
             <LinkedProse text={DISTINCTION} onOpen={openReference} />
           </div>
+        </section>
+
+        <section
+          aria-labelledby="le-rythme"
+          className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+        >
+          <Typography
+            variant="label"
+            as="h2"
+            id="le-rythme"
+            className="mb-4 text-ms-gold-dark"
+          >
+            Le rythme
+          </Typography>
+          <ol className="overflow-hidden rounded-2xl bg-ms-cream-deep">
+            {RHYTHM.map((step, index) => (
+              <li
+                key={step.title}
+                className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-black/5 px-4 py-4 last:border-b-0"
+              >
+                <span className="pt-0.5 text-[13px] font-medium text-ms-gold-dark">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <p className="text-[16px] font-semibold text-ms-black">
+                    {step.title}
+                  </p>
+                  <p className="mt-1 text-[15px] leading-snug text-ms-gray-700">
+                    {step.note}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section
