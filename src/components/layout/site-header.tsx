@@ -8,9 +8,13 @@ export function SiteHeader() {
   return (
     <header
       role="banner"
-      className="ios-ui sticky top-0 z-40 border-b border-ms-gold/25 bg-ms-off-white/80 pt-[env(safe-area-inset-top)] backdrop-blur-xl"
+      className="ios-ui sticky top-0 z-40 border-b border-ms-gold/25 pt-[env(safe-area-inset-top)]"
     >
-      <Container className="flex items-center justify-between gap-3 py-2.5">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-ms-off-white/80 backdrop-blur-xl"
+      />
+      <Container className="relative flex items-center justify-between gap-3 py-2.5">
         <Link
           href={PUBLIC_ROUTES.home}
           aria-label={BRAND_LOGO_ALT}
