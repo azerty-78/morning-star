@@ -14,8 +14,8 @@ export function SiteFooter() {
           className="flex items-center gap-3 no-underline"
           aria-label={`${APP_NAME} — accueil`}
         >
-          <span className="brand-mark brand-mark--lg">
-            <BrandLogo decorative />
+          <span className="brand-mark brand-mark--footer">
+            <BrandLogo decorative mark />
           </span>
           <div>
             <p className="text-[15px] font-semibold tracking-tight text-ms-black">
