@@ -9,4 +9,3 @@ export { Container } from "./container";
 export { Grid, GridItem } from "./grid";
 export { Typography } from "./typography";
 export { PageHeader } from "./page-header";
-export { Navigation } from "./navigation";

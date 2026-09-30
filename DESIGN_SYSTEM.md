@@ -67,7 +67,7 @@ Asymétrie typique (liste) : métadonnées colonnes 1–3, contenu 5–12.
 
 ### UI (`src/components/ui`)
 
-Button, Input (souligné), Textarea, Dialog, Badge, Separator, Container, Grid, Typography, Navigation, PageHeader.
+Button, Input (souligné), Textarea, Dialog, Badge, Separator, Container, Grid, Typography, PageHeader.
 
 ### Éditorial (`src/components/editorial`)
 
