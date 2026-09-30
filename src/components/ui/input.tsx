@@ -42,7 +42,7 @@ export function Input({
           [hintId, errorId].filter(Boolean).join(" ") || undefined
         }
         className={cn(
-          "h-12 w-full rounded-xl border border-ms-gold/30 bg-white",
+          "h-12 w-full min-w-0 max-w-full rounded-xl border border-ms-gold/30 bg-white",
           "px-4 text-[16px] text-ms-black",
           "placeholder:text-ms-gray-400",
           "focus-visible:border-ms-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ms-gold/30",

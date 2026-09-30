@@ -22,7 +22,7 @@ export function ArchivePagination({
   return (
     <nav
       aria-label="Pagination des archives"
-      className="mt-4 flex items-center justify-between gap-3"
+      className="mt-4 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between"
     >
       <Typography variant="meta">
         Page {page} sur {pageCount}

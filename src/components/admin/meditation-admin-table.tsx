@@ -90,7 +90,7 @@ export function MeditationAdminTable({
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-3">
         {filters.map((item) => {
           const active = filter === item.id;
           const Icon = item.icon;

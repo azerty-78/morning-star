@@ -22,7 +22,7 @@ export function PageHeader({
         <p className="text-[13px] font-medium text-ms-gold-dark">{eyebrow}</p>
       ) : null}
       {omitTitle ? null : (
-        <h1 className="mt-1 text-[32px] font-semibold leading-tight tracking-tight text-ms-black">
+        <h1 className="mt-1 text-[clamp(1.75rem,5vw,2rem)] font-semibold leading-tight tracking-tight text-ms-black">
           {title}
         </h1>
       )}

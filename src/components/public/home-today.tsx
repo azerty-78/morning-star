@@ -25,7 +25,7 @@ export function HomeToday({ meditation }: HomeTodayProps) {
       </time>
       <h1
         id="meditation-du-jour-title"
-        className="mt-2 text-[32px] font-semibold leading-tight tracking-tight text-ms-black"
+        className="mt-2 text-[clamp(1.75rem,5vw,2rem)] font-semibold leading-tight tracking-tight text-ms-black"
       >
         {meditation.title}
       </h1>

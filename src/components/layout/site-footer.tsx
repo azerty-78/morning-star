@@ -7,8 +7,11 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer role="contentinfo" className="ios-ui mt-auto bg-ms-cream-deep">
-      <div className="mx-auto flex max-w-[var(--ms-container)] flex-col gap-5 px-[var(--ms-gutter)] py-8 sm:flex-row sm:items-center sm:justify-between">
+    <footer
+      role="contentinfo"
+      className="ios-ui mt-auto mb-[calc(4.75rem+env(safe-area-inset-bottom))] bg-ms-cream-deep md:mb-0"
+    >
+      <div className="mx-auto flex max-w-[var(--ms-container)] flex-col gap-4 px-[var(--ms-gutter)] py-6 sm:flex-row sm:items-center sm:justify-between sm:py-8">
         <Link
           href={PUBLIC_ROUTES.home}
           className="flex items-center gap-3 no-underline"

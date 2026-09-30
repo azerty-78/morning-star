@@ -89,15 +89,15 @@ export function AboutArticle({
             priority
             className="about-hero"
           />
-          <header className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ms-black/80 via-ms-black/35 to-transparent px-[var(--ms-gutter)] pb-8 pt-28">
+          <header className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ms-black/80 via-ms-black/35 to-transparent px-[var(--ms-gutter)] pb-5 pt-16 sm:pb-8 sm:pt-28">
             <div className="mx-auto w-full max-w-[var(--ms-container-narrow)]">
               <p className="mb-2 text-[13px] font-medium text-ms-gold-light">
                 La publication
               </p>
-              <h1 className="font-sans text-[length:var(--ms-text-3xl)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-white">
+              <h1 className="font-sans text-[clamp(2rem,7vw,2.75rem)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-white">
                 À propos
               </h1>
-              <p className="mt-3 max-w-[var(--ms-measure)] font-sans text-[length:var(--ms-text-lg)] leading-[var(--ms-leading-snug)] text-white/90">
+              <p className="mt-2 max-w-[var(--ms-measure)] font-sans text-[clamp(1rem,3.2vw,1.25rem)] leading-snug text-white/90 sm:mt-3">
                 Une méditation par jour, pour commencer la journée dans la Parole.
               </p>
             </div>

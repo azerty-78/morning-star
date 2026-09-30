@@ -80,6 +80,7 @@ export function GridItem({
   return (
     <div
       className={cn(
+        "min-w-0",
         spanClass[span],
         start ? startClass[start] : undefined,
         className,

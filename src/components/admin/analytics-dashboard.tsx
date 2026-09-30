@@ -19,13 +19,13 @@ function PeriodCard({
   return (
     <section className="rounded-3xl bg-white p-4 shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
       <h2 className="text-[15px] font-semibold text-ms-black">{title}</h2>
-      <dl className="mt-3 grid grid-cols-3 gap-2">
+      <dl className="mt-3 grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
         {cells.map((cell) => (
           <div key={cell.label} className="rounded-2xl bg-ms-cream-deep/70 px-3 py-3">
             <dd className="text-[22px] font-semibold leading-none tabular-nums text-ms-black">
               {cell.value.toLocaleString("fr-FR")}
             </dd>
-            <dt className="mt-1 text-[12px] text-ms-gray-600">{cell.label}</dt>
+            <dt className="mt-1 text-[12px] leading-tight text-ms-gray-600">{cell.label}</dt>
           </div>
         ))}
       </dl>

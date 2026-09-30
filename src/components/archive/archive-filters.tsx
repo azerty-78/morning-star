@@ -34,7 +34,7 @@ export function ArchiveFilters({ query, facets }: ArchiveFiltersProps) {
         Filtrer
       </h2>
 
-      <form action={PUBLIC_ROUTES.archive} method="get" className="flex flex-col gap-8">
+      <form action={PUBLIC_ROUTES.archive} method="get" className="flex flex-col gap-4 sm:gap-8">
         <Grid cols={12} gap="md">
           <GridItem span={12} className="md:col-span-6">
             <Input
@@ -161,7 +161,7 @@ function FieldSelect({
         id={id}
         name={name}
         defaultValue={defaultValue}
-        className="h-12 w-full cursor-pointer rounded-xl border border-ms-gold/30 bg-ms-cream-deep px-3 text-[16px] text-ms-black focus-visible:border-ms-gold focus-visible:outline-none"
+        className="h-12 w-full min-w-0 max-w-full cursor-pointer rounded-xl border border-ms-gold/30 bg-ms-cream-deep px-3 text-[16px] text-ms-black focus-visible:border-ms-gold focus-visible:outline-none"
       >
         {options.map((opt) => (
           <option key={opt.value || "all"} value={opt.value}>

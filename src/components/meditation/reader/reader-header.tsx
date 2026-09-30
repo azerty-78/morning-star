@@ -28,7 +28,7 @@ export function ReaderHeader({
       </time>
       <h1
         id="meditation-title"
-        className="mt-2 max-w-[18ch] text-[32px] font-semibold leading-tight tracking-tight text-ms-black"
+        className="mt-2 text-[clamp(1.75rem,5vw,2rem)] font-semibold leading-tight tracking-tight text-ms-black"
       >
         {title}
       </h1>

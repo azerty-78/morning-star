@@ -235,7 +235,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="ios-ui flex min-h-full flex-col bg-ms-cream-deep md:flex-row">
       <aside
         className={cn(
-          "shrink-0 border-b border-ms-gold/25 md:sticky md:top-0 md:flex md:h-screen md:flex-col md:overflow-y-auto md:border-b-0 md:border-r md:px-3 md:pb-4 md:pt-0",
+          "hidden shrink-0 md:sticky md:top-0 md:flex md:h-screen md:flex-col md:overflow-y-auto md:border-r md:border-ms-gold/25 md:px-3 md:pb-4 md:pt-0",
           ready && "md:transition-[width] md:duration-200",
           collapsed ? "md:w-[4.75rem]" : "md:w-[260px]",
         )}
@@ -330,36 +330,70 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-ms-gold/30 bg-ms-off-white/90 backdrop-blur-xl">
-          <div className="flex h-[4.25rem] items-center justify-between gap-4 px-4 sm:px-6">
+        <header className="sticky top-0 z-30 border-b border-ms-gold/30 bg-ms-off-white/90 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
+          <div className="flex h-14 items-center justify-between gap-3 px-3 sm:h-[4.25rem] sm:gap-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-ms-gold text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.08)]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-ms-gold text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.08)] sm:h-10 sm:w-10">
                 <NavIcon name={section.icon} />
               </span>
               <div className="min-w-0">
                 <p className="truncate text-[12px] font-medium text-ms-gold-dark">
                   {section.hint}
                 </p>
-                <h1 className="truncate text-[20px] font-semibold leading-tight tracking-tight text-ms-black">
+                <h1 className="truncate text-[18px] font-semibold leading-tight tracking-tight text-ms-black sm:text-[20px]">
                   {section.title}
                 </h1>
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-3">
               {todayLabel ? (
-                <p className="hidden text-[13px] text-ms-gray-600 md:block">
+                <p className="hidden text-[13px] text-ms-gray-600 lg:block">
                   {todayLabel}
                 </p>
               ) : null}
               <Link
                 href={PUBLIC_ROUTES.home}
-                className="inline-flex h-9 items-center gap-2 rounded-full bg-ms-black px-3.5 text-[13px] font-medium text-ms-off-white no-underline transition-colors hover:bg-ms-gold hover:text-ms-black"
+                className="inline-flex h-9 items-center gap-2 rounded-full bg-ms-black px-3 text-[13px] font-medium text-ms-off-white no-underline transition-colors hover:bg-ms-gold hover:text-ms-black sm:px-3.5"
               >
                 <NavIcon name="site" />
                 <span className="hidden sm:inline">Voir le site</span>
               </Link>
             </div>
           </div>
+          <nav aria-label="Administration" className="border-t border-ms-gold/20 md:hidden">
+            <ul className="flex gap-1 overflow-x-auto px-2 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {ADMIN_NAV.map((item) => (
+                <li key={item.href} className="shrink-0">
+                  <NavLink
+                    href={item.href}
+                    label={item.label}
+                    active={isPathActive(pathname, item.href)}
+                    collapsed={false}
+                  />
+                </li>
+              ))}
+              {secondary.map((item) => (
+                <li key={item.href} className="shrink-0">
+                  <NavLink
+                    href={item.href}
+                    label={item.label}
+                    active={isPathActive(pathname, item.href)}
+                    collapsed={false}
+                  />
+                </li>
+              ))}
+              <li className="shrink-0">
+                <button
+                  type="button"
+                  onClick={() => router.push(PUBLIC_ROUTES.home)}
+                  className="flex items-center gap-3 rounded-[10px] px-3 py-2 text-[15px] font-medium text-ms-black hover:bg-ms-gold/15"
+                >
+                  <NavIcon name="logout" />
+                  Déconnexion
+                </button>
+              </li>
+            </ul>
+          </nav>
         </header>
         <div className="min-w-0 flex-1">{children}</div>
       </div>

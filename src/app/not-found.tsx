@@ -12,7 +12,7 @@ export default function NotFound() {
         <Container narrow className="py-10">
           <section className="rounded-[22px] bg-white px-6 py-8 shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
             <p className="text-[13px] font-medium text-ms-gold-dark">404</p>
-            <h1 className="mt-1 text-[32px] font-semibold tracking-tight text-ms-black">
+            <h1 className="mt-1 text-[clamp(1.75rem,5vw,2rem)] font-semibold tracking-tight text-ms-black">
               Cette page n&apos;existe pas
             </h1>
             <p className="mt-2 text-[17px] leading-snug text-ms-gray-700">
