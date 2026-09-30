@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import type { AdminCalendarDay } from "@/domain/admin";
 import type { MeditationStatus } from "@/domain/meditation";
-import { ADMIN_ROUTES } from "@/constants/routes";
+import { meditationAdminHref } from "@/constants/routes";
 import { cn, formatMonthYear } from "@/lib/utils";
 
 function padMonthDays(yearMonth: string): string[] {
@@ -122,7 +122,7 @@ export function EditorialCalendar({
                   {items.map((item) => (
                     <li key={item.id}>
                       <Link
-                        href={ADMIN_ROUTES.meditations}
+                        href={meditationAdminHref(item.status, item.slug)}
                         className="block truncate text-[11px] font-medium text-ms-black no-underline hover:text-ms-gold-dark"
                         title={item.title}
                       >
@@ -153,11 +153,16 @@ export function EditorialCalendar({
                 <p className="text-[13px] font-medium text-ms-gray-600">{date}</p>
                 <ul className="mt-2 space-y-2">
                   {(byDate.get(date) ?? []).map((item) => (
-                    <li key={item.id} className="flex items-center justify-between gap-3">
-                      <span className="min-w-0 truncate text-[16px] font-medium text-ms-black">
-                        {item.title}
-                      </span>
-                      <StatusBadge status={item.status} />
+                    <li key={item.id}>
+                      <Link
+                        href={meditationAdminHref(item.status, item.slug)}
+                        className="flex items-center justify-between gap-3 no-underline"
+                      >
+                        <span className="min-w-0 truncate text-[16px] font-medium text-ms-black">
+                          {item.title}
+                        </span>
+                        <StatusBadge status={item.status} />
+                      </Link>
                     </li>
                   ))}
                 </ul>

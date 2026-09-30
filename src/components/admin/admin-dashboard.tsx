@@ -19,7 +19,7 @@ import {
 } from "recharts";
 import type { AdminDashboardSnapshot } from "@/domain/admin";
 import type { DailyMeditation } from "@/domain/meditation";
-import { ADMIN_ROUTES, PUBLIC_ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES, meditationAdminHref, PUBLIC_ROUTES } from "@/constants/routes";
 import { cn, formatPublicationDate } from "@/lib/utils";
 
 function statusLabel(status: DailyMeditation["status"]): string {
@@ -293,7 +293,7 @@ export function AdminDashboardView({
             scheduled.map((item) => (
               <Row
                 key={item.id}
-                href={ADMIN_ROUTES.meditations}
+                href={meditationAdminHref(item.status, item.slug)}
                 title={item.title}
                 meta={formatPublicationDate(item.publicationDate)}
                 status={item.status}

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import { MeditationViewTracker } from "@/components/analytics";
 import { Container } from "@/components/ui";
 import { MeditationReader } from "@/components/meditation/reader/meditation-reader";
@@ -75,6 +77,13 @@ export default async function MeditationDetailPage({ params }: PageProps) {
           ]),
         ]}
       />
+      <Link
+        href={PUBLIC_ROUTES.meditations}
+        className="mb-3 inline-flex items-center gap-0.5 text-[16px] font-medium text-ms-gold-dark no-underline hover:text-ms-black"
+      >
+        <ChevronLeft size={20} strokeWidth={2.25} aria-hidden />
+        Méditations
+      </Link>
       <MeditationReader
         meditation={meditation}
         authorName={authorName}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   BookOpen,
   CalendarDays,
@@ -10,7 +10,7 @@ import {
   Upload,
 } from "lucide-react";
 import type { DailyMeditation, MeditationStatus } from "@/domain/meditation";
-import { ADMIN_ROUTES, PUBLIC_ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES, meditationAdminHref } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { formatPublicationDate } from "@/lib/utils";
 
@@ -23,15 +23,8 @@ function statusLabel(status: MeditationStatus): string {
 
 type Filter = "ALL" | MeditationStatus;
 
-const FILTERS: Filter[] = ["DRAFT", "SCHEDULED", "PUBLISHED"];
-
-function readFilter(search: string): Filter {
-  const value = new URLSearchParams(search).get("filtre");
-  return FILTERS.includes(value as Filter) ? (value as Filter) : "ALL";
-}
-
 const filters: Array<{
-  id: Filter;
+  id: Exclude<Filter, "ALL">;
   label: string;
   icon: typeof BookOpen;
 }> = [
@@ -47,21 +40,7 @@ export function MeditationAdminTable({
   items: DailyMeditation[];
   initialFilter?: Filter;
 }) {
-  const [filter, setFilter] = useState<Filter>(initialFilter);
-
-  useEffect(() => {
-    const sync = () => setFilter(readFilter(window.location.search));
-    window.addEventListener("popstate", sync);
-    return () => window.removeEventListener("popstate", sync);
-  }, []);
-
-  function selectFilter(next: Filter) {
-    const url = new URL(window.location.href);
-    if (next === "ALL") url.searchParams.delete("filtre");
-    else url.searchParams.set("filtre", next);
-    window.history.pushState(null, "", `${url.pathname}${url.search}`);
-    setFilter(next);
-  }
+  const filter = initialFilter;
 
   const counts = useMemo(
     () => ({
@@ -94,14 +73,17 @@ export function MeditationAdminTable({
         {filters.map((item) => {
           const active = filter === item.id;
           const Icon = item.icon;
+          const href = active
+            ? ADMIN_ROUTES.meditations
+            : `${ADMIN_ROUTES.meditations}?filtre=${item.id}`;
           return (
-            <button
+            <Link
               key={item.id}
-              type="button"
-              aria-pressed={active}
-              onClick={() => selectFilter(active ? "ALL" : item.id)}
+              href={href}
+              scroll={false}
+              aria-current={active ? "page" : undefined}
               className={cn(
-                "rounded-3xl p-4 text-left transition-transform active:scale-[0.98]",
+                "rounded-3xl p-4 text-left no-underline transition-transform active:scale-[0.98]",
                 active
                   ? "bg-ms-gold text-ms-black"
                   : "bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.05)] hover:bg-ms-gold/10",
@@ -112,7 +94,7 @@ export function MeditationAdminTable({
                 {counts[item.id]}
               </span>
               <span className="mt-1 block text-[13px] font-medium">{item.label}</span>
-            </button>
+            </Link>
           );
         })}
       </div>
@@ -124,10 +106,7 @@ export function MeditationAdminTable({
           </li>
         ) : (
           visible.map((item) => {
-            const href =
-              item.status === "PUBLISHED"
-                ? `${PUBLIC_ROUTES.meditations}/${item.slug}`
-                : ADMIN_ROUTES.import;
+            const href = meditationAdminHref(item.status, item.slug);
             const ActionIcon = item.status === "PUBLISHED" ? BookOpen : FilePenLine;
             return (
               <li key={item.id} className="border-b border-black/5 last:border-b-0">

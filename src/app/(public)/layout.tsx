@@ -12,10 +12,12 @@ export default function PublicLayout({
     <>
       <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
       <SiteHeader />
-      <main id="contenu-principal" className="ios-ui flex-1 bg-ms-cream-deep" tabIndex={-1}>
-        {children}
-      </main>
-      <SiteFooter />
+      <div className="flex flex-1 flex-col pb-[calc(4.75rem+env(safe-area-inset-bottom))] md:pb-0">
+        <main id="contenu-principal" className="ios-ui flex-1 bg-ms-cream-deep" tabIndex={-1}>
+          {children}
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }

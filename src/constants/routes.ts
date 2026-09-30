@@ -18,8 +18,10 @@ export const PUBLIC_NAV = [
 
 /** Page courante : l’accueil ne s’active que sur `/`. */
 export function isPathActive(pathname: string, href: string): boolean {
-  if (href === PUBLIC_ROUTES.home) return pathname === PUBLIC_ROUTES.home;
-  return pathname === href || pathname.startsWith(`${href}/`);
+  const current = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
+  const target = href.length > 1 ? href.replace(/\/$/, "") : href;
+  if (target === PUBLIC_ROUTES.home) return current === PUBLIC_ROUTES.home;
+  return current === target || current.startsWith(`${target}/`);
 }
 
 export const ADMIN_ROUTES = {
@@ -33,6 +35,17 @@ export const ADMIN_ROUTES = {
   parametres: "/admin/parametres",
   import: "/admin/import",
 } as const;
+
+/** Méditation publiée : lecteur public. Brouillon ou programmée : filtre admin. */
+export function meditationAdminHref(status: string, slug: string): string {
+  if (status === "PUBLISHED") {
+    return `${PUBLIC_ROUTES.meditations}/${slug}`;
+  }
+  if (status === "DRAFT" || status === "SCHEDULED") {
+    return `${ADMIN_ROUTES.meditations}?filtre=${status}`;
+  }
+  return ADMIN_ROUTES.meditations;
+}
 
 /** Navigation principale espace auteur (ordre d’affichage). */
 export const ADMIN_NAV = [

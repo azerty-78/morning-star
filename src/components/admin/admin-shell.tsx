@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { BRAND_LOGO_ALT, BrandLogo } from "@/components/brand";
 import {
   ADMIN_NAV,
@@ -167,16 +167,25 @@ function NavLink({
   label,
   active,
   collapsed,
+  ensureVisible = false,
 }: {
   href: string;
   label: string;
   active: boolean;
   collapsed: boolean;
+  ensureVisible?: boolean;
 }) {
   const icon = iconForHref[href] ?? "dashboard";
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (!active || !ensureVisible) return;
+    ref.current?.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [active, ensureVisible, href]);
 
   return (
     <Link
+      ref={ref}
       href={href}
       aria-current={active ? "page" : undefined}
       aria-label={label}
@@ -200,7 +209,6 @@ function NavLink({
  */
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const isLogin = pathname === ADMIN_ROUTES.login;
   const [collapsed, setCollapsed] = useState(false);
   const [ready, setReady] = useState(false);
@@ -308,13 +316,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               </li>
             ))}
             <li>
-              <button
-                type="button"
-                onClick={() => router.push(PUBLIC_ROUTES.home)}
+              <Link
+                href={PUBLIC_ROUTES.home}
                 aria-label="Déconnexion"
                 title="Déconnexion"
                 className={cn(
-                  "flex w-full items-center gap-3 rounded-[10px] px-3 py-2 text-left text-[15px] font-medium text-ms-black transition-colors hover:bg-ms-gold/15",
+                  "flex w-full items-center gap-3 rounded-[10px] px-3 py-2 text-left text-[15px] font-medium text-ms-black no-underline transition-colors hover:bg-ms-gold/15",
                   collapsed && "md:justify-center md:px-2",
                 )}
               >
@@ -322,7 +329,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 <span className={cn("truncate", collapsed && "md:hidden")}>
                   Déconnexion
                 </span>
-              </button>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -369,6 +376,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                     label={item.label}
                     active={isPathActive(pathname, item.href)}
                     collapsed={false}
+                    ensureVisible
                   />
                 </li>
               ))}
@@ -379,18 +387,18 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                     label={item.label}
                     active={isPathActive(pathname, item.href)}
                     collapsed={false}
+                    ensureVisible
                   />
                 </li>
               ))}
               <li className="shrink-0">
-                <button
-                  type="button"
-                  onClick={() => router.push(PUBLIC_ROUTES.home)}
-                  className="flex items-center gap-3 rounded-[10px] px-3 py-2 text-[15px] font-medium text-ms-black hover:bg-ms-gold/15"
+                <Link
+                  href={PUBLIC_ROUTES.home}
+                  className="flex items-center gap-3 rounded-[10px] px-3 py-2 text-[15px] font-medium text-ms-black no-underline hover:bg-ms-gold/15"
                 >
                   <NavIcon name="logout" />
                   Déconnexion
-                </button>
+                </Link>
               </li>
             </ul>
           </nav>

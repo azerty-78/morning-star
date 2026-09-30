@@ -5,6 +5,9 @@ import { fileURLToPath } from "node:url";
 const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  // Image de production : serveur autonome, public/ et .next/static copiés par le Dockerfile.
+  output: "standalone",
+  outputFileTracingRoot: projectRoot,
   // Le dépôt git parent hors du projet peut faire ignorer le lockfile local.
   turbopack: {
     root: projectRoot,

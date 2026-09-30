@@ -9,7 +9,7 @@ export function SiteFooter() {
   return (
     <footer
       role="contentinfo"
-      className="ios-ui mt-auto mb-[calc(4.75rem+env(safe-area-inset-bottom))] bg-ms-cream-deep md:mb-0"
+      className="ios-ui mt-auto bg-ms-cream-deep"
     >
       <div className="mx-auto flex max-w-[var(--ms-container)] flex-col gap-4 px-[var(--ms-gutter)] py-6 sm:flex-row sm:items-center sm:justify-between sm:py-8">
         <Link

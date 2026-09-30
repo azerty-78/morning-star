@@ -1,0 +1,21 @@
+# Lu par Docker : le contexte de build est la racine du dépôt (setup/compose.yaml).
+# Les images de public/ (logo, photos À propos, icônes) restent dans l'image.
+
+node_modules
+.next
+out
+build
+dist
+.git
+.github
+.data
+.vercel
+coverage
+*.md
+.env
+.env.*
+!.env.example
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
+setup
