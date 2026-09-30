@@ -62,6 +62,28 @@ export function PublicPageSkeleton() {
   );
 }
 
+export function LoginPageSkeleton() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      className="mx-auto w-full max-w-[var(--ms-container-narrow)] px-[var(--ms-gutter)] pb-16 pt-[var(--ms-space-8)]"
+    >
+      <Status label="Chargement de la connexion" />
+      <Bone className="h-28 w-28 rounded-2xl" />
+      <Bone className="mt-8 h-3 w-16" />
+      <Bone className="mt-4 h-10 w-48" />
+      <Bone className="mt-4 h-4 w-72 max-w-full" />
+      <div className="mt-10 flex flex-col gap-5">
+        <Bone className="h-12 w-full rounded-xl" />
+        <Bone className="h-12 w-full rounded-xl" />
+        <Bone className="h-11 w-36 rounded-none" />
+      </div>
+    </div>
+  );
+}
+
 export function AdminPageSkeleton() {
   return (
     <div
