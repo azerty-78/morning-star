@@ -47,7 +47,7 @@ export function ReaderBody({
                     "inline border-0 border-b border-ms-gold bg-transparent p-0",
                     "font-serif text-[length:var(--ms-text-lg)] text-ms-gold-dark",
                     "cursor-pointer",
-                    "hover:border-ms-black hover:text-ms-fg",
+                    "hover:text-ms-black",
                     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ms-gold",
                   )}
                   aria-haspopup="dialog"

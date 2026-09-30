@@ -17,13 +17,13 @@ export default async function MeditationsPage() {
   const meditations = await service.listPublished();
 
   return (
-    <Container className="pb-16">
+    <Container className="pb-6">
       <PageHeader
         eyebrow="Lecture"
         title="Méditations"
         description="Parcourir les méditations publiées."
       />
-      <div className="mt-10">
+      <div className="mt-4">
         <MeditationList meditations={meditations} />
       </div>
     </Container>

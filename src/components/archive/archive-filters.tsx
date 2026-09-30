@@ -1,4 +1,4 @@
-import { Button, Grid, GridItem, Input, Typography } from "@/components/ui";
+import { Button, Grid, GridItem, Input } from "@/components/ui";
 import type {
   ArchiveFacets,
   NormalizedArchiveQuery,
@@ -26,15 +26,13 @@ export function ArchiveFilters({ query, facets }: ArchiveFiltersProps) {
   );
 
   return (
-    <section aria-labelledby="archive-filters-heading" className="border-b border-ms-border pb-10">
-      <Typography
-        id="archive-filters-heading"
-        variant="label"
-        as="h2"
-        className="mb-6 text-ms-gold-dark"
-      >
+    <section
+      aria-labelledby="archive-filters-heading"
+      className="rounded-[22px] bg-white p-4 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:p-5"
+    >
+      <h2 id="archive-filters-heading" className="mb-4 text-[15px] font-semibold text-ms-black">
         Filtrer
-      </Typography>
+      </h2>
 
       <form action={PUBLIC_ROUTES.archive} method="get" className="flex flex-col gap-8">
         <Grid cols={12} gap="md">
@@ -126,7 +124,7 @@ export function ArchiveFilters({ query, facets }: ArchiveFiltersProps) {
             {hasActiveFilters ? (
               <Link
                 href={PUBLIC_ROUTES.archive}
-                className="inline-flex min-h-10 items-center justify-center px-2 text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-muted no-underline hover:text-ms-fg"
+                className="inline-flex h-11 items-center justify-center px-2 text-[15px] font-semibold text-ms-gold-dark no-underline hover:text-ms-black"
               >
                 Réinitialiser
               </Link>
@@ -155,7 +153,7 @@ function FieldSelect({
     <div className="flex flex-col gap-[var(--ms-space-2)]">
       <label
         htmlFor={id}
-        className="text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-gray-700"
+        className="text-[13px] font-medium text-ms-gray-600"
       >
         {label}
       </label>
@@ -163,7 +161,7 @@ function FieldSelect({
         id={id}
         name={name}
         defaultValue={defaultValue}
-        className="w-full rounded-none border-0 border-b border-ms-border bg-transparent py-2.5 text-[length:var(--ms-text-base)] text-ms-fg focus-visible:border-ms-black focus-visible:outline-none"
+        className="h-12 w-full cursor-pointer rounded-xl border border-ms-gold/30 bg-ms-cream-deep px-3 text-[16px] text-ms-black focus-visible:border-ms-gold focus-visible:outline-none"
       >
         {options.map((opt) => (
           <option key={opt.value || "all"} value={opt.value}>

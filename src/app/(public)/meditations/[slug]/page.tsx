@@ -60,7 +60,7 @@ export default async function MeditationDetailPage({ params }: PageProps) {
   const authorName = author?.name ?? "Morning Star";
 
   return (
-    <Container className="pb-[var(--ms-space-10)] pt-[var(--ms-space-7)] md:pt-[var(--ms-space-8)]">
+    <Container className="pb-6 pt-6">
       <MeditationViewTracker meditationId={meditation.id} />
       <JsonLd
         data={[

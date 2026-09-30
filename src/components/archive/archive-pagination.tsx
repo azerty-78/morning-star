@@ -22,7 +22,7 @@ export function ArchivePagination({
   return (
     <nav
       aria-label="Pagination des archives"
-      className="mt-10 flex flex-col gap-4 border-t border-ms-border pt-8 sm:flex-row sm:items-center sm:justify-between"
+      className="mt-4 flex items-center justify-between gap-3"
     >
       <Typography variant="meta">
         Page {page} sur {pageCount}
@@ -39,7 +39,7 @@ export function ArchivePagination({
         ) : (
           <span
             aria-disabled="true"
-            className="inline-flex min-h-8 items-center border border-ms-border px-3 text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wide)] text-ms-muted opacity-35"
+            className="inline-flex h-9 items-center rounded-full bg-white px-3.5 text-[14px] font-semibold text-ms-gray-400"
           >
             Précédent
           </span>
@@ -55,7 +55,7 @@ export function ArchivePagination({
         ) : (
           <span
             aria-disabled="true"
-            className="inline-flex min-h-8 items-center border border-ms-border px-3 text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wide)] text-ms-muted opacity-35"
+            className="inline-flex h-9 items-center rounded-full bg-white px-3.5 text-[14px] font-semibold text-ms-gray-400"
           >
             Suivant
           </span>

@@ -24,7 +24,7 @@ export function Input({
     <div className="flex flex-col gap-[var(--ms-space-2)]">
       <label
         htmlFor={inputId}
-        className="text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-gray-700"
+        className="text-[13px] font-medium text-ms-gray-600"
       >
         {label}
         {required ? (
@@ -42,11 +42,10 @@ export function Input({
           [hintId, errorId].filter(Boolean).join(" ") || undefined
         }
         className={cn(
-          "w-full rounded-none border-0 border-b border-ms-border bg-transparent",
-          "px-0 py-2.5 text-[length:var(--ms-text-base)] text-ms-fg",
+          "h-12 w-full rounded-xl border border-ms-gold/30 bg-white",
+          "px-4 text-[16px] text-ms-black",
           "placeholder:text-ms-gray-400",
-          "transition-colors duration-[var(--ms-duration)]",
-          "focus-visible:border-ms-black focus-visible:outline-none",
+          "focus-visible:border-ms-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ms-gold/30",
           error && "border-ms-gold",
           className,
         )}

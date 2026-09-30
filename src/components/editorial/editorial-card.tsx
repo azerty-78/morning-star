@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { cn, formatPublicationDate } from "@/lib/utils";
-import { Typography } from "@/components/ui";
 
 export interface EditorialCardProps {
   href: string;
@@ -12,61 +12,35 @@ export interface EditorialCardProps {
   className?: string;
 }
 
-/**
- * Entrée de liste éditoriale — pas une « card » SaaS.
- * Règles : filet, grille asymétrique, aucun shadow / radius.
- */
 export function EditorialCard({
   href,
   title,
   excerpt,
   date,
-  index,
   themes,
   className,
 }: EditorialCardProps) {
   return (
-    <article
-      className={cn(
-        "border-t border-ms-border first:border-t-0",
-        className,
-      )}
-    >
+    <article className={cn("border-b border-black/5 last:border-b-0", className)}>
       <Link
         href={href}
-        className={cn(
-          "group grid gap-3 py-7 no-underline md:grid-cols-12 md:gap-6 md:py-8",
-          "transition-colors duration-[var(--ms-duration)]",
-          "hover:bg-ms-gray-100/50",
-        )}
+        className="flex items-center gap-3 px-4 py-3.5 no-underline transition-colors hover:bg-ms-gold/10"
       >
-        <div className="md:col-span-3">
-          {index ? (
-            <Typography variant="label" className="mb-2 text-ms-gold">
-              {index}
-            </Typography>
-          ) : null}
-          <Typography variant="date" as="time" dateTime={date}>
-            {formatPublicationDate(date)}
-          </Typography>
-        </div>
-        <div className="md:col-span-8 md:col-start-5">
-          <Typography
-            variant="subtitle"
-            as="h2"
-            className="text-ms-fg group-hover:text-ms-black"
-          >
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[16px] font-medium text-ms-black">
             {title}
-          </Typography>
-          <Typography variant="meta" className="mt-3 max-w-[var(--ms-measure)]">
-            {excerpt}
-          </Typography>
+          </span>
+          <span className="mt-0.5 block truncate text-[13px] text-ms-gray-600">
+            {formatPublicationDate(date)}
+            {excerpt ? ` · ${excerpt}` : ""}
+          </span>
           {themes && themes.length > 0 ? (
-            <p className="mt-3 text-[length:var(--ms-text-2xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-muted">
+            <span className="mt-0.5 block truncate text-[12px] text-ms-gold-dark">
               {themes.join(" · ")}
-            </p>
+            </span>
           ) : null}
-        </div>
+        </span>
+        <ChevronRight size={16} className="shrink-0 text-ms-gray-400" aria-hidden />
       </Link>
     </article>
   );
@@ -82,6 +56,13 @@ export function EditorialCardList({
   className,
 }: EditorialCardListProps) {
   return (
-    <div className={cn("border-y border-ms-black", className)}>{children}</div>
+    <div
+      className={cn(
+        "overflow-hidden rounded-[22px] bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]",
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }

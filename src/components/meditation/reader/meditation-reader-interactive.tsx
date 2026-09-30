@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import { PullQuote } from "@/components/editorial";
 import { BiblePassageDialog } from "@/components/bible/bible-passage-dialog";
-import { Typography } from "@/components/ui";
 import type {
   BiblePassage,
   BibleTranslation,
@@ -57,50 +56,45 @@ export function MeditationReaderInteractive({
 
   return (
     <>
-      {meditation.highlightQuote ? (
-        <PullQuote cite={primaryCite} className="mt-10 md:mt-12">
-          {meditation.highlightQuote}
-        </PullQuote>
-      ) : null}
+      <div className="rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7">
+        {meditation.highlightQuote ? (
+          <PullQuote cite={primaryCite} className="mb-8">
+            {meditation.highlightQuote}
+          </PullQuote>
+        ) : null}
 
-      <div className="mt-10 md:mt-12 md:grid md:grid-cols-12 md:gap-6">
-        <div className="md:col-span-8 md:col-start-5">
-          <ReaderBody body={meditation.body} onOpenReference={openReference} />
+        <ReaderBody body={meditation.body} onOpenReference={openReference} />
 
-          {meditation.bibleReferences.length > 0 ? (
-            <aside
-              className="mt-12 border-t border-ms-border pt-8"
-              aria-label="Références bibliques"
-            >
-              <Typography variant="label" className="mb-4 text-ms-muted">
-                Références
-              </Typography>
-              <ul className="flex flex-wrap gap-x-5 gap-y-2">
-                {meditation.bibleReferences.map((ref) => (
-                  <li key={ref.label}>
-                    <button
-                      type="button"
-                      onClick={() => openFromLabel(ref.label)}
-                      className={cn(
-                        "border-0 border-b border-ms-gold bg-transparent p-0",
-                        "font-serif text-[length:var(--ms-text-sm)] text-ms-gold-dark",
-                        "hover:border-ms-black hover:text-ms-fg",
-                        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ms-gold",
-                      )}
-                      aria-haspopup="dialog"
-                      aria-label={`Lire le passage ${ref.label}`}
-                    >
-                      {ref.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </aside>
-          ) : null}
+        {meditation.bibleReferences.length > 0 ? (
+          <aside className="mt-8" aria-label="Références bibliques">
+            <p className="mb-3 text-[13px] font-medium text-ms-gold-dark">
+              Références
+            </p>
+            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+              {meditation.bibleReferences.map((ref) => (
+                <li key={ref.label}>
+                  <button
+                    type="button"
+                    onClick={() => openFromLabel(ref.label)}
+                    className={cn(
+                      "cursor-pointer border-0 border-b border-ms-gold bg-transparent p-0",
+                      "font-serif text-[15px] text-ms-gold-dark",
+                      "hover:text-ms-black",
+                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ms-gold",
+                    )}
+                    aria-haspopup="dialog"
+                    aria-label={`Lire le passage ${ref.label}`}
+                  >
+                    {ref.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        ) : null}
 
-          <div className="mt-10">
-            <ReaderActions meditation={meditation} authorName={authorName} />
-          </div>
+        <div className="mt-8">
+          <ReaderActions meditation={meditation} authorName={authorName} />
         </div>
       </div>
 

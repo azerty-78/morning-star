@@ -25,7 +25,7 @@ export function Textarea({
     <div className="flex flex-col gap-[var(--ms-space-2)]">
       <label
         htmlFor={inputId}
-        className="text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-gray-700"
+        className="text-[13px] font-medium text-ms-gray-600"
       >
         {label}
         {required ? (
@@ -44,11 +44,10 @@ export function Textarea({
           [hintId, errorId].filter(Boolean).join(" ") || undefined
         }
         className={cn(
-          "w-full resize-y rounded-none border border-ms-border bg-ms-surface",
-          "px-3 py-3 text-[length:var(--ms-text-base)] text-ms-fg leading-[var(--ms-leading-normal)]",
+          "w-full resize-y rounded-xl border border-ms-gold/30 bg-white",
+          "px-4 py-3 text-[16px] text-ms-black leading-snug",
           "placeholder:text-ms-gray-400",
-          "transition-colors duration-[var(--ms-duration)]",
-          "focus-visible:border-ms-black focus-visible:outline-none",
+          "focus-visible:border-ms-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ms-gold/30",
           error && "border-ms-gold",
           className,
         )}

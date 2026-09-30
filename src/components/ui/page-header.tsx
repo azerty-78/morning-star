@@ -1,6 +1,4 @@
 import { cn } from "@/lib/utils";
-import { Typography } from "./typography";
-import { Separator } from "./separator";
 
 export interface PageHeaderProps {
   eyebrow?: string;
@@ -19,19 +17,20 @@ export function PageHeader({
   omitTitle = false,
 }: PageHeaderProps) {
   return (
-    <header className={cn("pt-[var(--ms-space-8)] pb-[var(--ms-space-6)]", className)}>
+    <header className={cn("ios-ui pb-2 pt-6", className)}>
       {eyebrow ? (
-        <Typography variant="label" className="mb-4 text-ms-gold-dark">
-          {eyebrow}
-        </Typography>
+        <p className="text-[13px] font-medium text-ms-gold-dark">{eyebrow}</p>
       ) : null}
-      {omitTitle ? null : <Typography variant="title">{title}</Typography>}
+      {omitTitle ? null : (
+        <h1 className="mt-1 text-[32px] font-semibold leading-tight tracking-tight text-ms-black">
+          {title}
+        </h1>
+      )}
       {description ? (
-        <Typography variant="subtitle" className="mt-4 max-w-[var(--ms-measure)]">
+        <p className="mt-2 max-w-xl text-[17px] leading-snug text-ms-gray-700">
           {description}
-        </Typography>
+        </p>
       ) : null}
-      <Separator tone="strong" className="mt-[var(--ms-space-6)]" />
     </header>
   );
 }

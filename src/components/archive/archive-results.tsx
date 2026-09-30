@@ -2,7 +2,6 @@ import {
   EditorialCard,
   EditorialCardList,
 } from "@/components/editorial";
-import { Typography } from "@/components/ui";
 import { PUBLIC_ROUTES } from "@/constants/routes";
 import type { ArchiveResult } from "@/domain/meditation";
 import { MOCK_THEME_LABELS } from "@/lib/mock";
@@ -17,18 +16,18 @@ export function ArchiveResults({ result }: ArchiveResultsProps) {
 
   return (
     <section aria-labelledby="archive-results-heading">
-      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-        <Typography id="archive-results-heading" variant="label" as="h2">
-          Résultats
-        </Typography>
-        <Typography variant="meta">
-          {meta.total} méditation{meta.total > 1 ? "s" : ""}
-          {query.q ? ` pour « ${query.q} »` : ""}
-          {meta.pageCount > 1
-            ? ` · page ${meta.page} / ${meta.pageCount}`
-            : ""}
-        </Typography>
-      </div>
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <h2 id="archive-results-heading" className="text-[15px] font-semibold text-ms-black">
+            Résultats
+          </h2>
+          <p className="text-[13px] text-ms-gray-600">
+            {meta.total} méditation{meta.total > 1 ? "s" : ""}
+            {query.q ? ` pour « ${query.q} »` : ""}
+            {meta.pageCount > 1
+              ? ` · page ${meta.page} / ${meta.pageCount}`
+              : ""}
+          </p>
+        </div>
 
       <EditorialCardList>
         {items.map((m, i) => (

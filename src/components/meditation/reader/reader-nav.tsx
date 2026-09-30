@@ -1,4 +1,4 @@
-import { ButtonLink, Typography } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { PUBLIC_ROUTES } from "@/constants/routes";
 import type { DailyMeditation } from "@/domain/meditation";
 import { formatPublicationDate } from "@/lib/utils";
@@ -8,65 +8,57 @@ export interface ReaderNavProps {
   next: DailyMeditation | null;
 }
 
+function NavCard({
+  label,
+  meditation,
+  align = "start",
+}: {
+  label: string;
+  meditation: DailyMeditation | null;
+  align?: "start" | "end";
+}) {
+  const end = align === "end";
+
+  return (
+    <div
+      className={`rounded-[22px] bg-white p-5 shadow-[0_1px_2px_rgba(26,26,26,0.05)] ${end ? "md:text-right" : ""}`}
+    >
+      <p className="text-[13px] font-medium text-ms-gold-dark">{label}</p>
+      {meditation ? (
+        <>
+          <p className="mt-2 text-[13px] text-ms-gray-600">
+            {formatPublicationDate(meditation.publicationDate)}
+          </p>
+          <p className="mt-1 text-[17px] font-semibold leading-snug text-ms-black">
+            {meditation.title}
+          </p>
+          <div className={`mt-4 ${end ? "md:flex md:justify-end" : ""}`}>
+            <ButtonLink
+              href={`${PUBLIC_ROUTES.meditations}/${meditation.slug}`}
+              variant={end ? "primary" : "secondary"}
+              size="sm"
+            >
+              Lire
+            </ButtonLink>
+          </div>
+        </>
+      ) : (
+        <p className="mt-2 text-[15px] text-ms-gray-600">
+          Pas de méditation {end ? "suivante" : "précédente"}.
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ReaderNav({ previous, next }: ReaderNavProps) {
   return (
     <nav
       aria-label="Méditations adjacentes"
-      className="grid gap-6 border-t border-ms-black pt-8 md:grid-cols-2"
+      className="grid gap-3 md:grid-cols-2"
     >
-      <div>
-        {previous ? (
-          <>
-            <Typography variant="label" className="mb-3 text-ms-muted">
-              Précédente
-            </Typography>
-            <Typography variant="meta" className="mb-2">
-              {formatPublicationDate(previous.publicationDate)}
-            </Typography>
-            <Typography variant="subtitle" as="p" className="mb-4 text-ms-fg">
-              {previous.title}
-            </Typography>
-            <ButtonLink
-              href={`${PUBLIC_ROUTES.meditations}/${previous.slug}`}
-              variant="secondary"
-              size="sm"
-            >
-              Lire
-            </ButtonLink>
-          </>
-        ) : (
-          <Typography variant="meta">Pas de méditation précédente.</Typography>
-        )}
-      </div>
-
-      <div className="md:text-right">
-        {next ? (
-          <>
-            <Typography variant="label" className="mb-3 text-ms-muted">
-              Suivante
-            </Typography>
-            <Typography variant="meta" className="mb-2">
-              {formatPublicationDate(next.publicationDate)}
-            </Typography>
-            <Typography
-              variant="subtitle"
-              as="p"
-              className="mb-4 text-ms-fg md:ml-auto md:max-w-sm"
-            >
-              {next.title}
-            </Typography>
-            <ButtonLink
-              href={`${PUBLIC_ROUTES.meditations}/${next.slug}`}
-              variant="primary"
-              size="sm"
-            >
-              Lire
-            </ButtonLink>
-          </>
-        ) : (
-          <Typography variant="meta">Pas de méditation suivante.</Typography>
-        )}
-      </div>
+      <NavCard label="Précédente" meditation={previous} />
+      <NavCard label="Suivante" meditation={next} align="end" />
     </nav>
   );
 }

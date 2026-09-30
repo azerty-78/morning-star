@@ -49,18 +49,18 @@ export default async function ArchivePage({ searchParams }: PageProps) {
     );
 
     return (
-      <Container className="pb-[var(--ms-space-10)]">
+      <Container className="pb-6">
         <PageHeader
           eyebrow="Chronologie"
           title="Archive"
           description="Liste éditoriale des méditations — recherche, filtres et tri chronologique."
         />
 
-        <div className="mt-10">
+        <div className="mt-4">
           <ArchiveFilters query={result.query} facets={facets} />
         </div>
 
-        <div className="mt-10">
+        <div className="mt-4">
           {result.meta.total === 0 ? (
             <ArchiveEmpty hasFilters={hasFilters} />
           ) : (
@@ -83,13 +83,13 @@ export default async function ArchivePage({ searchParams }: PageProps) {
       error instanceof Error ? error.message : "Erreur inattendue.";
 
     return (
-      <Container className="pb-[var(--ms-space-10)]">
+      <Container className="pb-6">
         <PageHeader
           eyebrow="Chronologie"
           title="Archive"
           description="Liste éditoriale des méditations."
         />
-        <div className="mt-10">
+        <div className="mt-4">
           <ArchiveError message={message} />
         </div>
       </Container>

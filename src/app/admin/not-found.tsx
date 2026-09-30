@@ -1,20 +1,22 @@
-import { Container, Typography } from "@/components/ui";
+import { Container } from "@/components/ui";
 import { ButtonLink } from "@/components/ui/button-link";
 import { ADMIN_ROUTES } from "@/constants/routes";
 
 export default function AdminNotFound() {
   return (
-    <Container className="py-16">
-      <Typography variant="label" className="mb-4 text-ms-gold-dark">
-        Administration
-      </Typography>
-      <Typography variant="title">Page introuvable</Typography>
-      <Typography variant="body" className="mt-4 max-w-[var(--ms-measure)]">
-        Cette adresse n’existe pas dans l’espace auteur.
-      </Typography>
-      <div className="mt-8">
-        <ButtonLink href={ADMIN_ROUTES.dashboard}>Retour au dashboard</ButtonLink>
-      </div>
+    <Container className="ios-ui py-6">
+      <section className="rounded-[22px] bg-white px-5 py-8 shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <p className="text-[13px] font-medium text-ms-gold-dark">Administration</p>
+        <h1 className="mt-1 text-[28px] font-semibold tracking-tight text-ms-black">
+          Page introuvable
+        </h1>
+        <p className="mt-2 text-[16px] text-ms-gray-700">
+          Cette adresse n’existe pas dans l’espace auteur.
+        </p>
+        <div className="mt-6">
+          <ButtonLink href={ADMIN_ROUTES.dashboard}>Retour au dashboard</ButtonLink>
+        </div>
+      </section>
     </Container>
   );
 }

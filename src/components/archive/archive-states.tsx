@@ -10,7 +10,7 @@ export function ArchiveEmpty({
   return (
     <section
       aria-labelledby="archive-empty-heading"
-      className="border border-ms-border px-6 py-12 md:px-10"
+      className="rounded-[22px] bg-white px-5 py-8 shadow-[0_1px_2px_rgba(26,26,26,0.05)]"
     >
       <Typography
         id="archive-empty-heading"
@@ -41,7 +41,7 @@ export function ArchiveError({ message }: { message?: string }) {
     <section
       role="alert"
       aria-labelledby="archive-error-heading"
-      className="border border-ms-black px-6 py-12 md:px-10"
+      className="rounded-[22px] bg-white px-5 py-8 shadow-[0_1px_2px_rgba(26,26,26,0.05)]"
     >
       <Typography
         id="archive-error-heading"
@@ -71,20 +71,15 @@ export function ArchiveLoading() {
       aria-live="polite"
       className="flex flex-col gap-8"
     >
-      <Typography variant="label" className="text-ms-muted">
-        Chargement de l&apos;archive…
-      </Typography>
-      <div className="border-y border-ms-black">
+      <p className="sr-only">Chargement de l&apos;archive…</p>
+      <div className="overflow-hidden rounded-[22px] bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="grid gap-3 border-t border-ms-border py-7 first:border-t-0 md:grid-cols-12 md:gap-6 md:py-8"
+            className="border-b border-black/5 px-4 py-4 last:border-b-0"
           >
-            <div className="ms-skeleton h-4 w-24 animate-pulse rounded-md bg-ms-cream-deep md:col-span-3" />
-            <div className="space-y-3 md:col-span-8 md:col-start-5">
-              <div className="ms-skeleton h-6 w-3/4 max-w-md animate-pulse rounded-md bg-ms-cream-deep" />
-              <div className="ms-skeleton h-4 w-full max-w-lg animate-pulse rounded-md bg-ms-cream-deep" />
-            </div>
+            <div className="ms-skeleton h-4 w-1/3 animate-pulse rounded-md bg-ms-cream-deep" />
+            <div className="ms-skeleton mt-2 h-3 w-2/3 animate-pulse rounded-md bg-ms-cream-deep" />
           </div>
         ))}
       </div>

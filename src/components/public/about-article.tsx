@@ -91,7 +91,7 @@ export function AboutArticle({
           />
           <header className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ms-black/80 via-ms-black/35 to-transparent px-[var(--ms-gutter)] pb-8 pt-28">
             <div className="mx-auto w-full max-w-[var(--ms-container-narrow)]">
-              <p className="mb-3 font-sans text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-gold-light">
+              <p className="mb-2 text-[13px] font-medium text-ms-gold-light">
                 La publication
               </p>
               <h1 className="font-sans text-[length:var(--ms-text-3xl)] font-semibold leading-[var(--ms-leading-tight)] tracking-[var(--ms-tracking-tight)] text-white">
@@ -245,7 +245,7 @@ function ReferenceButton({
       className={cn(
         "inline cursor-pointer border-0 border-b border-ms-gold bg-transparent p-0",
         "font-serif text-[length:inherit] text-ms-gold-dark",
-        "hover:border-ms-black hover:text-ms-fg",
+        "hover:text-ms-black",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ms-gold",
       )}
       aria-haspopup="dialog"

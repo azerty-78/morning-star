@@ -23,7 +23,7 @@ export default function ArchiveErrorPage({
         <button
           type="button"
           onClick={reset}
-          className="mt-6 text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)] underline"
+          className="mt-4 inline-flex h-11 cursor-pointer items-center rounded-full bg-ms-gold px-5 text-[15px] font-semibold text-ms-black hover:bg-ms-gold-dark hover:text-white"
         >
           Réessayer
         </button>

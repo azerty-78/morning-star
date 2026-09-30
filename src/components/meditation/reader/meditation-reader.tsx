@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui";
 import type {
   BiblePassage,
   BibleTranslation,
@@ -36,6 +35,7 @@ export function MeditationReader({
       itemScope
       itemType="https://schema.org/Article"
       aria-labelledby="meditation-title"
+      className="flex flex-col gap-4"
     >
       <meta itemProp="headline" content={meditation.title} />
       <meta itemProp="datePublished" content={meditation.publicationDate} />
@@ -55,8 +55,6 @@ export function MeditationReader({
         translations={translations}
         defaultTranslationCode={defaultTranslationCode}
       />
-
-      <Separator tone="default" className="my-12 md:my-16" />
 
       <ReaderNav previous={previous} next={next} />
     </article>

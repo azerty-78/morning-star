@@ -54,11 +54,9 @@ export function NewsletterSignup() {
   return (
     <section
       aria-labelledby="newsletter-heading"
-      className="ios-ui rounded-[22px] bg-ms-cream-deep px-5 py-6 sm:px-7 sm:py-8"
+      className="ios-ui rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7 sm:py-8"
     >
-      <p className="text-[13px] font-semibold uppercase tracking-wide text-ms-gold-dark">
-        Newsletter
-      </p>
+      <p className="text-[13px] font-medium text-ms-gold-dark">Newsletter</p>
       <h2
         id="newsletter-heading"
         className="mt-1 text-[28px] font-semibold leading-tight tracking-tight text-ms-black"
@@ -96,13 +94,13 @@ export function NewsletterSignup() {
               if (error) setError(undefined);
               if (message) setMessage(null);
             }}
-            className="h-12 w-full rounded-xl border border-ms-gold/30 bg-ms-paper px-4 text-[17px] text-ms-black outline-none placeholder:text-ms-gray-500 focus-visible:border-ms-gold focus-visible:ring-2 focus-visible:ring-ms-gold/40"
+            className="h-12 w-full rounded-full border border-ms-gold/30 bg-ms-cream-deep px-4 text-[17px] text-ms-black outline-none placeholder:text-ms-gray-500 focus-visible:border-ms-gold focus-visible:ring-2 focus-visible:ring-ms-gold/40"
           />
         </div>
         <button
           type="submit"
           disabled={pending}
-          className="h-12 shrink-0 rounded-xl bg-ms-gold px-5 text-[17px] font-semibold text-ms-black transition-colors hover:bg-ms-gold-dark hover:text-ms-white disabled:opacity-40"
+          className="h-12 shrink-0 cursor-pointer rounded-full bg-ms-gold px-5 text-[17px] font-semibold text-ms-black transition-colors hover:bg-ms-gold-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
           {pending ? "Envoi…" : "S'abonner"}
         </button>

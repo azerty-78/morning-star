@@ -33,7 +33,11 @@ export default async function AdminCommentairesPage() {
                   </p>
                 </div>
                 <span className="shrink-0 rounded-full bg-ms-gold/20 px-2.5 py-1 text-[11px] font-semibold text-ms-gold-dark">
-                  {c.status}
+                  {c.status === "PENDING"
+                    ? "En attente"
+                    : c.status === "APPROVED"
+                      ? "Approuvé"
+                      : "Rejeté"}
                 </span>
               </div>
               <p className="mt-3 text-[15px] leading-snug text-ms-black">{c.excerpt}</p>

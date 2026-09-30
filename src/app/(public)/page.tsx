@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container, Separator, Typography } from "@/components/ui";
+import { Container, Typography } from "@/components/ui";
 import {
   HomeArchiveTeaser,
   HomeToday,
@@ -25,7 +25,7 @@ export default async function HomePage() {
     : published.slice(0, 3);
 
   return (
-    <Container className="bg-ms-white pb-6 pt-[var(--ms-space-7)] md:pt-[var(--ms-space-8)]">
+    <Container className="space-y-8 pb-6 pt-6">
       {today ? (
         <HomeToday meditation={today} />
       ) : (
@@ -34,13 +34,9 @@ export default async function HomePage() {
         </Typography>
       )}
 
-      <Separator tone="default" className="my-[var(--ms-space-9)]" />
-
       <HomeArchiveTeaser meditations={previous} />
 
-      <div className="mt-[var(--ms-space-9)]">
-        <NewsletterSignup />
-      </div>
+      <NewsletterSignup />
     </Container>
   );
 }

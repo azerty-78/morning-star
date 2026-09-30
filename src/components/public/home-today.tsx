@@ -1,114 +1,57 @@
-import {
-  ButtonLink,
-  Grid,
-  GridItem,
-  Separator,
-  Typography,
-} from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { PUBLIC_ROUTES } from "@/constants/routes";
 import type { DailyMeditation } from "@/domain/meditation";
-import {
-  formatDayNumber,
-  formatMonthYear,
-  formatPublicationDate,
-  formatWeekday,
-} from "@/lib/utils";
+import { formatPublicationDate } from "@/lib/utils";
 
 export interface HomeTodayProps {
   meditation: DailyMeditation;
 }
 
-/**
- * Une du jour — composition éditoriale Swiss Style (grille 12).
- */
 export function HomeToday({ meditation }: HomeTodayProps) {
   const primaryRef = meditation.bibleReferences[0];
   const readHref = `${PUBLIC_ROUTES.meditations}/${meditation.slug}`;
 
   return (
-    <section aria-labelledby="meditation-du-jour-title">
-      <Grid cols={12} gap="lg" className="items-start">
-        {/* Rail date / rubrique */}
-        <GridItem span={12} className="md:col-span-3">
-          <div className="flex flex-col gap-5 md:sticky md:top-8 md:pr-4">
-            <Typography variant="label" className="text-ms-gold-dark">
-              Méditation du jour
-            </Typography>
-
-            <Separator tone="accent" className="w-12" />
-
-            <time
-              dateTime={meditation.publicationDate}
-              className="block"
-              aria-label={formatPublicationDate(meditation.publicationDate)}
-            >
-              <span className="ms-label block text-ms-muted">
-                {formatWeekday(meditation.publicationDate)}
-              </span>
-              <span
-                className="mt-2 block font-sans font-bold leading-none tracking-[var(--ms-tracking-tighter)] text-ms-fg"
-                style={{ fontSize: "clamp(3.5rem, 12vw, 5.5rem)" }}
-              >
-                {formatDayNumber(meditation.publicationDate)}
-              </span>
-              <span className="mt-2 block text-[length:var(--ms-text-sm)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-gray-700">
-                {formatMonthYear(meditation.publicationDate)}
-              </span>
-            </time>
-          </div>
-        </GridItem>
-
-        {/* Contenu principal */}
-        <GridItem span={12} className="md:col-span-8 md:col-start-5">
-          <Typography
-            id="meditation-du-jour-title"
-            variant="display"
-            className="max-w-[18ch]"
-          >
-            {meditation.title}
-          </Typography>
-
-          {meditation.subtitle ? (
-            <Typography
-              variant="subtitle"
-              className="mt-5 max-w-[var(--ms-measure)]"
-            >
-              {meditation.subtitle}
-            </Typography>
-          ) : null}
-
-          {primaryRef ? (
-            <p className="mt-8">
-              <Typography variant="label" as="span" className="mr-3 text-ms-muted">
-                Texte
-              </Typography>
-              <Typography variant="reference" as="cite" className="not-italic">
-                {primaryRef.label}
-              </Typography>
-            </p>
-          ) : null}
-
-          <Typography
-            variant="lede"
-            className="mt-8 max-w-[var(--ms-measure)]"
-          >
-            {meditation.excerpt}
-          </Typography>
-
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <ButtonLink
-              href={readHref}
-              variant="primary"
-              aria-label={`Lire la méditation : ${meditation.title}`}
-            >
-              Lire la méditation
-            </ButtonLink>
-            <ButtonLink href={PUBLIC_ROUTES.archive} variant="secondary">
-              Archives
-            </ButtonLink>
-          </div>
-        </GridItem>
-      </Grid>
+    <section
+      aria-labelledby="meditation-du-jour-title"
+      className="overflow-hidden rounded-[22px] bg-white px-5 py-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:px-7"
+    >
+      <p className="text-[13px] font-medium text-ms-gold-dark">Méditation du jour</p>
+      <time
+        dateTime={meditation.publicationDate}
+        className="mt-1 block text-[15px] text-ms-gray-600"
+      >
+        {formatPublicationDate(meditation.publicationDate)}
+      </time>
+      <h1
+        id="meditation-du-jour-title"
+        className="mt-2 text-[32px] font-semibold leading-tight tracking-tight text-ms-black"
+      >
+        {meditation.title}
+      </h1>
+      {meditation.subtitle ? (
+        <p className="mt-2 max-w-xl text-[18px] leading-snug text-ms-gray-700">
+          {meditation.subtitle}
+        </p>
+      ) : null}
+      {primaryRef ? (
+        <p className="mt-3 text-[15px] text-ms-gold-dark">{primaryRef.label}</p>
+      ) : null}
+      <p className="mt-4 max-w-xl text-[17px] leading-snug text-ms-gray-700">
+        {meditation.excerpt}
+      </p>
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <ButtonLink
+          href={readHref}
+          variant="primary"
+          aria-label={`Lire la méditation : ${meditation.title}`}
+        >
+          Lire la méditation
+        </ButtonLink>
+        <ButtonLink href={PUBLIC_ROUTES.archive} variant="secondary">
+          Archives
+        </ButtonLink>
+      </div>
     </section>
   );
 }

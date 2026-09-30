@@ -1,11 +1,18 @@
 import { cn } from "@/lib/utils";
 
-function Bone({ className }: { className?: string }) {
+function Bone({
+  className,
+  tone = "cream",
+}: {
+  className?: string;
+  tone?: "cream" | "paper";
+}) {
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "ms-skeleton block animate-pulse rounded-md bg-ms-cream-deep",
+        "ms-skeleton block animate-pulse rounded-md",
+        tone === "paper" ? "bg-white" : "bg-ms-cream-deep",
         className,
       )}
     />
@@ -22,39 +29,21 @@ export function PublicPageSkeleton() {
       role="status"
       aria-live="polite"
       aria-busy="true"
-      className="mx-auto w-full max-w-[var(--ms-container)] px-[var(--ms-gutter)] pb-6 pt-[var(--ms-space-7)] md:pt-[var(--ms-space-8)]"
+      className="mx-auto w-full max-w-[var(--ms-container)] space-y-4 px-[var(--ms-gutter)] pb-6 pt-6"
     >
       <Status label="Chargement de la page" />
-      <Bone className="h-3 w-28" />
-      <Bone className="mt-5 h-11 w-2/3 max-w-xl" />
-      <Bone className="mt-4 h-5 w-1/2 max-w-md" />
-      <Bone className="mt-8 h-px w-full rounded-none" />
-
-      <div className="mt-10 grid gap-8 md:grid-cols-12">
-        <div className="md:col-span-3">
-          <Bone className="h-3 w-20" />
-          <Bone className="mt-4 h-16 w-24" />
-          <Bone className="mt-3 h-3 w-16" />
-        </div>
-        <div className="flex flex-col gap-3 md:col-span-8 md:col-start-5">
-          <Bone className="h-4 w-full" />
-          <Bone className="h-4 w-11/12" />
-          <Bone className="h-4 w-4/5" />
-          <Bone className="mt-4 h-10 w-44 rounded-none" />
-        </div>
+      <div className="rounded-[22px] bg-white p-5 shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <Bone className="h-3 w-28" />
+        <Bone className="mt-4 h-8 w-2/3 max-w-md" />
+        <Bone className="mt-3 h-4 w-full" />
+        <Bone className="mt-2 h-4 w-4/5" />
+        <Bone className="mt-5 h-11 w-40 rounded-full" />
       </div>
-
-      <div className="mt-12 flex flex-col gap-4">
+      <div className="overflow-hidden rounded-[22px] bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
         {Array.from({ length: 3 }, (_, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-4 border-t border-ms-border py-4"
-          >
-            <Bone className="h-4 w-8" />
-            <div className="min-w-0 flex-1">
-              <Bone className="h-4 w-1/3" />
-              <Bone className="mt-2 h-3 w-2/3" />
-            </div>
+          <div key={index} className="border-b border-black/5 px-4 py-4 last:border-b-0">
+            <Bone className="h-4 w-1/3" />
+            <Bone className="mt-2 h-3 w-2/3" />
           </div>
         ))}
       </div>
@@ -71,14 +60,15 @@ export function LoginPageSkeleton() {
       className="mx-auto w-full max-w-[var(--ms-container-narrow)] px-[var(--ms-gutter)] pb-16 pt-[var(--ms-space-8)]"
     >
       <Status label="Chargement de la connexion" />
-      <Bone className="h-28 w-28 rounded-2xl" />
-      <Bone className="mt-8 h-3 w-16" />
-      <Bone className="mt-4 h-10 w-48" />
-      <Bone className="mt-4 h-4 w-72 max-w-full" />
-      <div className="mt-10 flex flex-col gap-5">
-        <Bone className="h-12 w-full rounded-xl" />
-        <Bone className="h-12 w-full rounded-xl" />
-        <Bone className="h-11 w-36 rounded-none" />
+      <div className="rounded-[22px] bg-white p-6 shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <Bone className="mx-auto h-16 w-16 rounded-2xl" />
+        <Bone className="mx-auto mt-6 h-7 w-40" />
+        <Bone className="mx-auto mt-3 h-4 w-56 max-w-full" />
+        <div className="mt-8 flex flex-col gap-4">
+          <Bone className="h-12 w-full rounded-xl" />
+          <Bone className="h-12 w-full rounded-xl" />
+          <Bone className="h-11 w-full rounded-full" />
+        </div>
       </div>
     </div>
   );

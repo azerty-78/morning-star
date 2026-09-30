@@ -5,19 +5,19 @@ export type ButtonSize = "sm" | "md";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    "bg-ms-gold text-ms-black border border-ms-gold hover:bg-ms-gold-dark hover:border-ms-gold-dark hover:text-ms-white",
+    "bg-ms-gold text-ms-black border border-transparent hover:bg-ms-gold-dark hover:text-white",
   secondary:
-    "bg-transparent text-ms-black border border-ms-black hover:border-ms-gold-dark hover:bg-ms-gold/15 hover:text-ms-black",
+    "bg-white text-ms-black border border-ms-gold/35 hover:bg-ms-gold/15",
   ghost:
-    "bg-transparent text-ms-fg border border-transparent hover:border-ms-gold hover:text-ms-gold-dark",
+    "bg-transparent text-ms-gold-dark border border-transparent hover:bg-ms-gold/15",
   accent:
-    "bg-ms-gold text-ms-black border border-ms-gold hover:bg-ms-gold-dark hover:border-ms-gold-dark hover:text-ms-white",
-  link: "bg-transparent text-ms-gold-dark border-0 underline underline-offset-4 hover:text-ms-black px-0",
+    "bg-ms-gold text-ms-black border border-transparent hover:bg-ms-gold-dark hover:text-white",
+  link: "bg-transparent text-ms-gold-dark border-0 px-0 hover:text-ms-black",
 };
 
 const sizeClass: Record<ButtonSize, string> = {
-  sm: "min-h-8 px-3 py-1.5 text-[length:var(--ms-text-xs)] tracking-[var(--ms-tracking-wide)]",
-  md: "min-h-10 px-4 py-2 text-[length:var(--ms-text-xs)] tracking-[var(--ms-tracking-wider)]",
+  sm: "h-9 px-3.5 text-[14px]",
+  md: "h-11 px-5 text-[15px]",
 };
 
 export function buttonClassName({
@@ -31,9 +31,9 @@ export function buttonClassName({
 }): string {
   return cn(
     "inline-flex cursor-pointer items-center justify-center gap-2",
-    "font-medium uppercase rounded-none no-underline",
-    "transition-colors duration-[var(--ms-duration)] ease-[var(--ms-ease)]",
-    "disabled:opacity-35 disabled:pointer-events-none",
+    "rounded-full font-semibold tracking-normal no-underline",
+    "transition-colors duration-200",
+    "disabled:pointer-events-none disabled:opacity-40",
     variant !== "link" && sizeClass[size],
     variantClass[variant],
     className,

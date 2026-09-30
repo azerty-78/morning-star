@@ -72,7 +72,7 @@ export function BibleReference({
         className={cn(
           "border-0 border-b border-ms-gold bg-transparent p-0 text-left",
           "font-serif text-[length:var(--ms-text-sm)] text-ms-gold-dark",
-          "hover:border-ms-black hover:text-ms-fg",
+          "cursor-pointer hover:text-ms-black",
           "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ms-gold",
           className,
         )}
