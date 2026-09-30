@@ -7,8 +7,6 @@ import type {
   BibleTranslation,
   ResolvedBibleReference,
 } from "@/domain/bible";
-import { Typography } from "@/components/ui";
-import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { passageLookupKey, referenceKey } from "@/lib/bible";
 import { cn } from "@/lib/utils";
@@ -84,68 +82,48 @@ export function BiblePassageDialog({
     resolveMessage,
   });
 
+  const facts = [
+    { label: "Livre", value: reference?.bookName ?? "" },
+    { label: "Chapitre", value: reference ? String(reference.chapter) : "" },
+    { label: "Versets", value: verseLabel },
+  ];
+
   return (
-    <Dialog
-      open={open}
-      title={title}
-      onClose={handleClose}
-      className="w-[min(100%,32rem)] max-w-[calc(100vw-2rem)]"
-    >
+    <Dialog open={open} title={title} onClose={handleClose}>
       {!reference ? (
-        <Typography variant="meta">
+        <p className="rounded-2xl bg-white px-4 py-4 text-[15px] leading-snug text-ms-muted">
           {resolveMessage ??
             "Référence invalide ou non reconnue. Aucune redirection externe."}
-        </Typography>
+        </p>
       ) : (
-        <div className="flex flex-col gap-5">
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-3">
-            <div>
-              <Typography variant="label" as="dt" className="mb-1">
-                Livre
-              </Typography>
-              <dd className="m-0 text-[length:var(--ms-text-sm)] text-ms-fg">
-                {reference.bookName}
-              </dd>
-            </div>
-            <div>
-              <Typography variant="label" as="dt" className="mb-1">
-                Chapitre
-              </Typography>
-              <dd className="m-0 text-[length:var(--ms-text-sm)] text-ms-fg">
-                {reference.chapter}
-              </dd>
-            </div>
-            <div>
-              <Typography variant="label" as="dt" className="mb-1">
-                Versets
-              </Typography>
-              <dd className="m-0 text-[length:var(--ms-text-sm)] text-ms-fg">
-                {verseLabel}
-              </dd>
-            </div>
-            <div>
-              <Typography variant="label" as="dt" className="mb-1">
-                Traduction
-              </Typography>
-              <dd className="m-0 text-[length:var(--ms-text-sm)] text-ms-fg">
-                {translation?.name ?? translationCode}
-              </dd>
-            </div>
+        <div className="flex flex-col gap-3">
+          <dl className="overflow-hidden rounded-2xl bg-white">
+            {facts.map((fact) => (
+              <div
+                key={fact.label}
+                className="flex items-center justify-between gap-4 border-b border-ms-gold/15 px-4 py-3 last:border-b-0"
+              >
+                <dt className="text-[15px] text-ms-muted">{fact.label}</dt>
+                <dd className="m-0 text-right text-[15px] font-medium text-ms-black">
+                  {fact.value}
+                </dd>
+              </div>
+            ))}
           </dl>
 
           {usableTranslations.length > 0 ? (
             <div>
               <label
                 htmlFor="bible-translation"
-                className="mb-2 block text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted"
+                className="mb-1.5 block px-1 text-[13px] font-medium text-ms-muted"
               >
-                Traduction (textes licenciés uniquement)
+                Traduction
               </label>
               <select
                 id="bible-translation"
                 value={translationCode}
                 onChange={(e) => setTranslationCode(e.target.value)}
-                className="w-full rounded-none border-0 border-b border-ms-border bg-transparent py-2 text-[length:var(--ms-text-base)] text-ms-fg focus-visible:border-ms-black focus-visible:outline-none"
+                className="w-full cursor-pointer appearance-none rounded-2xl border-0 bg-white px-4 py-3 text-[16px] text-ms-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ms-gold"
               >
                 {usableTranslations.map((t) => (
                   <option key={t.code} value={t.code}>
@@ -156,50 +134,41 @@ export function BiblePassageDialog({
             </div>
           ) : null}
 
-          <div className="border-t border-ms-border pt-5">
-            {passage ? (
+          {passage ? (
+            <div className="rounded-2xl bg-white px-4 py-4">
+              <p className="mb-3 text-[12px] font-semibold tracking-wide text-ms-gold-dark">
+                {translation?.name ?? translationCode}
+              </p>
               <div className="flex flex-col gap-4">
                 {passage.verses.map((v) => (
                   <p
                     key={v.verse}
                     className="font-serif text-[length:var(--ms-text-base)] leading-[var(--ms-leading-relaxed)] text-ms-gray-800"
                   >
-                    <sup className="mr-1 font-sans text-[length:var(--ms-text-2xs)] text-ms-gold-dark">
+                    <sup className="mr-1 font-sans text-[11px] font-semibold text-ms-gold-dark">
                       {v.verse}
                     </sup>
                     {v.text}
                   </p>
                 ))}
               </div>
-            ) : (
-              <div
-                role="status"
-                className={cn("border border-ms-border px-4 py-5")}
-              >
-                <Typography variant="label" className="mb-2 text-ms-gold-dark">
-                  Passage non disponible
-                </Typography>
-                <Typography variant="meta">{emptyReason}</Typography>
-              </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div role="status" className={cn("rounded-2xl bg-white px-4 py-4")}>
+              <p className="text-[15px] font-semibold text-ms-black">
+                Passage non disponible
+              </p>
+              <p className="mt-1 text-[14px] leading-snug text-ms-muted">
+                {emptyReason}
+              </p>
+            </div>
+          )}
 
           {translation?.licenseNotice ? (
-            <Typography variant="meta" className="text-[length:var(--ms-text-2xs)]">
+            <p className="px-1 text-[12px] leading-snug text-ms-muted">
               {translation.licenseNotice}
-            </Typography>
+            </p>
           ) : null}
-
-          <div className="flex justify-end border-t border-ms-border pt-4">
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={handleClose}
-            >
-              Fermer
-            </Button>
-          </div>
         </div>
       )}
     </Dialog>
