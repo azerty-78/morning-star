@@ -4,12 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ImportJob } from "@/domain/import";
 import { ImportStage } from "@/domain/import";
-import {
-  Badge,
-  Button,
-  Separator,
-  Typography,
-} from "@/components/ui";
+import { Typography } from "@/components/ui";
 import { ADMIN_ROUTES, API_ROUTES } from "@/constants/routes";
 
 const STAGE_ORDER: ImportStage[] = [
@@ -26,21 +21,27 @@ const STAGE_ORDER: ImportStage[] = [
 
 export function ImportPipelineStatus({ job }: { job: ImportJob }) {
   return (
-    <ol className="grid gap-2 border border-ms-border p-4 md:grid-cols-3">
+    <ol className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
       {STAGE_ORDER.map((stage) => {
         const result = job.stages.find((s) => s.stage === stage);
         const done = Boolean(result?.ok);
         return (
           <li
             key={stage}
-            className="flex items-baseline justify-between gap-2 border-b border-ms-border py-2 last:border-b-0 md:border-b-0"
+            className="flex items-center justify-between gap-3 border-b border-black/5 px-4 py-3 last:border-b-0"
           >
-            <Typography variant="label" as="span" className="text-ms-muted">
+            <span className="text-[15px] text-ms-black">
               {stage.replaceAll("_", " ")}
-            </Typography>
-            <Badge tone={done ? "accent" : "neutral"}>
+            </span>
+            <span
+              className={
+                done
+                  ? "rounded-full bg-ms-gold px-2.5 py-1 text-[11px] font-semibold text-ms-black"
+                  : "rounded-full bg-ms-cream-deep px-2.5 py-1 text-[11px] font-semibold text-ms-gray-600"
+              }
+            >
               {done ? "OK" : "—"}
-            </Badge>
+            </span>
           </li>
         );
       })}
@@ -183,57 +184,57 @@ export function ImportPreviewPanel({ job }: { job: ImportJob }) {
         </section>
       ) : null}
 
-      <Separator tone="strong" />
-
-      <section aria-labelledby="validation-heading">
-        <Typography id="validation-heading" variant="label" className="mb-4 text-ms-gold-dark">
-          Validation administrateur
-        </Typography>
-        <Typography variant="meta" className="mb-6 max-w-[var(--ms-measure)]">
-          Aucune publication automatique. Approuvez la preview, puis publiez
-          ou programmez explicitement.
-        </Typography>
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Button
+      <section
+        aria-labelledby="validation-heading"
+        className="rounded-3xl bg-white p-4 shadow-[0_1px_2px_rgba(26,26,26,0.05)]"
+      >
+        <h2 id="validation-heading" className="text-[15px] font-semibold text-ms-black">
+          Validation
+        </h2>
+        <p className="mt-1 text-[14px] text-ms-gray-600">
+          Approuvez la preview, puis publiez ou programmez explicitement.
+        </p>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+          <button
             type="button"
-            variant="primary"
             disabled={pending || job.status === "APPROVED" || job.status === "PUBLISHED"}
             onClick={() => void postAction("approve")}
+            className="h-11 cursor-pointer rounded-full bg-ms-gold px-5 text-[15px] font-semibold text-ms-black disabled:cursor-not-allowed disabled:opacity-40"
           >
             Approuver
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="secondary"
             disabled={pending || job.status !== "APPROVED"}
             onClick={() => void postAction("publish")}
+            className="h-11 cursor-pointer rounded-full bg-ms-black px-5 text-[15px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
             Publier
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="ghost"
             disabled={pending}
             onClick={() => void postAction("reject", { reason: "Rejeté depuis la preview." })}
+            className="h-11 cursor-pointer rounded-full bg-ms-cream-deep px-5 text-[15px] font-semibold text-ms-black disabled:cursor-not-allowed disabled:opacity-40"
           >
             Rejeter
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="link"
             onClick={() => router.push(ADMIN_ROUTES.import)}
+            className="h-11 cursor-pointer rounded-full px-5 text-[15px] font-semibold text-ms-gold-dark"
           >
             Nouvel import
-          </Button>
+          </button>
         </div>
         {message ? (
-          <p className="mt-4 text-[length:var(--ms-text-sm)] text-ms-muted" role="status">
+          <p className="mt-3 text-[14px] text-ms-gray-600" role="status">
             {message}
           </p>
         ) : null}
-        <Typography variant="meta" className="mt-4">
-          Statut job : {job.status} · étape : {job.currentStage}
-        </Typography>
+        <p className="mt-3 text-[13px] text-ms-gray-600">
+          Statut : {job.status} · étape : {job.currentStage}
+        </p>
       </section>
     </div>
   );

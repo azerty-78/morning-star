@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Button } from "@/components/ui";
 import { API_ROUTES } from "@/constants/routes";
 
 export function NotifyPublicationButton({
@@ -44,15 +43,14 @@ export function NotifyPublicationButton({
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <Button
+      <button
         type="button"
-        variant="secondary"
-        size="sm"
         disabled={pending}
         onClick={handleClick}
+        className="inline-flex h-10 cursor-pointer items-center rounded-full bg-ms-gold px-4 text-[15px] font-semibold text-ms-black disabled:cursor-not-allowed disabled:opacity-50"
       >
         {pending ? "Envoi…" : "Notifier les abonnés"}
-      </Button>
+      </button>
       <p role="status" aria-live="polite" className="text-sm text-ms-muted">
         {status}
       </p>

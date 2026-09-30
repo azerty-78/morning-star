@@ -1,5 +1,5 @@
-import { Badge, Container, PageHeader, Typography } from "@/components/ui";
 import { NotifyPublicationButton } from "@/components/admin";
+import { Container } from "@/components/ui";
 import { MOCK_DATA_BANNER } from "@/constants/app";
 import { createMeditationService } from "@/services/meditation";
 import { createNewsletterService } from "@/services/newsletter";
@@ -50,137 +50,94 @@ function subscriberStatusLabel(status: string): string {
 export default async function AdminNewsletterPage() {
   const snap = await createNewsletterService().getAdminSnapshot();
   const today = await createMeditationService().getToday();
+  const metrics = [
+    { label: "Total", value: snap.counts.total },
+    { label: "Actifs", value: snap.counts.active },
+    { label: "En attente", value: snap.counts.pending },
+    { label: "Désabonnés", value: snap.counts.unsubscribed },
+  ];
 
   return (
-    <Container className="pb-[var(--ms-space-10)]">
-      <PageHeader
-        omitTitle
-        eyebrow="Administration"
-        title="Newsletter"
-        description="Abonnés, désabonnés et historique des notifications — sans tableau SaaS."
-      />
-      <div className="mb-8 flex flex-wrap items-center gap-4">
-        <Badge tone="accent">{MOCK_DATA_BANNER}</Badge>
-        <Badge tone="neutral">EmailProvider · mock</Badge>
-      </div>
+    <Container className="ios-ui space-y-4 py-4 pb-[var(--ms-space-10)]">
+      <p className="text-[13px] text-ms-gray-600">{MOCK_DATA_BANNER}</p>
 
-      <dl className="grid gap-8 border-y border-ms-black py-8 sm:grid-cols-4">
-        <div>
-          <Typography variant="label" as="dt">
-            Abonnés (total)
-          </Typography>
-          <Typography variant="title" as="dd" className="mt-2 tabular-nums">
-            {snap.counts.total.toLocaleString("fr-FR")}
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="label" as="dt">
-            Actifs
-          </Typography>
-          <Typography variant="title" as="dd" className="mt-2 tabular-nums">
-            {snap.counts.active.toLocaleString("fr-FR")}
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="label" as="dt">
-            En attente
-          </Typography>
-          <Typography variant="title" as="dd" className="mt-2 tabular-nums">
-            {snap.counts.pending.toLocaleString("fr-FR")}
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="label" as="dt">
-            Désabonnés
-          </Typography>
-          <Typography variant="title" as="dd" className="mt-2 tabular-nums">
-            {snap.counts.unsubscribed.toLocaleString("fr-FR")}
-          </Typography>
-        </div>
-      </dl>
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {metrics.map((metric) => (
+          <div
+            key={metric.label}
+            className="rounded-3xl bg-white p-4 shadow-[0_1px_2px_rgba(26,26,26,0.05)]"
+          >
+            <p className="text-[26px] font-semibold leading-none tabular-nums text-ms-black">
+              {metric.value.toLocaleString("fr-FR")}
+            </p>
+            <p className="mt-2 text-[13px] font-medium text-ms-gray-600">{metric.label}</p>
+          </div>
+        ))}
+      </section>
 
       {today ? (
-        <section className="mt-10 border-b border-ms-border pb-8">
-          <Typography variant="nav" className="mb-3">
-            Notification de publication
-          </Typography>
-          <Typography variant="body" className="mb-4 text-ms-gray-700">
-            Déclencher un envoi mock pour « {today.title} » aux abonnés actifs
-            (EmailService · mock → .data/email/).
-          </Typography>
-          <NotifyPublicationButton meditationId={today.id} />
+        <section className="rounded-3xl bg-white p-4 shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+          <h2 className="text-[15px] font-semibold text-ms-black">Notification de publication</h2>
+          <p className="mt-1 text-[14px] text-ms-gray-600">
+            Envoyer « {today.title} » aux abonnés actifs. L’envoi reste simulé.
+          </p>
+          <div className="mt-3">
+            <NotifyPublicationButton meditationId={today.id} />
+          </div>
         </section>
       ) : null}
 
-      <section className="mt-10">
-        <Typography variant="nav" className="mb-4 border-b border-ms-black pb-2">
+      <section className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <h2 className="px-4 py-3 text-[15px] font-semibold text-ms-black">
           Historique des notifications
-        </Typography>
-        {snap.notifications.length === 0 ? (
-          <Typography variant="meta">Aucun envoi pour le moment.</Typography>
-        ) : (
-          <ul>
-            {snap.notifications.map((n) => (
-              <li
-                key={n.id}
-                className="grid gap-2 border-b border-ms-border py-4 md:grid-cols-12 md:items-baseline"
-              >
-                <div className="md:col-span-2">
-                  <Typography
-                    variant="date"
-                    dateTime={n.createdAt.toISOString()}
-                  >
-                    {n.createdAt.toISOString().slice(0, 10)}
-                  </Typography>
-                  <Typography variant="label" className="mt-1">
-                    {kindLabel(n.kind)}
-                  </Typography>
-                </div>
-                <div className="md:col-span-6">
-                  <p className="text-sm font-medium text-ms-fg">{n.subject}</p>
-                  {n.meditationTitle ? (
-                    <Typography variant="meta" className="mt-1">
-                      {n.meditationTitle}
-                    </Typography>
-                  ) : null}
-                </div>
-                <div className="md:col-span-2">
-                  <Badge tone={n.status === "SENT" ? "inverted" : "neutral"}>
+        </h2>
+        <ul className="border-t border-ms-gold/15">
+          {snap.notifications.length === 0 ? (
+            <li className="px-4 py-5 text-[15px] text-ms-gray-600">Aucun envoi pour le moment.</li>
+          ) : (
+            snap.notifications.map((n) => (
+              <li key={n.id} className="border-b border-black/5 px-4 py-3 last:border-b-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-[16px] font-medium text-ms-black">{n.subject}</p>
+                    <p className="mt-0.5 text-[13px] text-ms-gray-600">
+                      {kindLabel(n.kind)}
+                      {n.meditationTitle ? ` · ${n.meditationTitle}` : ""} ·{" "}
+                      {n.createdAt.toISOString().slice(0, 10)}
+                    </p>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-ms-gold/20 px-2.5 py-1 text-[11px] font-semibold text-ms-black">
                     {notificationStatusLabel(n.status)}
-                  </Badge>
+                  </span>
                 </div>
-                <div className="md:col-span-2 md:text-right">
-                  <Typography variant="meta" className="tabular-nums">
-                    {n.sentCount}/{n.recipientCount} envoyés
-                    {n.failedCount > 0 ? ` · ${n.failedCount} échec` : ""}
-                  </Typography>
-                </div>
+                <p className="mt-1 text-[13px] tabular-nums text-ms-gray-600">
+                  {n.sentCount}/{n.recipientCount} envoyés
+                  {n.failedCount > 0 ? ` · ${n.failedCount} échec` : ""}
+                </p>
               </li>
-            ))}
-          </ul>
-        )}
+            ))
+          )}
+        </ul>
       </section>
 
-      <section className="mt-12">
-        <Typography variant="nav" className="mb-4 border-b border-ms-black pb-2">
-          Inscriptions récentes
-        </Typography>
-        <Typography variant="meta" className="mb-4">
-          Adresses masquées — jamais exposées côté public.
-        </Typography>
-        <ul>
+      <section className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <div className="px-4 py-3">
+          <h2 className="text-[15px] font-semibold text-ms-black">Inscriptions récentes</h2>
+          <p className="mt-0.5 text-[13px] text-ms-gray-600">Adresses masquées.</p>
+        </div>
+        <ul className="border-t border-ms-gold/15">
           {snap.recentSubscribers.map((s) => (
             <li
               key={s.id}
-              className="grid grid-cols-[1fr_auto] gap-3 border-b border-ms-border py-3"
+              className="flex items-center justify-between gap-3 border-b border-black/5 px-4 py-3 last:border-b-0"
             >
-              <div>
-                <p className="font-mono text-sm text-ms-fg">{s.emailMasked}</p>
-                <Typography variant="meta">
-                  {s.subscribedAt.slice(0, 10)}
-                </Typography>
+              <div className="min-w-0">
+                <p className="truncate font-mono text-[14px] text-ms-black">{s.emailMasked}</p>
+                <p className="text-[13px] text-ms-gray-600">{s.subscribedAt.slice(0, 10)}</p>
               </div>
-              <Badge tone="neutral">{subscriberStatusLabel(s.status)}</Badge>
+              <span className="shrink-0 rounded-full bg-ms-cream-deep px-2.5 py-1 text-[11px] font-semibold text-ms-gray-700">
+                {subscriberStatusLabel(s.status)}
+              </span>
             </li>
           ))}
         </ul>

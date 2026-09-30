@@ -1,40 +1,39 @@
 import { DocumentDropzone } from "@/components/editor";
-import { Container, PageHeader, Typography } from "@/components/ui";
-import { ADMIN_ROUTES } from "@/constants/routes";
-import Link from "next/link";
+import { Container } from "@/components/ui";
 
 export const metadata = {
   title: "Import",
 };
 
+const STEPS = [
+  "Dépôt",
+  "Validation",
+  "Extraction",
+  "Analyse",
+  "Preview",
+  "Publication",
+];
+
 export default function AdminImportPage() {
   return (
-    <Container className="pb-[var(--ms-space-10)]">
-      <PageHeader
-        omitTitle
-        eyebrow="Administration"
-        title="Import"
-        description="Déposez un PDF, DOC ou DOCX. Le pipeline produit une preview — jamais de publication automatique."
-      />
-
-      <div className="mt-10">
-        <DocumentDropzone />
-      </div>
-
-      <Typography variant="meta" className="mt-8">
-        Pipeline : Upload → Validation → Extraction → Normalisation → Analyse →
-        Structuration → Références bibliques → Nettoyage Blogspot → Preview →
-        Validation admin → Publication / Programmation.
-      </Typography>
-
-      <p className="mt-6">
-        <Link
-          href={ADMIN_ROUTES.dashboard}
-          className="text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)]"
-        >
-          Retour dashboard
-        </Link>
+    <Container className="ios-ui space-y-4 py-4 pb-[var(--ms-space-10)]">
+      <p className="text-[13px] text-ms-gray-600">
+        Le document devient une preview. Rien n’est publié tout seul.
       </p>
+      <DocumentDropzone />
+      <ol className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        {STEPS.map((step, index) => (
+          <li
+            key={step}
+            className="flex items-center gap-3 border-b border-black/5 px-4 py-3 last:border-b-0"
+          >
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ms-gold/20 text-[13px] font-semibold text-ms-gold-dark">
+              {index + 1}
+            </span>
+            <span className="text-[16px] font-medium text-ms-black">{step}</span>
+          </li>
+        ))}
+      </ol>
     </Container>
   );
 }

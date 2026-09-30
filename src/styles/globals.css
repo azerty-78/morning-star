@@ -345,6 +345,23 @@ hr {
   transform: none;
 }
 
+.brand-mark--login {
+  width: auto;
+  height: 4.5rem;
+  overflow: visible;
+  border-radius: 0;
+}
+
+.brand-mark--login img {
+  position: static;
+  top: auto;
+  left: auto;
+  width: auto;
+  height: 4.5rem;
+  max-width: none;
+  transform: none;
+}
+
 /* En-tête : emblème entier, à la hauteur de la barre. */
 .brand-mark--header {
   width: auto;

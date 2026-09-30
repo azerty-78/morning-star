@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { Typography } from "@/components/ui";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import type { AdminCalendarDay } from "@/domain/admin";
 import type { MeditationStatus } from "@/domain/meditation";
 import { ADMIN_ROUTES } from "@/constants/routes";
 import { cn, formatMonthYear } from "@/lib/utils";
-import { statusLabel } from "@/services/admin";
 
 function padMonthDays(yearMonth: string): string[] {
   const parts = yearMonth.split("-");
@@ -21,9 +20,10 @@ function padMonthDays(yearMonth: string): string[] {
 
 function weekdayIndex(iso: string): number {
   const date = new Date(`${iso}T12:00:00`);
-  // Lundi = 0
   return (date.getDay() + 6) % 7;
 }
+
+const WEEKDAYS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
 export function EditorialCalendar({
   yearMonth,
@@ -45,120 +45,125 @@ export function EditorialCalendar({
     ...Array.from({ length: startPad }, () => null),
     ...allDates,
   ];
+  const today = new Date();
+  const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   return (
-    <div>
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-ms-black pb-4">
-        <div>
-          <Typography variant="label" className="mb-2 text-ms-gold-dark">
-            Calendrier éditorial
-          </Typography>
-          <Typography variant="title" as="h2" className="capitalize">
+    <div className="ios-ui space-y-4">
+      <section className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)]">
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <h2 className="text-[20px] font-semibold capitalize tracking-tight text-ms-black">
             {formatMonthYear(`${yearMonth}-01`)}
-          </Typography>
-        </div>
-        <div className="flex gap-4">
-          <Link
-            href={prevHref}
-            className="text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-fg no-underline hover:underline"
-          >
-            ← Mois précédent
-          </Link>
-          <Link
-            href={nextHref}
-            className="text-[length:var(--ms-text-xs)] uppercase tracking-[var(--ms-tracking-wider)] text-ms-fg no-underline hover:underline"
-          >
-            Mois suivant →
-          </Link>
-        </div>
-      </div>
-
-      <ul className="mb-6 flex flex-wrap gap-x-6 gap-y-2" aria-label="Légende">
-        {legend.map((item) => (
-          <li key={item.status} className="flex items-center gap-2">
-            <StatusBadge status={item.status} />
-          </li>
-        ))}
-      </ul>
-
-      <div
-        className="hidden grid-cols-7 gap-px border border-ms-black bg-ms-black sm:grid"
-        role="grid"
-        aria-label={`Calendrier ${yearMonth}`}
-      >
-        {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => (
-          <div
-            key={d}
-            className="bg-ms-off-white px-2 py-2 text-[length:var(--ms-text-2xs)] font-medium uppercase tracking-[var(--ms-tracking-widest)] text-ms-muted"
-          >
-            {d}
-          </div>
-        ))}
-        {cells.map((date, i) => {
-          if (!date) {
-            return (
-              <div key={`pad-${i}`} className="min-h-[5.5rem] bg-ms-paper" />
-            );
-          }
-          const items = byDate.get(date) ?? [];
-          const dayNum = Number(date.slice(-2));
-          return (
-            <div
-              key={date}
-              role="gridcell"
-              className={cn(
-                "min-h-[5.5rem] bg-ms-off-white p-2",
-                items.length > 0 && "bg-ms-paper",
-              )}
+          </h2>
+          <div className="flex gap-2">
+            <Link
+              href={prevHref}
+              aria-label="Mois précédent"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-ms-gold/15 text-ms-black no-underline hover:bg-ms-gold/30"
             >
-              <p className="font-sans text-xs font-semibold tabular-nums text-ms-fg">
-                {dayNum}
-              </p>
-              <ul className="mt-1 space-y-1">
-                {items.map((item) => (
-                  <li key={item.id}>
-                    <Link
-                      href={ADMIN_ROUTES.meditations}
-                      className="block no-underline"
-                      title={`${statusLabel(item.status)} — ${item.title}`}
-                    >
-                      <span className="line-clamp-2 text-[10px] font-medium leading-tight text-ms-fg hover:underline">
-                        {item.title}
-                      </span>
-                      <span className="mt-0.5 block text-[9px] uppercase tracking-wider text-ms-muted">
-                        {statusLabel(item.status)}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
-      </div>
+              <ChevronLeft size={18} aria-hidden />
+            </Link>
+            <Link
+              href={nextHref}
+              aria-label="Mois suivant"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-ms-gold/15 text-ms-black no-underline hover:bg-ms-gold/30"
+            >
+              <ChevronRight size={18} aria-hidden />
+            </Link>
+          </div>
+        </div>
 
-      {/* Liste mobile — densifiée */}
-      <ul className="divide-y divide-ms-border border-y border-ms-black sm:hidden">
-        {allDates
-          .filter((d) => (byDate.get(d)?.length ?? 0) > 0)
-          .map((date) => (
-            <li key={date} className="py-3">
-              <Typography variant="date" dateTime={date} className="mb-2">
-                {date}
-              </Typography>
-              <ul className="space-y-2">
-                {(byDate.get(date) ?? []).map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex items-baseline justify-between gap-3"
-                  >
-                    <span className="text-sm font-medium">{item.title}</span>
-                    <StatusBadge status={item.status} />
-                  </li>
-                ))}
-              </ul>
+        <ul className="flex flex-wrap gap-2 border-t border-ms-gold/15 px-4 py-3" aria-label="Légende">
+          {legend.map((item) => (
+            <li key={item.status}>
+              <StatusBadge status={item.status} />
             </li>
           ))}
+        </ul>
+
+        <div
+          className="grid grid-cols-7 gap-1 px-2 pb-3 sm:px-3"
+          role="grid"
+          aria-label={`Calendrier ${yearMonth}`}
+        >
+          {WEEKDAYS.map((d) => (
+            <div
+              key={d}
+              className="px-1 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-ms-gray-600"
+            >
+              {d}
+            </div>
+          ))}
+          {cells.map((date, i) => {
+            if (!date) {
+              return <div key={`pad-${i}`} className="min-h-16 rounded-2xl bg-ms-cream-deep/40 sm:min-h-24" />;
+            }
+            const items = byDate.get(date) ?? [];
+            const dayNum = Number(date.slice(-2));
+            const isToday = date === todayIso;
+            return (
+              <div
+                key={date}
+                role="gridcell"
+                className={cn(
+                  "min-h-16 rounded-2xl p-1.5 sm:min-h-24 sm:p-2",
+                  items.length > 0 ? "bg-ms-gold/10" : "bg-ms-cream-deep/50",
+                )}
+              >
+                <p
+                  className={cn(
+                    "inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-[12px] font-semibold tabular-nums",
+                    isToday ? "bg-ms-gold text-ms-black" : "text-ms-black",
+                  )}
+                >
+                  {dayNum}
+                </p>
+                <ul className="mt-1 hidden space-y-1 sm:block">
+                  {items.map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        href={ADMIN_ROUTES.meditations}
+                        className="block truncate text-[11px] font-medium text-ms-black no-underline hover:text-ms-gold-dark"
+                        title={item.title}
+                      >
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {items.length > 0 ? (
+                  <span className="mt-1 block h-1.5 w-1.5 rounded-full bg-ms-gold sm:hidden" aria-hidden />
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <ul className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(26,26,26,0.05)] sm:hidden">
+        {allDates.filter((d) => (byDate.get(d)?.length ?? 0) > 0).length === 0 ? (
+          <li className="px-4 py-5 text-[15px] text-ms-gray-600">
+            Aucune méditation ce mois-ci.
+          </li>
+        ) : (
+          allDates
+            .filter((d) => (byDate.get(d)?.length ?? 0) > 0)
+            .map((date) => (
+              <li key={date} className="border-b border-black/5 px-4 py-3 last:border-b-0">
+                <p className="text-[13px] font-medium text-ms-gray-600">{date}</p>
+                <ul className="mt-2 space-y-2">
+                  {(byDate.get(date) ?? []).map((item) => (
+                    <li key={item.id} className="flex items-center justify-between gap-3">
+                      <span className="min-w-0 truncate text-[16px] font-medium text-ms-black">
+                        {item.title}
+                      </span>
+                      <StatusBadge status={item.status} />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))
+        )}
       </ul>
     </div>
   );

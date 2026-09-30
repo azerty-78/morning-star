@@ -2,7 +2,6 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Typography } from "@/components/ui";
 import { ADMIN_ROUTES, API_ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 
@@ -91,34 +90,32 @@ export function DocumentDropzone() {
           onFiles(e.dataTransfer.files);
         }}
         className={cn(
-          "border border-dashed border-ms-black bg-ms-off-white px-6 py-14 text-center",
-          dragging && "bg-ms-gray-100",
+          "rounded-3xl border border-dashed border-ms-gold/60 bg-white px-6 py-12 text-center shadow-[0_1px_2px_rgba(26,26,26,0.05)]",
+          dragging && "border-ms-gold bg-ms-gold/10",
           pending && "opacity-60",
         )}
       >
-        <Typography variant="label" className="text-ms-gold-dark">
-          Import
-        </Typography>
-        <Typography variant="title" as="p" className="mt-3 text-[length:var(--ms-text-2xl)]">
+        <p className="text-[13px] font-semibold text-ms-gold-dark">Import</p>
+        <p className="mt-2 text-[22px] font-semibold tracking-tight text-ms-black">
           Déposer un document
-        </Typography>
-        <Typography variant="meta" className="mx-auto mt-3 max-w-md">
+        </p>
+        <p className="mx-auto mt-2 max-w-md text-[14px] leading-snug text-ms-gray-600">
           PDF, DOC ou DOCX — le fichier sera analysé puis présenté en preview.
           Aucune publication automatique.
-        </Typography>
-        <div className="mt-8">
+        </p>
+        <div className="mt-6">
           <label htmlFor="import-file-input">
             <span className="sr-only">Choisir un fichier</span>
-            <Button
+            <button
               type="button"
-              variant="primary"
               disabled={pending}
               onClick={() =>
                 document.getElementById("import-file-input")?.click()
               }
+              className="inline-flex h-11 cursor-pointer items-center rounded-full bg-ms-gold px-5 text-[15px] font-semibold text-ms-black disabled:cursor-not-allowed disabled:opacity-50"
             >
               {pending ? "Analyse…" : "Choisir un fichier"}
-            </Button>
+            </button>
           </label>
           <input
             id="import-file-input"

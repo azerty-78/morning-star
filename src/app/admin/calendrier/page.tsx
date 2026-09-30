@@ -1,5 +1,5 @@
 import { EditorialCalendar } from "@/components/admin";
-import { Badge, Container, PageHeader } from "@/components/ui";
+import { Container } from "@/components/ui";
 import { MOCK_DATA_BANNER } from "@/constants/app";
 import { ADMIN_ROUTES } from "@/constants/routes";
 import { createAdminService } from "@/services/admin";
@@ -32,16 +32,8 @@ export default async function AdminCalendrierPage({
   const next = shiftMonth(yearMonth, 1);
 
   return (
-    <Container className="pb-[var(--ms-space-10)]">
-      <PageHeader
-        omitTitle
-        eyebrow="Administration"
-        title="Calendrier"
-        description="Planning éditorial — BROUILLON, PROGRAMMÉ, PUBLIÉ."
-      />
-      <div className="mb-8">
-        <Badge tone="accent">{MOCK_DATA_BANNER}</Badge>
-      </div>
+    <Container className="py-4 pb-[var(--ms-space-10)]">
+      <p className="mb-3 text-[13px] text-ms-gray-600">{MOCK_DATA_BANNER}</p>
       <EditorialCalendar
         yearMonth={calendar.yearMonth}
         days={calendar.days}

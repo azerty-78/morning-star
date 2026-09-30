@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   BookOpen,
   CalendarDays,
@@ -23,6 +23,13 @@ function statusLabel(status: MeditationStatus): string {
 
 type Filter = "ALL" | MeditationStatus;
 
+const FILTERS: Filter[] = ["DRAFT", "SCHEDULED", "PUBLISHED"];
+
+function readFilter(search: string): Filter {
+  const value = new URLSearchParams(search).get("filtre");
+  return FILTERS.includes(value as Filter) ? (value as Filter) : "ALL";
+}
+
 const filters: Array<{
   id: Filter;
   label: string;
@@ -35,10 +42,26 @@ const filters: Array<{
 
 export function MeditationAdminTable({
   items,
+  initialFilter = "ALL",
 }: {
   items: DailyMeditation[];
+  initialFilter?: Filter;
 }) {
-  const [filter, setFilter] = useState<Filter>("ALL");
+  const [filter, setFilter] = useState<Filter>(initialFilter);
+
+  useEffect(() => {
+    const sync = () => setFilter(readFilter(window.location.search));
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
+  }, []);
+
+  function selectFilter(next: Filter) {
+    const url = new URL(window.location.href);
+    if (next === "ALL") url.searchParams.delete("filtre");
+    else url.searchParams.set("filtre", next);
+    window.history.pushState(null, "", `${url.pathname}${url.search}`);
+    setFilter(next);
+  }
 
   const counts = useMemo(
     () => ({
@@ -76,7 +99,7 @@ export function MeditationAdminTable({
               key={item.id}
               type="button"
               aria-pressed={active}
-              onClick={() => setFilter(active ? "ALL" : item.id)}
+              onClick={() => selectFilter(active ? "ALL" : item.id)}
               className={cn(
                 "rounded-3xl p-4 text-left transition-transform active:scale-[0.98]",
                 active
