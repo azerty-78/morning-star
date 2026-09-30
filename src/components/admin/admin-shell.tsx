@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BRAND_LOGO_ALT, BrandLogo } from "@/components/brand";
 import {
   ADMIN_NAV,
@@ -29,6 +29,7 @@ type IconName =
   | "parametres"
   | "import"
   | "site"
+  | "logout"
   | "collapse"
   | "expand";
 
@@ -148,6 +149,13 @@ function NavIcon({ name }: { name: IconName }) {
           <path d="M17 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h5" />
         </>
       ) : null}
+      {name === "logout" ? (
+        <>
+          <path d="M10 7V5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-2" />
+          <path d="M4 12h10" />
+          <path d="m7 9-3 3 3 3" />
+        </>
+      ) : null}
       {name === "collapse" ? <path d="M15 6 9 12l6 6" /> : null}
       {name === "expand" ? <path d="M9 6l6 6-6 6" /> : null}
     </svg>
@@ -192,6 +200,7 @@ function NavLink({
  */
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isLogin = pathname === ADMIN_ROUTES.login;
   const [collapsed, setCollapsed] = useState(false);
   const [ready, setReady] = useState(false);
@@ -226,21 +235,24 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="ios-ui flex min-h-full flex-col bg-ms-cream-deep md:flex-row">
       <aside
         className={cn(
-          "shrink-0 border-b border-ms-gold/25 md:sticky md:top-0 md:flex md:h-screen md:flex-col md:overflow-y-auto md:border-b-0 md:border-r md:px-3 md:py-4",
+          "shrink-0 border-b border-ms-gold/25 md:sticky md:top-0 md:flex md:h-screen md:flex-col md:overflow-y-auto md:border-b-0 md:border-r md:px-3 md:pb-4 md:pt-0",
           ready && "md:transition-[width] md:duration-200",
           collapsed ? "md:w-[4.75rem]" : "md:w-[260px]",
         )}
       >
         <div
           className={cn(
-            "flex items-center gap-3 px-4 py-3 md:px-2 md:pb-4",
-            collapsed && "md:flex-col md:gap-2",
+            "flex h-[4.25rem] items-center gap-3 border-b border-ms-gold/30 px-4 md:px-2",
+            collapsed && "md:flex-col md:justify-center md:gap-1 md:px-0",
           )}
         >
           <Link
             href={ADMIN_ROUTES.dashboard}
             aria-label={BRAND_LOGO_ALT}
-            className="brand-mark brand-mark--sidebar no-underline"
+            className={cn(
+              "brand-mark brand-mark--sidebar no-underline",
+              collapsed && "is-collapsed",
+            )}
           >
             <BrandLogo decorative mark />
           </Link>
@@ -259,7 +271,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             aria-controls="admin-sidebar-nav"
             aria-label={collapsed ? "Étendre le menu" : "Réduire le menu"}
             title={collapsed ? "Étendre le menu" : "Réduire le menu"}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15"
+            className={cn(
+              "flex shrink-0 items-center justify-center rounded-[10px] bg-white text-ms-black shadow-[0_1px_2px_rgba(26,26,26,0.04)] transition-colors hover:bg-ms-gold/15",
+              collapsed ? "h-6 w-6" : "h-9 w-9",
+            )}
           >
             <NavIcon name={collapsed ? "expand" : "collapse"} />
           </button>
@@ -292,6 +307,23 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 />
               </li>
             ))}
+            <li>
+              <button
+                type="button"
+                onClick={() => router.push(PUBLIC_ROUTES.home)}
+                aria-label="Déconnexion"
+                title="Déconnexion"
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-[10px] px-3 py-2 text-left text-[15px] font-medium text-ms-black transition-colors hover:bg-ms-gold/15",
+                  collapsed && "md:justify-center md:px-2",
+                )}
+              >
+                <NavIcon name="logout" />
+                <span className={cn("truncate", collapsed && "md:hidden")}>
+                  Déconnexion
+                </span>
+              </button>
+            </li>
           </ul>
         </nav>
 

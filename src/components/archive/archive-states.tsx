@@ -80,10 +80,10 @@ export function ArchiveLoading() {
             key={i}
             className="grid gap-3 border-t border-ms-border py-7 first:border-t-0 md:grid-cols-12 md:gap-6 md:py-8"
           >
-            <div className="h-4 w-24 bg-ms-gray-100 md:col-span-3" />
+            <div className="ms-skeleton h-4 w-24 animate-pulse rounded-md bg-ms-cream-deep md:col-span-3" />
             <div className="space-y-3 md:col-span-8 md:col-start-5">
-              <div className="h-6 w-3/4 max-w-md bg-ms-gray-100" />
-              <div className="h-4 w-full max-w-lg bg-ms-gray-100" />
+              <div className="ms-skeleton h-6 w-3/4 max-w-md animate-pulse rounded-md bg-ms-cream-deep" />
+              <div className="ms-skeleton h-4 w-full max-w-lg animate-pulse rounded-md bg-ms-cream-deep" />
             </div>
           </div>
         ))}

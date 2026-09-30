@@ -7,6 +7,7 @@ export const metadata = {
 };
 
 export default async function AdminMeditationsPage() {
+  await new Promise((resolve) => setTimeout(resolve, 4000));
   const items = await createAdminService().listMeditations();
 
   return (

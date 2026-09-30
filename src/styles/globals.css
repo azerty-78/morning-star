@@ -374,6 +374,14 @@ hr {
   transform: none;
 }
 
+.brand-mark--sidebar.is-collapsed {
+  height: 1.5rem;
+}
+
+.brand-mark--sidebar.is-collapsed img {
+  height: 1.5rem;
+}
+
 /* Chrome iOS — header, footer, newsletter, admin. Le corps éditorial reste suisse. */
 .ios-ui {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
@@ -388,6 +396,12 @@ hr {
   letter-spacing: var(--ms-tracking-wider);
   text-transform: uppercase;
   color: var(--ms-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-skeleton {
+    animation: none;
+  }
 }
 
 .sr-only {
