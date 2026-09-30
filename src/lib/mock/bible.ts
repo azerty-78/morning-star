@@ -75,6 +75,24 @@ const mockVerseStore: VerseStore = {
       text: "Et nous tenons pour d'autant plus certaine la parole prophétique, à laquelle vous faites bien de prêter attention, comme à une lampe qui brille dans un lieu obscur, jusqu'à ce que le jour vienne à paraître et que l'étoile du matin se lève dans vos cœurs.",
     },
   ],
+  "LSG1910|rev|2|28": [
+    {
+      verse: 28,
+      text: "Et je lui donnerai l'étoile du matin.",
+    },
+  ],
+  "LSG1910|num|24|17": [
+    {
+      verse: 17,
+      text: "Je le vois, mais non maintenant, je le contemple, mais non de près. Un astre sort de Jacob, un sceptre s'élève d'Israël. Il perce les flancs de Moab, et il abat tous les enfants de Seth.",
+    },
+  ],
+  "LSG1910|isa|14|12": [
+    {
+      verse: 12,
+      text: "Te voilà tombé du ciel, astre brillant, fils de l'aurore ! Tu es abattu à terre, toi, le vainqueur des nations !",
+    },
+  ],
   "LSG1910|psa|46|10": [
     {
       verse: 10,

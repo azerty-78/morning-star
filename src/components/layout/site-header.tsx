@@ -14,9 +14,9 @@ export function SiteHeader() {
         <Link
           href={PUBLIC_ROUTES.home}
           aria-label={BRAND_LOGO_ALT}
-          className="brand-mark no-underline"
+          className="brand-mark brand-mark--header no-underline"
         >
-          <BrandLogo priority decorative />
+          <BrandLogo priority decorative mark />
         </Link>
         <PublicNav />
       </Container>

@@ -11,18 +11,21 @@ export function BrandLogo({
   className,
   priority = false,
   decorative = false,
+  mark = false,
 }: {
   className?: string;
   priority?: boolean;
   /** true quand le parent (lien) porte déjà le nom accessible. */
   decorative?: boolean;
+  /** Emblème seul (étoile + M), pour la barre d’en-tête. */
+  mark?: boolean;
 }) {
   return (
     <Image
-      src="/logo.png"
+      src={mark ? "/logo-mark.png" : "/logo.png"}
       alt={decorative ? "" : BRAND_LOGO_ALT}
-      width={1254}
-      height={1254}
+      width={mark ? 572 : 1254}
+      height={mark ? 420 : 1254}
       priority={priority}
       className={cn("object-contain", className)}
     />

@@ -5,14 +5,14 @@ export type ButtonSize = "sm" | "md";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    "bg-ms-black text-ms-white border border-ms-black hover:bg-ms-gray-700",
+    "bg-ms-gold text-ms-black border border-ms-gold hover:bg-ms-gold-dark hover:border-ms-gold-dark hover:text-ms-white",
   secondary:
-    "bg-transparent text-ms-fg border border-ms-black hover:bg-ms-gray-100",
+    "bg-transparent text-ms-black border border-ms-black hover:border-ms-gold-dark hover:bg-ms-gold/15 hover:text-ms-black",
   ghost:
-    "bg-transparent text-ms-fg border border-transparent hover:border-ms-border",
+    "bg-transparent text-ms-fg border border-transparent hover:border-ms-gold hover:text-ms-gold-dark",
   accent:
-    "bg-ms-gold text-ms-white border border-ms-gold hover:bg-ms-gold-dark",
-  link: "bg-transparent text-ms-fg border-0 underline underline-offset-4 hover:text-ms-gold-dark px-0",
+    "bg-ms-gold text-ms-black border border-ms-gold hover:bg-ms-gold-dark hover:border-ms-gold-dark hover:text-ms-white",
+  link: "bg-transparent text-ms-gold-dark border-0 underline underline-offset-4 hover:text-ms-black px-0",
 };
 
 const sizeClass: Record<ButtonSize, string> = {
@@ -30,7 +30,7 @@ export function buttonClassName({
   className?: string;
 }): string {
   return cn(
-    "inline-flex items-center justify-center gap-2",
+    "inline-flex cursor-pointer items-center justify-center gap-2",
     "font-medium uppercase rounded-none no-underline",
     "transition-colors duration-[var(--ms-duration)] ease-[var(--ms-ease)]",
     "disabled:opacity-35 disabled:pointer-events-none",
