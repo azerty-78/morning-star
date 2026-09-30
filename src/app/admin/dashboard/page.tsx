@@ -13,6 +13,7 @@ export default async function AdminDashboardPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Dashboard"
         description="Vue d’ensemble pour un auteur unique — publication, file d’attente, audience."

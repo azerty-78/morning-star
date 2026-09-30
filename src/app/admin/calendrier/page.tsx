@@ -34,6 +34,7 @@ export default async function AdminCalendrierPage({
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Calendrier"
         description="Planning éditorial — BROUILLON, PROGRAMMÉ, PUBLIÉ."

@@ -1,29 +1,25 @@
 import Link from "next/link";
 import { BRAND_LOGO_ALT, BrandLogo } from "@/components/brand";
 import { PUBLIC_ROUTES } from "@/constants/routes";
-import { Container, Navigation, Separator } from "@/components/ui";
-
-const navItems = [
-  { href: PUBLIC_ROUTES.home, label: "Aujourd'hui" },
-  { href: PUBLIC_ROUTES.meditations, label: "Méditations" },
-  { href: PUBLIC_ROUTES.archive, label: "Archive" },
-  { href: PUBLIC_ROUTES.recherche, label: "Recherche" },
-];
+import { Container } from "@/components/ui";
+import { PublicNav } from "./public-nav";
 
 export function SiteHeader() {
   return (
-    <header className="bg-ms-bg" role="banner">
-      <Container className="flex flex-col gap-6 py-4 md:flex-row md:items-center md:justify-between md:py-5">
+    <header
+      role="banner"
+      className="ios-ui sticky top-0 z-40 border-b border-ms-gold/25 bg-ms-off-white/80 backdrop-blur-xl"
+    >
+      <Container className="flex flex-col gap-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href={PUBLIC_ROUTES.home}
           aria-label={BRAND_LOGO_ALT}
-          className="block w-fit shrink-0 no-underline"
+          className="brand-mark no-underline"
         >
-          <BrandLogo priority decorative className="h-32 w-32 sm:h-40 sm:w-40" />
+          <BrandLogo priority decorative />
         </Link>
-        <Navigation items={navItems} />
+        <PublicNav />
       </Container>
-      <Separator tone="strong" />
     </header>
   );
 }

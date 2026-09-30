@@ -25,6 +25,7 @@ export default async function ImportPreviewPage({ params }: PageProps) {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Import · Preview"
         title={job.preview?.title ?? "Résultat d'analyse"}
         description={`${job.file.filename} · ${job.file.format.toUpperCase()} · validation admin obligatoire`}

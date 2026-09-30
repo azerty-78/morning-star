@@ -12,6 +12,7 @@ export default async function AdminCommentairesPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Commentaires"
         description="Modération légère — file d’attente pour l’auteur."

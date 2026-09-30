@@ -24,7 +24,7 @@ export function BrandLogo({
       width={1254}
       height={1254}
       priority={priority}
-      className={cn("h-auto w-auto object-contain", className)}
+      className={cn("object-contain", className)}
     />
   );
 }

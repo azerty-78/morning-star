@@ -342,11 +342,11 @@ function buildConfirmHtml(input: {
   unsubUrl: string;
 }): string {
   const logo = absoluteUrl("/logo.png");
-  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#0a0a0a;background:#f7f4ee;padding:32px;">
+  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#1a1a1a;background:#f7f4ec;padding:32px;">
   <img src="${logo}" alt="${APP_NAME}" width="120" height="120" style="display:block;width:120px;height:120px;" />
   <h1 style="font-size:28px;letter-spacing:-0.02em;">Confirmez votre inscription</h1>
   <p>Un clic suffit pour recevoir la méditation du jour.</p>
-  <p><a href="${input.confirmUrl}" style="color:#0a0a0a;font-weight:600;">Confirmer mon email</a></p>
+  <p><a href="${input.confirmUrl}" style="color:#8c6824;font-weight:600;">Confirmer mon email</a></p>
   <p style="font-size:12px;color:#6f6d67;margin-top:32px;"><a href="${input.unsubUrl}" style="color:#6f6d67;">Se désinscrire</a></p>
 </body></html>`;
 }
@@ -358,9 +358,9 @@ function buildPublicationHtml(input: {
   unsubUrl: string;
 }): string {
   const logo = absoluteUrl("/logo.png");
-  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#0a0a0a;background:#f7f4ee;padding:32px;">
+  return `<!DOCTYPE html><html lang="fr"><body style="font-family:Helvetica,Arial,sans-serif;color:#1a1a1a;background:#f7f4ec;padding:32px;">
   <img src="${logo}" alt="${APP_NAME}" width="96" height="96" style="display:block;width:96px;height:96px;" />
-  <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#7d6523;">Méditation du jour</p>
+  <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#8c6824;">Méditation du jour</p>
   <h1 style="font-size:28px;letter-spacing:-0.02em;">${escapeHtml(input.title)}</h1>
   <p style="font-size:18px;line-height:1.5;color:#3a3834;">${escapeHtml(input.excerpt)}</p>
   <p><a href="${input.readUrl}" style="color:#0a0a0a;font-weight:600;">Lire la méditation</a></p>

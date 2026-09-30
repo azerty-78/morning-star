@@ -31,7 +31,7 @@ export default async function MeditationOpenGraphImage({ params }: Props) {
           height: "100%",
           display: "flex",
           alignItems: "center",
-          backgroundColor: "#f7f4ee",
+          backgroundColor: "#f7f4ec",
           color: "#0a0a0a",
           padding: "48px 64px",
           fontFamily: "Helvetica, Arial, sans-serif",
@@ -53,7 +53,7 @@ export default async function MeditationOpenGraphImage({ params }: Props) {
               fontSize: 18,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "#7d6523",
+              color: "#8c6824",
             }}
           >
             {date || "Morning Star"}

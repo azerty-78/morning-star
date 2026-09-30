@@ -13,6 +13,7 @@ export default async function AdminStatistiquesPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Statistiques"
         description="Lecture éditoriale des audiences — pages vues et sessions approximatives, sans tableau SaaS coloré."

@@ -54,6 +54,7 @@ export default async function AdminNewsletterPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Newsletter"
         description="Abonnés, désabonnés et historique des notifications — sans tableau SaaS."

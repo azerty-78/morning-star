@@ -20,7 +20,7 @@ export default async function OpenGraphImage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#f7f4ee",
+          backgroundColor: "#f7f4ec",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}

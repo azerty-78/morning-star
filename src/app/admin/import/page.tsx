@@ -11,6 +11,7 @@ export default function AdminImportPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Import"
         description="Déposez un PDF, DOC ou DOCX. Le pipeline produit une preview — jamais de publication automatique."

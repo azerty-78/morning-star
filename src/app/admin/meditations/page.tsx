@@ -22,6 +22,7 @@ export default async function AdminMeditationsPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]">
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Méditations"
         description="Tous les textes — brouillons, programmés et publiés."

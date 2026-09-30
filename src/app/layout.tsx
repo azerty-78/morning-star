@@ -6,7 +6,7 @@ import "@/styles/globals.css";
 export const metadata: Metadata = buildRootMetadata();
 
 export const viewport: Viewport = {
-  themeColor: "#f3f2ee",
+  themeColor: "#cf9d48",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,

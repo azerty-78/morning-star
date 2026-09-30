@@ -28,10 +28,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: absoluteUrl(PUBLIC_ROUTES.recherche),
+      url: absoluteUrl(PUBLIC_ROUTES.about),
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.5,
+      changeFrequency: "yearly",
+      priority: 0.4,
     },
   ];
 

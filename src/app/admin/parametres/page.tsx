@@ -13,6 +13,7 @@ export default async function AdminParametresPage() {
   return (
     <Container className="pb-[var(--ms-space-10)]" narrow>
       <PageHeader
+        omitTitle
         eyebrow="Administration"
         title="Paramètres"
         description="Réglages essentiels du site et du compte auteur."

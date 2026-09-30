@@ -8,10 +8,12 @@
 
 :root {
   /* ——— Couleurs ——— */
-  --ms-black: #0a0a0a;
+  --ms-black: #1a1a1a;
   --ms-white: #ffffff;
-  --ms-off-white: #f3f2ee;
-  --ms-paper: #faf9f6;
+  /* Champ du logo officiel */
+  --ms-off-white: #f7f4ec;
+  --ms-paper: #fbf8f1;
+  --ms-cream-deep: #efe6d4;
 
   --ms-gray-50: #f7f6f3;
   --ms-gray-100: #ebeae5;
@@ -23,10 +25,10 @@
   --ms-gray-700: #3a3834;
   --ms-gray-800: #232220;
 
-  /* Accent doré — Étoile du matin (usage parcimonieux) */
-  --ms-gold: #a8872f;
-  --ms-gold-dark: #7d6523;
-  --ms-gold-light: #c4a84e;
+  /* Or de l’étoile du logo — le sombre reste lisible en petit texte */
+  --ms-gold: #cf9d48;
+  --ms-gold-dark: #8c6824;
+  --ms-gold-light: #e4c27a;
 
   --ms-bg: var(--ms-off-white);
   --ms-fg: var(--ms-black);
@@ -123,6 +125,7 @@
   --color-ms-white: var(--ms-white);
   --color-ms-off-white: var(--ms-off-white);
   --color-ms-paper: var(--ms-paper);
+  --color-ms-cream-deep: var(--ms-cream-deep);
   --color-ms-gray-50: var(--ms-gray-50);
   --color-ms-gray-100: var(--ms-gray-100);
   --color-ms-gray-200: var(--ms-gray-200);
@@ -272,6 +275,47 @@ hr {
 
 .ms-prose > * + * {
   margin-top: var(--ms-block-gap);
+}
+
+/* Marque recadrée : le fichier logo a une large marge, et `img { max-width: 100% }`
+   n’est pas dans une couche, donc les utilitaires Tailwind ne le contrarient pas. */
+.brand-mark {
+  position: relative;
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.brand-mark img {
+  position: absolute;
+  top: -22%;
+  left: 50%;
+  width: 7.25rem;
+  height: 7.25rem;
+  max-width: none;
+  transform: translateX(-50%);
+  object-fit: contain;
+}
+
+.brand-mark--lg {
+  width: 4.25rem;
+  height: 4.25rem;
+}
+
+.brand-mark--lg img {
+  top: -20%;
+  width: 10rem;
+  height: 10rem;
+}
+
+/* Chrome iOS — header, footer, newsletter, admin. Le corps éditorial reste suisse. */
+.ios-ui {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .ms-label {

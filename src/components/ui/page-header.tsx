@@ -7,6 +7,8 @@ export interface PageHeaderProps {
   title: string;
   description?: string;
   className?: string;
+  /** Le titre est déjà porté par la barre admin. */
+  omitTitle?: boolean;
 }
 
 export function PageHeader({
@@ -14,6 +16,7 @@ export function PageHeader({
   title,
   description,
   className,
+  omitTitle = false,
 }: PageHeaderProps) {
   return (
     <header className={cn("pt-[var(--ms-space-8)] pb-[var(--ms-space-6)]", className)}>
@@ -22,7 +25,7 @@ export function PageHeader({
           {eyebrow}
         </Typography>
       ) : null}
-      <Typography variant="title">{title}</Typography>
+      {omitTitle ? null : <Typography variant="title">{title}</Typography>}
       {description ? (
         <Typography variant="subtitle" className="mt-4 max-w-[var(--ms-measure)]">
           {description}
